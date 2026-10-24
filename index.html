@@ -276,6 +276,7 @@ input,textarea,select{font-size:16px}/* 防 iOS 聚焦缩放 */
 .field label{display:block;font-size:12.5px;color:var(--ink2);margin-bottom:6px;font-weight:500}
 .field label em{color:var(--accent);font-style:normal}
 .field input[type=text],.field input[type=date],.field input[type=time],.field input[type=number],.field textarea{width:100%;border:1px solid var(--line2);border-radius:11px;background:#fff;padding:10px 13px;color:var(--ink);transition:border .15s,box-shadow .15s}
+.field input[type=text],.field input[type=date],.field input[type=time],.field input[type=number]{min-height:46px}
 .field input:focus,.field textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(47,124,246,.12)}
 .field textarea{resize:vertical;min-height:84px;line-height:1.7}
 .field-row{display:flex;gap:10px}
@@ -1059,12 +1060,11 @@ const A={
     const defDate=e?e.date:(presetDate||(t.endDate&&todayStr()>t.endDate?t.endDate:clampDate(todayStr(),t.startDate,t.endDate)||todayStr()));
 
     function formHtml(type){
-      let inner='<div class="field-row">'+
-        '<div class="field" style="flex:0 0 46%"><label>日期</label><input type="date" id="f-date" value="'+defDate+'"></div>'+
-        '<div class="field" style="flex:1"><label>类型</label></div></div>';
+      const dateLabel=type==='transport'?'出行日期':(type==='hotel'?'记在哪一天':'日期');
+      let inner='<div class="field"><label>'+dateLabel+'</label><input type="date" id="f-date" value="'+defDate+'"></div>';
       if(type==='place'||type==='food'||type==='note'){
         inner+='<div class="field-row">'+
-          '<div class="field" style="flex:0 0 38%"><label>时间(选填)</label><input type="time" id="f-time" value="'+(e&&e.time||'')+'"></div>'+
+          '<div class="field" style="flex:0 0 40%"><label>时间(选填)</label><input type="time" id="f-time" value="'+(e&&e.time||'')+'"></div>'+
           '<div class="field" style="flex:1"><label>标题</label><input type="text" id="f-title" maxlength="60" value="'+esc(e&&e.title||'')+'" placeholder="'+(type==='food'?'这顿吃了什么':type==='note'?'这一页的标题':'要去的地方 / 做的事')+'"></div></div>'+
         '<div class="field"><label>'+(type==='note'?'见闻与故事':'备注')+'</label><textarea id="f-content" placeholder="'+(type==='note'?'今天看到了什么、遇到了谁……':'有什么要注意的:开放时间、门票、预约方式……')+'">'+esc(e&&e.content||'')+'</textarea></div>'+
         '<div class="field"><label>地点(定位后点亮足迹地图)</label><div class="place-row">'+
