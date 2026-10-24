@@ -1,5 +1,5 @@
-/* 行途录 Service Worker —— 缓存名 xingtu-v1 */
-const CACHE = 'xingtu-v1';
+/* 行途录 Service Worker —— 缓存名 xingtu-v2 */
+const CACHE = 'xingtu-v2';
 const PRECACHE = ['./index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', e => {
