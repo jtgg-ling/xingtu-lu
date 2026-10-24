@@ -2,8 +2,8 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>行途录 · 旅行回忆手账</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>行途录 · 旅行记录</title>
 <link rel="icon" href="icons/icon-192.png">
 <meta name="theme-color" content="#2f7cf6">
 <link rel="manifest" href="manifest.webmanifest">
@@ -13,458 +13,315 @@
 <meta name="apple-mobile-web-app-title" content="行途录">
 <style>
 :root{
-  --paper:#eef4ff;
-  --card:#ffffff;
-  --ink:#12264f;
-  --ink2:#5b7195;
-  --ink3:#93a5c4;
-  --line:#e3ecfa;
-  --line2:#cfdef5;
-  --accent:#2f7cf6;
-  --accent-dark:#1e63d6;
-  --moss:#10b981;
-  --gold:#ffb020;
-  --shadow:0 2px 6px rgba(37,99,235,.06),0 12px 32px -12px rgba(37,99,235,.18);
-  --shadow-lift:0 4px 10px rgba(37,99,235,.08),0 20px 44px -12px rgba(37,99,235,.28);
-  --serif:'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',system-ui,sans-serif;
+  --paper:#eef4ff;--card:#ffffff;--ink:#12264f;--ink2:#5b7195;--ink3:#93a5c4;
+  --line:#e3ecfa;--line2:#cfdef5;--accent:#2f7cf6;--accent2:#38bdf8;
+  --moss:#10b981;--gold:#ffb020;--danger:#a8402a;
+  --shadow:0 1px 3px rgba(37,99,235,.06),0 8px 24px -10px rgba(37,99,235,.16);
   --sans:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,-apple-system,sans-serif;
-  --r:18px;
+  --serif:'Segoe UI','PingFang SC','Microsoft YaHei',serif;
+  --tabbar-h:58px;
 }
-*{box-sizing:border-box;margin:0;padding:0}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
-body{
-  font-family:var(--sans);
-  background:var(--paper);
-  color:var(--ink);
-  font-size:15px;
-  line-height:1.7;
-  min-height:100vh;
-}
-::selection{background:rgba(47,124,246,.22)}
-button{font-family:inherit}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:15px;line-height:1.65;min-height:100vh}
+button{font-family:inherit;touch-action:manipulation}
 img{display:block}
-a{color:var(--accent)}
+::selection{background:rgba(47,124,246,.22)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input,textarea,select{font-size:16px}/* 防 iOS 聚焦缩放 */
 
 /* ===== 顶栏 ===== */
-.topbar{
-  position:sticky;top:0;z-index:900;
-  background:rgba(238,244,255,.85);backdrop-filter:blur(14px);
-  border-bottom:1px solid var(--line);
-}
-.topbar-in{
-  max-width:1120px;margin:0 auto;padding:0 24px;
-  display:flex;align-items:center;gap:22px;height:62px;
-}
-.logo{display:flex;align-items:center;gap:9px;cursor:pointer;user-select:none;flex:none}
+.topbar{position:sticky;top:0;z-index:900;background:rgba(238,244,255,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.topbar-in{max-width:600px;margin:0 auto;padding:0 16px;height:54px;display:flex;align-items:center;gap:12px}
+.logo{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
 .logo svg{color:var(--accent)}
-.logo b{font-family:var(--serif);font-size:21px;font-weight:700;letter-spacing:2px}
-.logo span{font-size:11px;color:var(--ink3);letter-spacing:3px;margin-top:5px}
-.nav{display:flex;gap:4px;flex:1;min-width:0;overflow-x:auto;scrollbar-width:none}
-.nav::-webkit-scrollbar{display:none}
-.nav button{
-  border:0;background:none;cursor:pointer;white-space:nowrap;
-  font-size:14px;color:var(--ink2);padding:8px 13px;border-radius:9px;
-  transition:color .18s,background .18s;
-}
-.nav button:hover{color:var(--ink);background:rgba(47,124,246,.08)}
-.nav button.on{color:var(--accent);background:rgba(47,124,246,.1);font-weight:600}
-.top-acts{display:flex;gap:8px;flex:none;align-items:center}
-
-/* ===== 按钮 ===== */
-.btn{
-  display:inline-flex;align-items:center;gap:7px;border-radius:10px;cursor:pointer;
-  font-size:14px;padding:9px 16px;border:1px solid transparent;line-height:1.4;
-  transition:all .18s;white-space:nowrap;user-select:none;
-}
-.btn svg{flex:none}
-.btn-p{background:linear-gradient(135deg,#2f7cf6,#38bdf8);color:#fff;box-shadow:0 2px 10px -2px rgba(47,124,246,.55)}
-.btn-p:hover{background:linear-gradient(135deg,#4a8ef8,#5cc6fa);transform:translateY(-2px);box-shadow:0 8px 20px -6px rgba(47,124,246,.6)}
-.btn-g{background:var(--card);border-color:var(--line2);color:var(--ink)}
-.btn-g:hover{border-color:var(--accent);color:var(--accent)}
-.btn-t{background:none;color:var(--ink2);padding:8px 10px}
-.btn-t:hover{color:var(--accent);background:rgba(47,124,246,.07)}
-.btn-d{background:#fbeeec;color:#a8402a;border-color:#ecd2cc}
-.btn-d:hover{background:#a8402a;color:#fff}
-.btn-sm{padding:6px 11px;font-size:13px;border-radius:8px}
-.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
-:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.logo b{font-family:var(--serif);font-size:20px;font-weight:700;letter-spacing:2px}
+.logo span{font-size:10px;color:var(--ink3);letter-spacing:2px;margin-top:4px}
+.tb-back{width:36px;height:36px;border:0;background:none;color:var(--ink2);cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:10px;flex:none}
+.tb-back:active{background:rgba(47,124,246,.1)}
+.tb-title{font-family:var(--serif);font-size:17px;font-weight:700;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-act{border:0;background:none;color:var(--accent);font-size:14px;cursor:pointer;padding:8px 4px;flex:none;font-weight:600}
 
 /* ===== 布局 ===== */
-.wrap{max-width:1120px;margin:0 auto;padding:34px 24px 90px}
-.view-anim{animation:fadeUp .4s ease both}
-@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-@media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
-}
+.wrap{max-width:600px;margin:0 auto;padding:18px 16px calc(var(--tabbar-h) + 38px + env(safe-area-inset-bottom))}
+.view-anim{animation:fadeUp .35s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+.boot{display:flex;align-items:center;justify-content:center;min-height:60vh;color:var(--ink3);letter-spacing:3px}
+
+/* ===== 底部导航 ===== */
+.tabbar{position:fixed;bottom:0;left:0;right:0;z-index:900;background:rgba(255,255,255,.94);backdrop-filter:blur(16px);border-top:1px solid var(--line);display:flex;padding:5px 6px calc(5px + env(safe-area-inset-bottom))}
+.tabbar button{flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;border:0;background:none;cursor:pointer;color:var(--ink3);font-size:10.5px;letter-spacing:1px;padding:6px 0 3px;border-radius:12px;transition:color .15s}
+.tabbar button.on{color:var(--accent);font-weight:600}
+.tabbar button:active{background:rgba(47,124,246,.06)}
+
+/* ===== 通用组件 ===== */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:12px;cursor:pointer;font-size:14.5px;padding:11px 18px;border:1px solid transparent;line-height:1.4;transition:all .15s;user-select:none;white-space:nowrap}
+.btn-p{background:linear-gradient(135deg,#2f7cf6,#38bdf8);color:#fff;box-shadow:0 4px 14px -4px rgba(47,124,246,.55);font-weight:600}
+.btn-p:active{transform:scale(.97)}
+.btn-g{background:var(--card);border-color:var(--line2);color:var(--ink)}
+.btn-t{background:none;color:var(--accent);padding:8px 10px}
+.btn-d{background:#fbeeec;color:#a8402a;border-color:#ecd2cc}
+.btn-sm{padding:7px 13px;font-size:13px;border-radius:10px}
+.btn-blk{width:100%}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+.empty{text-align:center;padding:52px 20px;color:var(--ink2);background:var(--card);border:1.5px dashed var(--line2);border-radius:16px}
+.empty svg{color:var(--line2);margin-bottom:12px}
+.empty h3{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--ink);margin-bottom:5px}
+.empty p{font-size:13.5px;margin-bottom:18px}
+.sec{display:flex;align-items:baseline;justify-content:space-between;margin:26px 0 13px}
+.sec h2{font-family:var(--serif);font-size:18px;font-weight:700}
+.sec span{font-size:12.5px;color:var(--ink3)}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink2);background:rgba(47,124,246,.07);border:1px solid rgba(47,124,246,.18);border-radius:99px;padding:3px 10px;white-space:nowrap}
+.icon-btn{width:34px;height:34px;border-radius:10px;border:0;cursor:pointer;background:rgba(255,255,255,.92);color:var(--ink2);display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(37,99,235,.18);flex:none}
+.icon-btn.del{color:#a8402a}
+.icon-btn:active{transform:scale(.92)}
 
 /* ===== 首页 ===== */
-.hero{margin-bottom:30px}
-.hero .kicker{font-size:12px;letter-spacing:5px;color:var(--accent);margin-bottom:8px}
-.hero h1{font-family:var(--serif);font-size:clamp(26px,4vw,38px);font-weight:800;letter-spacing:1px;background:linear-gradient(135deg,#2f7cf6,#38bdf8);-webkit-background-clip:text;background-clip:text;color:transparent}
-.hero p{color:var(--ink2);margin-top:8px;max-width:560px}
-.stats-strip{
-  display:flex;flex-wrap:wrap;gap:0;margin:26px 0 34px;
-  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
-  box-shadow:var(--shadow);overflow:hidden;
-}
-.stat-cell{flex:1;min-width:130px;padding:18px 22px;border-right:1px dashed var(--line2)}
-.stat-cell:last-child{border-right:0}
-.stat-cell .n{font-family:var(--serif);font-size:27px;font-weight:800;line-height:1.2;background:linear-gradient(135deg,#2f7cf6,#38bdf8);-webkit-background-clip:text;background-clip:text;color:transparent}
-.stat-cell .n small{font-size:14px;color:var(--ink2);font-weight:400;margin-left:2px}
-.stat-cell .l{font-size:12px;color:var(--ink3);letter-spacing:2px;margin-top:3px}
-
-/* 那年今天 */
-.memory-card{
-  display:flex;gap:18px;align-items:stretch;cursor:pointer;
-  background:linear-gradient(120deg,#ffffff,#eaf3ff);
-  border:1px solid #d5e5fc;border-radius:var(--r);
-  padding:16px;margin-bottom:36px;box-shadow:var(--shadow);
-  transition:transform .2s,box-shadow .2s;position:relative;overflow:hidden;
-}
-.memory-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lift)}
-.memory-card::before{
-  content:"回忆";position:absolute;right:14px;top:10px;
-  writing-mode:vertical-rl;font-family:var(--serif);font-size:12px;letter-spacing:6px;
-  color:rgba(47,124,246,.35);
-}
-.memory-card .mc-img{width:118px;height:118px;flex:none;border-radius:10px;overflow:hidden;background:#e3eefc}
+.hello{margin-bottom:20px}
+.hello .kicker{font-size:11px;letter-spacing:4px;color:var(--accent);margin-bottom:4px}
+.hello h1{font-family:var(--serif);font-size:25px;font-weight:800;letter-spacing:.5px}
+.hello p{color:var(--ink2);font-size:13.5px;margin-top:3px}
+.stat-strip{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;margin-bottom:22px}
+.stat-strip::-webkit-scrollbar{display:none}
+.stat-pill{flex:none;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 16px;box-shadow:var(--shadow);min-width:88px}
+.stat-pill .n{font-family:var(--serif);font-size:21px;font-weight:800;line-height:1.2;background:linear-gradient(135deg,#2f7cf6,#38bdf8);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat-pill .n small{font-size:12px;color:var(--ink2);font-weight:400;-webkit-text-fill-color:var(--ink2);margin-left:1px}
+.stat-pill .l{font-size:11px;color:var(--ink3);letter-spacing:1.5px}
+.memory-card{display:flex;gap:14px;align-items:center;cursor:pointer;background:linear-gradient(120deg,#fff,#eaf3ff);border:1px solid #d5e5fc;border-radius:16px;padding:13px;margin-bottom:24px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.memory-card::before{content:"回忆";position:absolute;right:10px;top:8px;writing-mode:vertical-rl;font-size:10px;letter-spacing:4px;color:rgba(47,124,246,.3)}
+.memory-card .mc-img{width:76px;height:76px;flex:none;border-radius:12px;overflow:hidden;background:#e3eefc}
 .memory-card .mc-img img{width:100%;height:100%;object-fit:cover}
-.memory-card .mc-body{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
-.memory-card .mc-tag{font-size:12px;color:var(--accent);letter-spacing:2px;margin-bottom:4px}
-.memory-card h3{font-family:var(--serif);font-size:18px;font-weight:700;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.memory-card .mc-ex{color:var(--ink2);font-size:13.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.memory-card .mc-meta{font-size:12px;color:var(--ink3);margin-top:6px}
+.memory-card .mc-body{flex:1;min-width:0}
+.memory-card .mc-tag{font-size:11px;color:var(--accent);letter-spacing:1.5px}
+.memory-card h3{font-family:var(--serif);font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.memory-card .mc-meta{font-size:11.5px;color:var(--ink3)}
+.trip-row{display:flex;gap:13px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;margin-bottom:12px;box-shadow:var(--shadow);cursor:pointer;position:relative;transition:transform .15s}
+.trip-row:active{transform:scale(.985)}
+.trip-cover{width:86px;height:86px;border-radius:12px;overflow:hidden;flex:none;background:linear-gradient(135deg,#dbeafe,#93c5fd);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:34px;color:rgba(30,99,212,.45)}
+.trip-cover img{width:100%;height:100%;object-fit:cover}
+.trip-info{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:3px;padding-right:2px}
+.trip-info h3{font-family:var(--serif);font-size:16.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.trip-info .dest{font-size:12.5px;color:var(--ink2);display:flex;align-items:center;gap:4px;white-space:nowrap;overflow:hidden}
+.trip-info .dest svg{color:var(--accent);flex:none}
+.trip-info .meta{display:flex;gap:5px;flex-wrap:wrap;margin-top:2px}
+.trip-row .ops{position:absolute;top:8px;right:8px;display:flex;gap:4px}
+.trip-row .ops .icon-btn{width:28px;height:28px;border-radius:8px}
+.trip-status{font-size:10.5px;letter-spacing:1px;border-radius:99px;padding:1.5px 8px;font-weight:600}
+.st-doing{background:#e5f8f0;color:#06886b}
+.st-todo{background:#fff4e0;color:#a36a00}
+.st-done{background:#eef2f8;color:var(--ink3)}
 
-/* 旅行卡片 */
-.sec-head{display:flex;align-items:baseline;justify-content:space-between;margin:0 0 18px}
-.sec-head h2{font-family:var(--serif);font-size:21px;font-weight:700;letter-spacing:1px}
-.sec-head span{font-size:13px;color:var(--ink3)}
-.trips-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:24px}
-.trip-card{
-  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
-  overflow:hidden;cursor:pointer;box-shadow:var(--shadow);position:relative;
-  transition:transform .22s,box-shadow .22s;transform:rotate(var(--rot,0deg));
-}
-.trip-card:nth-child(odd){--rot:-.6deg}
-.trip-card:nth-child(even){--rot:.5deg}
-.trip-card:hover{transform:rotate(0) translateY(-4px);box-shadow:var(--shadow-lift)}
-.trip-cover{height:172px;position:relative;overflow:hidden;background:#dbeafe}
-.trip-cover img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
-.trip-card:hover .trip-cover img{transform:scale(1.045)}
-.trip-cover .ph-letter{
-  width:100%;height:100%;display:flex;align-items:center;justify-content:center;
-  font-family:var(--serif);font-size:64px;color:rgba(30,99,212,.45);
-  background:linear-gradient(135deg,#dbeafe,#93c5fd);
-}
-.trip-body{padding:15px 17px 17px}
-.trip-body h3{font-family:var(--serif);font-size:18px;font-weight:700;letter-spacing:.5px;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.trip-body .dest{font-size:13px;color:var(--ink2);display:flex;align-items:center;gap:5px}
-.trip-body .dest svg{color:var(--accent);flex:none}
-.trip-meta{display:flex;gap:6px;margin-top:11px;flex-wrap:wrap}
-.badge{
-  font-size:11.5px;color:var(--ink2);background:rgba(47,124,246,.08);
-  border:1px solid rgba(47,124,246,.22);border-radius:99px;padding:2px 9px;
-}
-.trip-ops{position:absolute;top:10px;right:10px;z-index:4;display:flex;gap:5px;opacity:0;transition:opacity .18s}
-.trip-card:hover .trip-ops{opacity:1}
-.icon-btn{
-  width:30px;height:30px;border-radius:8px;border:0;cursor:pointer;
-  background:rgba(255,255,255,.92);color:var(--ink2);display:flex;align-items:center;justify-content:center;
-  box-shadow:0 1px 4px rgba(37,99,235,.2);transition:all .15s;
-}
-.icon-btn:hover{color:var(--accent)}
-.icon-btn.del:hover{color:#a8402a;background:#fbeeec}
-.new-trip-card{
-  border:1.5px dashed var(--line2);border-radius:var(--r);min-height:268px;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
-  cursor:pointer;color:var(--ink3);background:rgba(255,255,255,.5);
-  transition:all .2s;font-size:14px;
-}
-.new-trip-card:hover{border-color:var(--accent);color:var(--accent);background:var(--card)}
-.new-trip-card svg{opacity:.7}
-.safe-hint{
-  margin-top:40px;text-align:center;font-size:12.5px;color:var(--ink3);
-  display:flex;align-items:center;justify-content:center;gap:6px;
-}
-.safe-hint a{cursor:pointer;text-decoration:underline;text-underline-offset:3px}
-
-/* ===== 空状态 ===== */
-.empty{
-  text-align:center;padding:70px 20px;color:var(--ink2);
-  background:var(--card);border:1px dashed var(--line2);border-radius:var(--r);
-}
-.empty svg{color:var(--line2);margin-bottom:14px}
-.empty h3{font-family:var(--serif);font-size:19px;font-weight:700;color:var(--ink);margin-bottom:6px}
-.empty p{font-size:13.5px;margin-bottom:20px}
+/* ===== FAB ===== */
+.fab{position:fixed;right:16px;bottom:calc(var(--tabbar-h) + 22px + env(safe-area-inset-bottom));width:56px;height:56px;border-radius:18px;border:0;cursor:pointer;background:linear-gradient(135deg,#2f7cf6,#38bdf8);color:#fff;box-shadow:0 10px 26px -6px rgba(47,124,246,.6);display:flex;align-items:center;justify-content:center;z-index:880;transition:transform .15s}
+.fab:active{transform:scale(.92)}
 
 /* ===== 旅行详情 ===== */
-.back-link{
-  display:inline-flex;align-items:center;gap:6px;color:var(--ink2);cursor:pointer;
-  font-size:13.5px;margin-bottom:16px;border:0;background:none;padding:4px 2px;
-}
-.back-link:hover{color:var(--accent)}
-.trip-hero{
-  position:relative;border-radius:var(--r);overflow:hidden;margin-bottom:8px;
-  min-height:230px;display:flex;align-items:flex-end;box-shadow:var(--shadow);
-  background:linear-gradient(135deg,#2f7cf6,#38bdf8);
-}
-.trip-hero.covered{min-height:300px}
+.trip-hero{position:relative;border-radius:18px;overflow:hidden;min-height:172px;display:flex;align-items:flex-end;box-shadow:var(--shadow);background:linear-gradient(135deg,#2f7cf6,#38bdf8)}
 .trip-hero .cover-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.trip-hero .veil{
-  position:absolute;inset:0;
-  background:linear-gradient(to top,rgba(12,32,74,.72) 0%,rgba(12,32,74,.18) 55%,rgba(12,32,74,.05));
-}
-.trip-hero .th-body{position:relative;z-index:2;padding:26px 28px;color:#fff;width:100%}
-.trip-hero h1{font-family:var(--serif);font-size:clamp(23px,3.4vw,32px);font-weight:800;letter-spacing:1px;margin-bottom:6px}
-.trip-hero .th-sub{display:flex;flex-wrap:wrap;gap:7px 18px;font-size:13.5px;opacity:.94;align-items:center}
-.trip-hero .th-sub .it{display:inline-flex;align-items:center;gap:6px}
-.trip-hero .th-desc{font-size:13.5px;opacity:.85;margin-top:8px;max-width:640px}
-.trip-hero .th-ops{position:absolute;top:14px;right:14px;z-index:3;display:flex;gap:7px}
-.trip-hero .th-ops .icon-btn{background:rgba(255,255,255,.9)}
+.trip-hero .veil{position:absolute;inset:0;background:linear-gradient(to top,rgba(12,32,74,.75) 0%,rgba(12,32,74,.25) 55%,rgba(12,32,74,.08))}
+.trip-hero .th-body{position:relative;z-index:2;padding:18px;color:#fff;width:100%}
+.trip-hero h1{font-family:var(--serif);font-size:23px;font-weight:800;margin-bottom:4px}
+.trip-hero .th-sub{display:flex;flex-wrap:wrap;gap:5px 14px;font-size:12.5px;opacity:.95;align-items:center}
+.trip-hero .th-sub .it{display:inline-flex;align-items:center;gap:5px}
+.trip-hero .ops{position:absolute;top:12px;right:12px;z-index:3;display:flex;gap:6px}
+.trip-days{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:14px 0 4px}
+.trip-days::-webkit-scrollbar{display:none}
+.trip-days .chip{flex:none;background:var(--card);box-shadow:var(--shadow)}
+.trip-tabs{display:flex;gap:6px;margin:14px 0 18px;overflow-x:auto;scrollbar-width:none;position:sticky;top:54px;z-index:800;background:linear-gradient(var(--paper) 82%,transparent);padding:4px 0 8px;margin-top:10px}
+.trip-tabs::-webkit-scrollbar{display:none}
+.trip-tabs button{flex:none;display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line2);background:var(--card);color:var(--ink2);border-radius:99px;padding:8px 15px;font-size:13.5px;cursor:pointer;transition:all .15s}
+.trip-tabs button .cnt{font-size:10.5px;background:rgba(47,124,246,.12);color:var(--accent);border-radius:99px;padding:0 6px}
+.trip-tabs button.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.trip-tabs button.on .cnt{background:rgba(255,255,255,.25);color:#fff}
+.add-bar{display:flex;gap:8px;margin-bottom:16px}
+.add-bar .btn{flex:1}
 
-/* 标签页 */
-.tabs{display:flex;gap:2px;border-bottom:1.5px solid var(--line);margin:20px 0 26px;overflow-x:auto}
-.tabs button{
-  border:0;background:none;cursor:pointer;font-size:14.5px;color:var(--ink2);
-  padding:10px 16px;position:relative;white-space:nowrap;display:flex;align-items:center;gap:7px;
-}
-.tabs button svg{opacity:.75}
-.tabs button .cnt{font-size:11px;background:rgba(47,124,246,.12);color:var(--accent);border-radius:99px;padding:1px 7px}
-.tabs button::after{
-  content:"";position:absolute;left:12px;right:12px;bottom:-1.5px;height:2.5px;
-  background:var(--accent);border-radius:2px;transform:scaleX(0);transition:transform .2s;
-}
-.tabs button.on{color:var(--accent);font-weight:600}
-.tabs button.on::after{transform:scaleX(1)}
+/* 日程 */
+.day-h{display:flex;align-items:center;gap:9px;margin:20px 0 10px}
+.day-h:first-child{margin-top:2px}
+.day-h .dn{background:var(--accent);color:#fff;font-weight:700;border-radius:9px;padding:3px 9px;font-size:12px;letter-spacing:.5px;flex:none}
+.day-h .dd{color:var(--ink2);font-size:12.5px;flex:none}
+.day-h .ln{flex:1;border-top:1.5px dashed var(--line2)}
+.day-add{width:100%;border:1.5px dashed var(--line2);background:rgba(255,255,255,.55);color:var(--ink3);border-radius:12px;padding:9px;font-size:13px;cursor:pointer;margin-bottom:8px}
+.day-add:active{border-color:var(--accent);color:var(--accent)}
+.itm{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 14px;margin-bottom:10px;box-shadow:var(--shadow);position:relative}
+.itm-head{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.itm-head h3{font-family:var(--serif);font-size:15.5px;font-weight:700;flex:1;min-width:0;line-height:1.45}
+.tchip{flex:none;font-size:10.5px;letter-spacing:1px;padding:2px 8px;border-radius:99px;color:#fff;background:var(--tc,var(--accent))}
+.itm .time-chip{flex:none;font-size:11.5px;color:var(--ink2);font-variant-numeric:tabular-nums}
+.itm-content{color:var(--ink);font-size:14px;white-space:pre-wrap;word-break:break-word;margin-top:2px}
+.itm-place{display:inline-flex;align-items:center;gap:4px;margin-top:8px;font-size:12px;color:var(--ink2);background:rgba(47,124,246,.07);border:1px solid rgba(47,124,246,.18);border-radius:99px;padding:2.5px 10px}
+.itm-place svg{color:var(--accent);flex:none}
+.itm-ops{display:flex;gap:4px}
+.itm-ops .icon-btn{width:28px;height:28px;border-radius:8px;box-shadow:none;background:rgba(47,124,246,.06)}
+.itm-photos{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+.itm-photos .ep{aspect-ratio:1;border-radius:9px;overflow:hidden;background:#e3eefc;cursor:pointer}
+.itm-photos .ep img{width:100%;height:100%;object-fit:cover}
+/* 交通卡 */
+.tr-head{display:flex;align-items:center;gap:10px}
+.tr-emo{font-size:26px;flex:none;line-height:1}
+.tr-route{flex:1;min-width:0;display:flex;align-items:center;gap:8px}
+.tr-pt{min-width:0}
+.tr-pt .lab{font-size:10px;color:var(--ink3);letter-spacing:1px}
+.tr-pt .val{font-family:var(--serif);font-size:15.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tr-arrow{color:var(--accent);flex:none;display:flex}
+.tr-mid{text-align:center}
+.tr-mid .num{font-size:11px;color:var(--ink2);background:rgba(47,124,246,.08);border-radius:99px;padding:1px 8px;white-space:nowrap}
+.tr-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.tr-meta .chip{font-size:11px}
+/* 住宿卡 */
+.ht-head{display:flex;align-items:center;gap:10px}
+.ht-emo{font-size:24px;flex:none}
+.ht-name{font-family:var(--serif);font-size:15.5px;font-weight:700;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ht-nights{font-size:11.5px;color:var(--moss);background:#e5f8f0;border-radius:99px;padding:2px 9px;flex:none}
+.ht-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px;align-items:center}
+/* 记录类型选择 */
+.type-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:6px 0 4px}
+.type-grid button{border:1.5px solid var(--line2);background:#fff;border-radius:13px;padding:10px 2px 8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11.5px;color:var(--ink2);transition:all .15s}
+.type-grid button .em{font-size:21px;line-height:1.2}
+.type-grid button.on{border-color:var(--accent);background:rgba(47,124,246,.07);color:var(--accent);font-weight:600}
 
-/* 时间线 */
-.timeline{position:relative;padding-left:30px}
-.timeline::before{
-  content:"";position:absolute;left:8px;top:6px;bottom:6px;width:1.5px;
-  background:repeating-linear-gradient(to bottom,var(--line2) 0 6px,transparent 6px 12px);
-}
-.day-block{position:relative;margin-bottom:34px}
-.day-block::before{
-  content:"";position:absolute;left:-27px;top:6px;width:11px;height:11px;border-radius:50%;
-  background:var(--card);border:2.5px solid var(--accent);
-}
-.day-label{font-family:var(--serif);font-size:16px;font-weight:700;margin-bottom:14px;display:flex;align-items:baseline;gap:10px}
-.day-label .d1{color:var(--accent);font-weight:700}
-.day-label .d2{font-size:13px;color:var(--ink3)}
-.entry-card{
-  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
-  padding:18px 20px;margin-bottom:14px;box-shadow:var(--shadow);position:relative;
-}
-.entry-card::before{
-  content:"";position:absolute;left:-25.5px;top:26px;width:7px;height:7px;border-radius:50%;
-  background:var(--line2);
-}
-.entry-head{display:flex;align-items:flex-start;gap:10px;margin-bottom:6px}
-.type-chip{
-  flex:none;font-size:11.5px;letter-spacing:1px;padding:2.5px 10px;border-radius:99px;
-  color:#fff;background:var(--tc,var(--accent));margin-top:3px;
-}
-.entry-head h3{font-family:var(--serif);font-size:17.5px;font-weight:700;flex:1;min-width:0;line-height:1.5}
-.entry-ops{display:flex;gap:3px;opacity:0;transition:opacity .15s;flex:none}
-.entry-card:hover .entry-ops{opacity:1}
-.entry-content{color:var(--ink);font-size:14.5px;white-space:pre-wrap;word-break:break-word}
-.entry-place{
-  display:inline-flex;align-items:center;gap:5px;margin-top:12px;font-size:12.5px;
-  color:var(--ink2);background:rgba(47,124,246,.08);border:1px solid rgba(47,124,246,.2);
-  border-radius:99px;padding:3px 11px;
-}
-.entry-place svg{color:var(--accent);flex:none}
-.entry-place .no-geo{opacity:.65}
-.entry-photos{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
-.entry-photos.single{grid-template-columns:minmax(0,340px)}
-.entry-photos .ep{
-  aspect-ratio:1;border-radius:9px;overflow:hidden;cursor:pointer;background:#e3eefc;
-}
-.entry-photos .ep img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
-.entry-photos .ep:hover img{transform:scale(1.05)}
-@media (max-width:640px){.entry-photos{grid-template-columns:repeat(3,1fr)}}
+/* 花销 */
+.budget-card{padding:16px;margin-bottom:14px}
+.budget-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.budget-top .big{font-family:var(--serif);font-size:28px;font-weight:800;background:linear-gradient(135deg,#2f7cf6,#38bdf8);-webkit-background-clip:text;background-clip:text;color:transparent}
+.budget-top .big small{font-size:14px}
+.budget-top .rest{font-size:12.5px;color:var(--ink2)}
+.budget-bar{height:8px;border-radius:99px;background:rgba(47,124,246,.1);overflow:hidden;margin:12px 0 8px}
+.budget-bar i{display:block;height:100%;background:linear-gradient(90deg,#38bdf8,#2f7cf6);border-radius:99px;transition:width .5s}
+.budget-bar i.over{background:linear-gradient(90deg,#fb923c,#ef4444)}
+.budget-foot{display:flex;justify-content:space-between;font-size:11.5px;color:var(--ink3)}
+.cat-bars{padding:15px 16px;margin-bottom:14px}
+.cat-bars h3{font-size:13.5px;font-weight:700;margin-bottom:11px;display:flex;align-items:center;gap:6px}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.bar-row .bl{width:44px;font-size:12.5px;color:var(--ink2);flex:none;display:flex;align-items:center;gap:3px}
+.bar-row .bar{flex:1;height:16px;background:rgba(47,124,246,.08);border-radius:6px;overflow:hidden}
+.bar-row .bar i{display:block;height:100%;border-radius:6px;background:var(--bc,var(--accent));transition:width .5s}
+.bar-row .bn{width:76px;font-size:12px;color:var(--ink2);text-align:right;flex:none;font-variant-numeric:tabular-nums}
+.exp-row{display:flex;align-items:center;gap:11px;background:var(--card);border:1px solid var(--line);border-radius:13px;padding:10px 13px;margin-bottom:8px;box-shadow:var(--shadow);cursor:pointer}
+.exp-emo{width:38px;height:38px;border-radius:11px;background:rgba(47,124,246,.07);display:flex;align-items:center;justify-content:center;font-size:19px;flex:none}
+.exp-mid{flex:1;min-width:0}
+.exp-mid .c{font-size:14px;font-weight:600}
+.exp-mid .n{font-size:12px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.exp-amt{font-weight:700;font-size:15px;font-variant-numeric:tabular-nums;flex:none}
+.exp-day{font-size:12px;color:var(--ink3);margin:14px 0 8px;display:flex;align-items:center;gap:8px}
+.exp-day::after{content:"";flex:1;border-top:1px dashed var(--line2)}
 
-/* 照片墙 */
-.masonry{columns:4 230px;column-gap:14px}
-.ph-item{
-  break-inside:avoid;margin-bottom:14px;border-radius:11px;overflow:hidden;cursor:pointer;
-  position:relative;background:#e3eefc;box-shadow:var(--shadow);
-}
-.ph-item img{width:100%;transition:transform .35s}
-.ph-item:hover img{transform:scale(1.03)}
-.ph-item .ph-cap{
-  position:absolute;left:0;right:0;bottom:0;padding:22px 12px 9px;color:#fff;font-size:12px;
-  background:linear-gradient(to top,rgba(12,32,74,.72),transparent);
-  opacity:0;transition:opacity .2s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
-.ph-item:hover .ph-cap{opacity:1}
-.filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
-.fchip{
-  border:1px solid var(--line2);background:var(--card);color:var(--ink2);
-  border-radius:99px;padding:6px 15px;font-size:13px;cursor:pointer;transition:all .15s;
-}
-.fchip:hover{border-color:var(--accent);color:var(--accent)}
-.fchip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+/* 相册 */
+.album-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.album-grid .ag{aspect-ratio:1;border-radius:10px;overflow:hidden;background:#e3eefc;cursor:pointer;position:relative}
+.album-grid .ag img{width:100%;height:100%;object-fit:cover}
+.album-grid .ag .day-tag{position:absolute;left:5px;bottom:5px;font-size:9.5px;color:#fff;background:rgba(12,32,74,.55);border-radius:6px;padding:1px 6px}
 
-/* 地图 */
-.map-box{
-  height:480px;border-radius:var(--r);overflow:hidden;border:1px solid var(--line);
-  box-shadow:var(--shadow);background:#e3eefc;position:relative;z-index:1;
-}
-.map-note{font-size:12.5px;color:var(--ink3);margin-top:10px;display:flex;gap:6px;align-items:center}
-.map-fallback{
-  height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:10px;color:var(--ink3);font-size:14px;text-align:center;padding:20px;
-}
-.place-list{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
-.place-list .pl{
-  display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink2);
-  background:var(--card);border:1px solid var(--line);border-radius:99px;padding:5px 13px;
-}
-.place-list .pl i{width:8px;height:8px;border-radius:50%;background:var(--pc,var(--accent));flex:none}
+/* 清单 */
+.ck-input{display:flex;gap:8px;margin-bottom:14px}
+.ck-input input{flex:1;border:1px solid var(--line2);border-radius:12px;padding:10px 13px;background:#fff;color:var(--ink)}
+.ck-input input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(47,124,246,.12)}
+.ck-row{display:flex;align-items:center;gap:11px;background:var(--card);border:1px solid var(--line);border-radius:13px;padding:11px 13px;margin-bottom:8px;box-shadow:var(--shadow)}
+.ck-box{width:22px;height:22px;border-radius:7px;border:2px solid var(--line2);background:#fff;cursor:pointer;flex:none;display:flex;align-items:center;justify-content:center;color:#fff;padding:0}
+.ck-row.done .ck-box{background:var(--moss);border-color:var(--moss)}
+.ck-txt{flex:1;min-width:0;font-size:14.5px;word-break:break-word}
+.ck-row.done .ck-txt{color:var(--ink3);text-decoration:line-through}
+.ck-prog{font-size:12px;color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.ck-prog .bar{flex:1;height:6px;background:rgba(16,185,129,.12);border-radius:99px;overflow:hidden}
+.ck-prog .bar i{display:block;height:100%;background:var(--moss);border-radius:99px;transition:width .4s}
+
+/* ===== 地图 / 回顾 ===== */
+.map-box{height:56vh;min-height:340px;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow);background:#e3eefc;position:relative;z-index:1}
+.map-note{font-size:12px;color:var(--ink3);margin-top:10px;display:flex;gap:5px;align-items:center;flex-wrap:wrap}
+.map-fallback{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--ink3);font-size:13.5px;text-align:center;padding:20px}
+.place-list{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}
+.place-list .pl{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--ink2);background:var(--card);border:1px solid var(--line);border-radius:99px;padding:4px 11px}
+.place-list .pl i{width:7px;height:7px;border-radius:50%;background:var(--pc,var(--accent));flex:none}
 .leaflet-container{font-family:var(--sans)}
-.leaflet-popup-content-wrapper{border-radius:10px;box-shadow:var(--shadow-lift)}
-.leaflet-popup-content{margin:11px 15px;font-size:13px;line-height:1.6}
-
-/* 统计 */
-.stat-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px;margin-bottom:34px}
-.stat-card{
-  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
-  padding:20px 22px;box-shadow:var(--shadow);
-}
-.stat-card .n{font-family:var(--serif);font-size:31px;font-weight:800;line-height:1.15;background:linear-gradient(135deg,#2f7cf6,#38bdf8);-webkit-background-clip:text;background-clip:text;color:transparent}
-.stat-card .n small{font-size:14px;color:var(--ink2);font-weight:400}
-.stat-card .l{font-size:12.5px;color:var(--ink3);letter-spacing:2px;margin-top:4px}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:24px 26px;box-shadow:var(--shadow);margin-bottom:22px}
-.panel h3{font-family:var(--serif);font-size:17px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.leaflet-popup-content-wrapper{border-radius:10px}
+.leaflet-popup-content{margin:10px 14px;font-size:12.5px;line-height:1.6}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.stat-card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:15px 17px;box-shadow:var(--shadow)}
+.stat-card .n{font-family:var(--serif);font-size:25px;font-weight:800;line-height:1.2;background:linear-gradient(135deg,#2f7cf6,#38bdf8);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat-card .n small{font-size:13px;color:var(--ink2);font-weight:400;-webkit-text-fill-color:var(--ink2)}
+.stat-card .l{font-size:11.5px;color:var(--ink3);letter-spacing:1.5px;margin-top:2px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:16px;box-shadow:var(--shadow);margin-bottom:14px}
+.panel h3{font-family:var(--serif);font-size:15.5px;font-weight:700;margin-bottom:13px;display:flex;align-items:center;gap:7px}
 .panel h3 svg{color:var(--accent)}
-.bar-row{display:flex;align-items:center;gap:14px;margin-bottom:11px}
-.bar-row .by{width:56px;font-family:var(--serif);font-size:15px;font-weight:700;flex:none}
-.bar-row .bar{flex:1;height:20px;background:rgba(47,124,246,.08);border-radius:6px;overflow:hidden}
-.bar-row .bar i{display:block;height:100%;background:linear-gradient(90deg,#38bdf8,#2f7cf6);border-radius:6px;transition:width .6s ease}
-.bar-row .bn{width:70px;font-size:12.5px;color:var(--ink2);text-align:right;flex:none}
 
-/* ===== 弹窗 ===== */
-.modal-overlay{
-  position:fixed;inset:0;z-index:1000;background:rgba(18,38,79,.45);
-  display:flex;align-items:center;justify-content:center;padding:20px;
-  animation:mIn .2s ease;backdrop-filter:blur(3px);
-}
-@keyframes mIn{from{opacity:0}to{opacity:1}}
-.modal-card{
-  background:var(--card);border-radius:16px;width:100%;max-width:600px;
-  max-height:88vh;overflow-y:auto;box-shadow:0 24px 70px -12px rgba(18,38,79,.4);
-  animation:mUp .25s ease;padding:26px 28px;
-}
-.modal-card.narrow{max-width:440px}
-@keyframes mUp{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:none}}
-.modal-card h3{font-family:var(--serif);font-size:20px;font-weight:700;margin-bottom:20px;letter-spacing:1px}
-.modal-foot{display:flex;justify-content:flex-end;gap:10px;margin-top:24px}
-.field{margin-bottom:16px}
-.field label{display:block;font-size:13px;color:var(--ink2);margin-bottom:7px;font-weight:500}
+/* ===== 我的 ===== */
+.me-card{padding:18px;margin-bottom:14px}
+.me-card .row-line{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.me-card .row-line:last-child{border-bottom:0}
+.me-card .row-line b{font-family:var(--serif)}
+.me-card .row-line span{color:var(--ink2)}
+.me-list{overflow:hidden;margin-bottom:14px}
+.me-row{display:flex;align-items:center;gap:12px;width:100%;padding:14px 16px;background:var(--card);border:0;border-bottom:1px solid var(--line);cursor:pointer;font-size:14.5px;color:var(--ink);text-align:left}
+.me-row:last-child{border-bottom:0}
+.me-row:active{background:rgba(47,124,246,.05)}
+.me-row .em{font-size:19px;flex:none}
+.me-row .sub{display:block;font-size:11.5px;color:var(--ink3);font-weight:400}
+.me-row .arrow{margin-left:auto;color:var(--line2);display:flex;flex:none}
+.me-row.danger{color:var(--danger)}
+.tip-card{background:linear-gradient(120deg,#eaf3ff,#f0fbff);border:1px solid #d5e5fc;border-radius:15px;padding:14px 16px;font-size:12.5px;color:var(--ink2);line-height:1.8}
+
+/* ===== 底部弹窗 ===== */
+.sheet-overlay{position:fixed;inset:0;z-index:1000;background:rgba(18,38,79,.45);animation:fIn .2s ease;backdrop-filter:blur(2px);display:flex;align-items:flex-end;justify-content:center}
+@keyframes fIn{from{opacity:0}to{opacity:1}}
+.sheet{background:var(--paper);width:100%;max-width:600px;max-height:92vh;overflow-y:auto;border-radius:22px 22px 0 0;animation:shUp .28s cubic-bezier(.2,.8,.25,1);padding:10px 18px calc(20px + env(safe-area-inset-bottom));overscroll-behavior:contain}
+@keyframes shUp{from{transform:translateY(60%);opacity:.5}to{transform:none;opacity:1}}
+.sheet .grab{width:40px;height:4px;border-radius:99px;background:var(--line2);margin:2px auto 14px}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.sheet-head h3{font-family:var(--serif);font-size:18px;font-weight:700}
+.sheet-foot{display:flex;gap:10px;margin-top:18px}
+.sheet-foot .btn{flex:1}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12.5px;color:var(--ink2);margin-bottom:6px;font-weight:500}
 .field label em{color:var(--accent);font-style:normal}
-.field input[type=text],.field input[type=date],.field textarea{
-  width:100%;border:1px solid var(--line2);border-radius:10px;background:#ffffff;
-  padding:10px 13px;font-size:14.5px;font-family:inherit;color:var(--ink);
-  transition:border .15s,box-shadow .15s;
-}
+.field input[type=text],.field input[type=date],.field input[type=time],.field input[type=number],.field textarea{width:100%;border:1px solid var(--line2);border-radius:11px;background:#fff;padding:10px 13px;color:var(--ink);transition:border .15s,box-shadow .15s}
 .field input:focus,.field textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(47,124,246,.12)}
-.field textarea{resize:vertical;min-height:120px;line-height:1.75}
-.field-row{display:flex;gap:12px}
-.field-row .field{flex:1}
-.type-picker{display:flex;gap:7px;flex-wrap:wrap}
-.type-picker button{
-  border:1px solid var(--line2);background:#ffffff;color:var(--ink2);
-  border-radius:99px;padding:6px 15px;font-size:13px;cursor:pointer;transition:all .15s;
-}
-.type-picker button.on{background:var(--tc);border-color:var(--tc);color:#fff}
-.place-row{display:flex;gap:9px}
-.place-row input{flex:1}
-.place-status{font-size:12px;color:var(--moss);margin-top:6px;min-height:16px}
+.field textarea{resize:vertical;min-height:84px;line-height:1.7}
+.field-row{display:flex;gap:10px}
+.field-row .field{flex:1;min-width:0}
+.place-row{display:flex;gap:8px}
+.place-row input{flex:1;min-width:0}
+.place-status{font-size:12px;color:var(--moss);margin-top:5px;min-height:16px}
 .place-status.none{color:var(--ink3)}
-.place-results{margin-top:8px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#ffffff}
-.place-results button{
-  display:block;width:100%;text-align:left;border:0;background:none;cursor:pointer;
-  padding:8px 13px;font-size:13px;color:var(--ink2);border-bottom:1px solid var(--line);
-}
+.place-results{margin-top:8px;border:1px solid var(--line);border-radius:11px;overflow:hidden;background:#fff}
+.place-results button{display:block;width:100%;text-align:left;border:0;background:none;cursor:pointer;padding:9px 13px;font-size:13px;color:var(--ink2);border-bottom:1px solid var(--line)}
 .place-results button:last-child{border-bottom:0}
-.place-results button:hover{background:rgba(47,124,246,.07);color:var(--ink)}
-.photo-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px}
+.place-results button:active{background:rgba(47,124,246,.07);color:var(--ink)}
+.photo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:9px}
 .photo-grid .pg{position:relative;aspect-ratio:1;border-radius:9px;overflow:hidden;background:#e3eefc}
 .photo-grid .pg img{width:100%;height:100%;object-fit:cover}
-.photo-grid .pg .rm{
-  position:absolute;top:4px;right:4px;width:20px;height:20px;border-radius:50%;border:0;cursor:pointer;
-  background:rgba(12,32,74,.65);color:#fff;display:flex;align-items:center;justify-content:center;
-}
-.photo-grid .pg .rm:hover{background:#a8402a}
-@media (max-width:520px){.photo-grid{grid-template-columns:repeat(4,1fr)}}
+.photo-grid .pg .rm{position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;border:0;cursor:pointer;background:rgba(12,32,74,.65);color:#fff;display:flex;align-items:center;justify-content:center;padding:0}
 .confirm-msg{color:var(--ink2);font-size:14px;line-height:1.8}
+.mode-chips{display:flex;gap:7px;flex-wrap:wrap}
+.mode-chips button{border:1px solid var(--line2);background:#fff;border-radius:99px;padding:6px 13px;font-size:13px;cursor:pointer;color:var(--ink2)}
+.mode-chips button.on{background:var(--accent);border-color:var(--accent);color:#fff}
 
-/* ===== 灯箱 ===== */
-.lightbox{
-  position:fixed;inset:0;z-index:1100;background:rgba(10,25,55,.93);
-  display:flex;align-items:center;justify-content:center;animation:mIn .2s ease;
-}
-.lightbox img{max-width:90vw;max-height:80vh;border-radius:6px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
-.lb-cap{
-  position:absolute;bottom:26px;left:0;right:0;text-align:center;color:rgba(255,255,255,.88);
-  font-size:13.5px;padding:0 60px;
-}
-.lb-cap b{font-family:var(--serif);font-size:15.5px;display:block;margin-bottom:2px}
-.lb-btn{
-  position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;
-  border:0;cursor:pointer;background:rgba(255,255,255,.12);color:#fff;
-  display:flex;align-items:center;justify-content:center;transition:background .15s;
-}
-.lb-btn:hover{background:rgba(255,255,255,.28)}
-.lb-prev{left:18px}.lb-next{right:18px}
-.lb-close{position:absolute;top:18px;right:18px;top:16px;transform:none}
-.lb-count{position:absolute;top:24px;left:24px;color:rgba(255,255,255,.65);font-size:13px;letter-spacing:1px}
-
-/* ===== toast ===== */
-.toast{
-  position:fixed;bottom:34px;left:50%;transform:translateX(-50%) translateY(16px);
-  background:#12264f;color:#eef4ff;padding:11px 22px;border-radius:11px;font-size:14px;
-  box-shadow:0 10px 34px rgba(18,38,79,.35);z-index:1300;opacity:0;transition:all .25s;
-  pointer-events:none;max-width:86vw;text-align:center;
-}
+/* ===== 灯箱 / toast ===== */
+.lightbox{position:fixed;inset:0;z-index:1100;background:rgba(10,25,55,.94);display:none;align-items:center;justify-content:center}
+.lightbox img{max-width:94vw;max-height:78vh;border-radius:6px}
+.lb-cap{position:absolute;bottom:30px;left:0;right:0;text-align:center;color:rgba(255,255,255,.88);font-size:13px;padding:0 50px}
+.lb-cap b{font-family:var(--serif);font-size:15px;display:block;margin-bottom:2px}
+.lb-btn{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;border-radius:50%;border:0;cursor:pointer;background:rgba(255,255,255,.12);color:#fff;display:flex;align-items:center;justify-content:center}
+.lb-prev{left:12px}.lb-next{right:12px}
+.lb-close{position:absolute;top:14px;right:14px;top:16px;transform:none}
+.lb-count{position:absolute;top:22px;left:20px;color:rgba(255,255,255,.65);font-size:12.5px;letter-spacing:1px}
+.toast{position:fixed;bottom:calc(var(--tabbar-h) + 26px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%) translateY(14px);background:#12264f;color:#eef4ff;padding:10px 20px;border-radius:11px;font-size:13.5px;box-shadow:0 10px 30px rgba(18,38,79,.35);z-index:1300;opacity:0;transition:all .25s;pointer-events:none;max-width:86vw;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.boot{display:flex;align-items:center;justify-content:center;min-height:50vh;color:var(--ink3);font-family:var(--serif);letter-spacing:3px}
-
-@media (max-width:720px){
-  .topbar-in{padding:0 14px;gap:10px;height:auto;flex-wrap:wrap;padding-top:8px;padding-bottom:8px}
-  .nav{order:3;width:100%}
-  .wrap{padding:24px 16px 70px}
-  .stat-cell{min-width:calc(50% - 1px);border-bottom:1px dashed var(--line2)}
-  .memory-card .mc-img{width:88px;height:88px}
-}
 </style>
 </head>
 <body>
 
-<header class="topbar">
-  <div class="topbar-in">
-    <div class="logo" onclick="A.nav('home')" title="回到首页">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m16.2 7.8-2.1 6.3-6.3 2.1 2.1-6.3z"/></svg>
-      <b>行途录</b><span>XINGTU · 旅行回忆</span>
-    </div>
-    <nav class="nav" id="nav"></nav>
-    <div class="top-acts">
-      <button class="btn btn-t btn-sm" onclick="A.doExport()" title="导出备份"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>导出</button>
-      <button class="btn btn-t btn-sm" onclick="A.doImport()" title="导入备份"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/></svg>导入</button>
-      <button class="btn btn-p btn-sm" onclick="A.tripModal()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>新建旅行</button>
-    </div>
-  </div>
-</header>
-
-<main class="wrap" id="app"><div class="boot">正在翻开手账……</div></main>
-
+<header class="topbar"><div class="topbar-in" id="topbar"></div></header>
+<main class="wrap" id="app"><div class="boot">正在翻开行途录……</div></main>
+<nav class="tabbar" id="tabbar"></nav>
 <input type="file" id="import-file" accept=".json,application/json" hidden>
+<div class="lightbox" id="lightbox"></div>
 
 <script>
 /* ============================================================
-   行途录 · 旅行回忆手账 —— 纯本地单文件应用
-   数据全部保存在本浏览器 IndexedDB 中,可导出/导入 JSON 备份
+   行途录 · 旅行记录 —— 手机优先 · 纯本地单文件应用
+   数据保存在本浏览器 IndexedDB,支持导出/导入 JSON 备份
    ============================================================ */
 'use strict';
 
@@ -480,13 +337,8 @@ const fmtYMD=s=>{const p=String(s).split('-');return p[0]+'年'+(+p[1])+'月'+(+
 const fmtWeek=s=>'周'+WD[pdate(s).getDay()];
 const tripDays=t=>(t.startDate&&t.endDate)?Math.max(1,Math.round((pdate(t.endDate)-pdate(t.startDate))/864e5)+1):0;
 const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
-
-const TYPES=[
-  {k:'见闻',c:'#2f7cf6'},{k:'趣事',c:'#ffb020'},{k:'美食',c:'#ff7d54'},
-  {k:'住宿',c:'#10b981'},{k:'交通',c:'#8b5cf6'},{k:'心情',c:'#ec4899'},
-];
-const typeColor=k=>(TYPES.find(t=>t.k===k)||TYPES[0]).c;
-const PALETTE=['#2f7cf6','#10b981','#ff7d54','#8b5cf6','#ec4899','#ffb020','#06b6d4','#f43f5e'];
+const clampDate=(v,a,b)=>{if(a&&v<a)return a;if(b&&v>b)return b;return v;};
+const money=n=>'¥'+(+n||0).toLocaleString('zh-CN',{maximumFractionDigits:2});
 
 function icon(name,s=16){
   const P={
@@ -507,20 +359,58 @@ function icon(name,s=16){
     camera:'<path d="M14.5 4h-5L7.5 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3.5L14.5 4Z"/><circle cx="12" cy="13" r="3"/>',
     calendar:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/>',
     home2:'<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M9 22V12h6v10"/>',
+    user:'<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+    wallet:'<path d="M19 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0 0 4h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5"/><path d="M16 12h.01"/>',
+    list:'<path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/>',
+    route:'<circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/>',
+    check:'<path d="M20 6 9 17l-5-5"/>',
+    moon:'<circle cx="12" cy="12" r="10"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.9 4.9 1.4 1.4"/><path d="m17.7 17.7 1.4 1.4"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.3 17.7-1.4 1.4"/><path d="m19.1 4.9-1.4 1.4"/>',
   };
   return '<svg width="'+s+'" height="'+s+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+(P[name]||'')+'</svg>';
 }
 
-/* ---------- IndexedDB ---------- */
+/* ---------- 类型定义 ---------- */
+const ITYPES=[
+  {k:'place', t:'安排', em:'📍', c:'#2f7cf6'},
+  {k:'transport', t:'交通', em:'🚄', c:'#8b5cf6'},
+  {k:'hotel', t:'住宿', em:'🏨', c:'#10b981'},
+  {k:'food', t:'美食', em:'🍜', c:'#ff7d54'},
+  {k:'note', t:'见闻', em:'✏️', c:'#ec4899'},
+];
+const itype=k=>ITYPES.find(x=>x.k===k)||ITYPES[0];
+const OLD_TYPE_MAP={'见闻':'note','趣事':'note','心情':'note','美食':'food','交通':'transport','住宿':'hotel'};
+
+const MODES=[
+  {k:'plane',em:'✈️',t:'飞机'},{k:'hsr',em:'🚄',t:'高铁'},{k:'train',em:'🚆',t:'火车'},
+  {k:'metro',em:'🚇',t:'地铁'},{k:'bus',em:'🚌',t:'大巴'},{k:'car',em:'🚗',t:'自驾'},
+  {k:'taxi',em:'🚕',t:'打车'},{k:'ship',em:'🚢',t:'轮船'},{k:'bike',em:'🚲',t:'骑行'},{k:'walk',em:'🚶',t:'步行'},
+];
+const modeOf=k=>MODES.find(m=>m.k===k)||MODES[0];
+
+const CATS=[
+  {k:'food',em:'🍜',t:'餐饮',c:'#ff7d54'},
+  {k:'trans',em:'🚌',t:'交通',c:'#8b5cf6'},
+  {k:'stay',em:'🏨',t:'住宿',c:'#10b981'},
+  {k:'ticket',em:'🎫',t:'门票',c:'#2f7cf6'},
+  {k:'shop',em:'🛍️',t:'购物',c:'#ec4899'},
+  {k:'fun',em:'🎡',t:'娱乐',c:'#ffb020'},
+  {k:'other',em:'📦',t:'其他',c:'#93a5c4'},
+];
+const catOf=k=>CATS.find(c=>c.k===k)||CATS[6];
+const PALETTE=['#2f7cf6','#10b981','#ff7d54','#8b5cf6','#ec4899','#ffb020','#06b6d4','#f43f5e'];
+
+/* ---------- IndexedDB (v2) ---------- */
 let db=null;
 function openDB(){
   return new Promise((res,rej)=>{
-    const r=indexedDB.open('footprints-db',1);
+    const r=indexedDB.open('footprints-db',2);
     r.onupgradeneeded=e=>{
       const d=e.target.result;
-      d.createObjectStore('trips',{keyPath:'id'});
-      d.createObjectStore('entries',{keyPath:'id'});
-      d.createObjectStore('photos',{keyPath:'id'});
+      if(!d.objectStoreNames.contains('trips'))d.createObjectStore('trips',{keyPath:'id'});
+      if(!d.objectStoreNames.contains('entries'))d.createObjectStore('entries',{keyPath:'id'});
+      if(!d.objectStoreNames.contains('photos'))d.createObjectStore('photos',{keyPath:'id'});
+      if(!d.objectStoreNames.contains('expenses'))d.createObjectStore('expenses',{keyPath:'id'});
+      if(!d.objectStoreNames.contains('checklist'))d.createObjectStore('checklist',{keyPath:'id'});
     };
     r.onsuccess=e=>res(e.target.result);
     r.onerror=e=>rej(e.target.error);
@@ -536,47 +426,69 @@ const idbAll=s=>idbReq('readonly',s,o=>o.getAll());
 const idbClear=s=>idbReq('readwrite',s,o=>o.clear());
 
 /* ---------- 全局状态 ---------- */
-const S={trips:[],entries:[],photos:[],view:'home',tripId:null,tab:'timeline',galleryFilter:'all'};
-let LB=null;           // 灯箱 {items,i}
-let ED=null;           // 游记编辑草稿
-let maps={};           // leaflet 实例
-let entrySeq=0;
+const S={trips:[],entries:[],photos:[],expenses:[],checklist:[],view:'home',tripId:null,tab:'plan',galleryFilter:'all'};
+let LB=null,ED=null,maps={};
 
 const tripById=id=>S.trips.find(t=>t.id===id);
 const entryById=id=>S.entries.find(e=>e.id===id);
 const photoById=id=>S.photos.find(p=>p.id===id);
-const entriesOf=tid=>S.entries.filter(e=>e.tripId===tid).sort((a,b)=>a.date===b.date?(a.createdAt||0)-(b.createdAt||0):(a.date<b.date?-1:1));
+const itemsOf=tid=>S.entries.filter(e=>e.tripId===tid).sort((a,b)=>{
+  if(a.date!==b.date)return a.date<b.date?-1:1;
+  const ta=a.time||a.tDepart||'',tb=b.time||b.tDepart||'';
+  if(ta!==tb)return ta<tb?-1:1;
+  return (a.createdAt||0)-(b.createdAt||0);
+});
 const photosOfEntry=eid=>S.photos.filter(p=>p.entryId===eid);
 const photosOfTrip=tid=>{
-  const em={};entriesOf(tid).forEach((e,i)=>em[e.id]=i);
+  const em={};itemsOf(tid).forEach((e,i)=>em[e.id]=i);
   return S.photos.filter(p=>p.tripId===tid).sort((a,b)=>(em[a.entryId]??99)-(em[b.entryId]??99));
 };
 const tripCover=t=>photosOfTrip(t.id)[0]||null;
+const expensesOf=tid=>S.expenses.filter(x=>x.tripId===tid).sort((a,b)=>a.date===b.date?(a.createdAt||0)-(b.createdAt||0):(a.date<b.date?-1:1));
+const sumOf=tid=>expensesOf(tid).reduce((a,x)=>a+(+x.amount||0),0);
+const checklistOf=tid=>S.checklist.filter(x=>x.tripId===tid);
+const tripStatus=t=>{
+  const td=todayStr();
+  if(t.startDate&&t.endDate){
+    if(td<t.startDate)return['todo','未出发'];
+    if(td>t.endDate)return['done','已结束'];
+    return['doing','进行中'];
+  }
+  return['todo',''];
+};
+function globalStats(){
+  const days=S.trips.reduce((a,t)=>a+tripDays(t),0);
+  const cities=new Set(S.entries.filter(e=>e.placeName).map(e=>e.placeName)).size;
+  const spent=S.expenses.reduce((a,x)=>a+(+x.amount||0),0);
+  return{trips:S.trips.length,days,cities,photos:S.photos.length,spent};
+}
 
-/* ---------- toast / 弹窗 ---------- */
+/* ---------- toast / 底部弹窗 ---------- */
 let toastTimer=null;
 function toast(msg){
   let el=$('#toast');
   if(!el){el=document.createElement('div');el.id='toast';el.className='toast';document.body.appendChild(el);}
   el.textContent=msg;el.classList.add('show');
-  clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),2600);
+  clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),2400);
 }
-const modalStack=[];
-function openModal(html,narrow){
-  const ov=document.createElement('div');ov.className='modal-overlay';
-  ov.innerHTML='<div class="modal-card'+(narrow?' narrow':'')+'">'+html+'</div>';
+const sheetStack=[];
+function openSheet(html){
+  const ov=document.createElement('div');ov.className='sheet-overlay';
+  ov.innerHTML='<div class="sheet"><div class="grab"></div>'+html+'</div>';
   document.body.appendChild(ov);
-  const api={ov,close(){ov.remove();const i=modalStack.indexOf(api);if(i>-1)modalStack.splice(i,1);}};
+  document.body.style.overflow='hidden';
+  const api={ov,close(){ov.remove();const i=sheetStack.indexOf(api);if(i>-1)sheetStack.splice(i,1);if(!sheetStack.length)document.body.style.overflow='';}};
   ov.addEventListener('mousedown',e=>{if(e.target===ov)api.close();});
-  modalStack.push(api);
+  sheetStack.push(api);
   return api;
 }
 function confirmBox(title,msg,okText){
   return new Promise(res=>{
-    const m=openModal(
-      '<h3>'+esc(title)+'</h3><p class="confirm-msg">'+msg+'</p>'+
-      '<div class="modal-foot"><button class="btn btn-g" data-act="no">取消</button>'+
-      '<button class="btn btn-d" data-act="yes">'+esc(okText||'删除')+'</button></div>',true);
+    const m=openSheet(
+      '<h3 style="font-family:var(--serif);font-size:18px;font-weight:700;margin-bottom:10px">'+esc(title)+'</h3>'+
+      '<p class="confirm-msg">'+msg+'</p>'+
+      '<div class="sheet-foot"><button class="btn btn-g" data-act="no">取消</button>'+
+      '<button class="btn btn-d" data-act="yes">'+esc(okText||'删除')+'</button></div>');
     m.ov.querySelector('[data-act=no]').onclick=()=>{m.close();res(false);};
     m.ov.querySelector('[data-act=yes]').onclick=()=>{m.close();res(true);};
   });
@@ -584,9 +496,9 @@ function confirmBox(title,msg,okText){
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){
     if(LB){closeLB();return;}
-    const top=modalStack[modalStack.length-1];if(top)top.close();
+    const top=sheetStack[sheetStack.length-1];if(top)top.close();
   }
-  if(LB&&!modalStack.length){
+  if(LB&&!sheetStack.length){
     if(e.key==='ArrowLeft')lbNav(-1);
     if(e.key==='ArrowRight')lbNav(1);
   }
@@ -615,269 +527,369 @@ function compressImage(file){
    渲染
    ============================================================ */
 function render(){
-  if(maps.trip){maps.trip.remove();maps.trip=null;}
   if(maps.global){maps.global.remove();maps.global=null;}
   const app=$('#app');
-  renderNav();
+  renderTopbar();renderTabbar();renderFab();
   window.scrollTo(0,0);
   if(S.view==='home')app.innerHTML=viewHome();
   else if(S.view==='trip')app.innerHTML=viewTrip();
-  else if(S.view==='gallery')app.innerHTML=viewGallery();
-  else if(S.view==='map')app.innerHTML=viewGlobalMap();
+  else if(S.view==='map')app.innerHTML=viewMap();
   else if(S.view==='stats')app.innerHTML=viewStats();
+  else if(S.view==='me')app.innerHTML=viewMe();
   app.classList.remove('view-anim');void app.offsetWidth;app.classList.add('view-anim');
-  if(S.view==='trip'&&S.tab==='map')initTripMap();
   if(S.view==='map')initGlobalMap();
 }
 
 const NAVS=[
-  {k:'home',t:'我的旅行',i:'home2'},
-  {k:'gallery',t:'照片回忆',i:'image'},
-  {k:'map',t:'足迹地图',i:'map'},
-  {k:'stats',t:'旅行统计',i:'chart'},
+  {k:'home',t:'首页',i:'home2'},
+  {k:'map',t:'足迹',i:'map'},
+  {k:'stats',t:'回顾',i:'chart'},
+  {k:'me',t:'我的',i:'user'},
 ];
-function renderNav(){
-  $('#nav').innerHTML=NAVS.map(n=>
-    '<button class="'+(S.view===n.k||(n.k==='home'&&S.view==='trip')?'on':'')+'" onclick="A.nav(\''+n.k+'\')">'+icon(n.i,15)+esc(n.t)+'</button>'
+function renderTopbar(){
+  const el=$('#topbar');
+  if(S.view==='trip'){
+    const t=tripById(S.tripId);
+    el.innerHTML='<button class="tb-back" onclick="A.nav(\'home\')" aria-label="返回">'+icon('back',19)+'</button>'+
+      '<div class="tb-title">'+esc(t?t.name:'')+'</div>'+
+      (t?'<button class="tb-act" onclick="A.tripSheet(\''+t.id+'\')">编辑</button>':'');
+  }else{
+    el.innerHTML='<div class="logo" onclick="A.nav(\'home\')">'+
+      '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m16.2 7.8-2.1 6.3-6.3 2.1 2.1-6.3z"/></svg>'+
+      '<b>行途录</b><span>XINGTU</span></div>';
+  }
+}
+function renderTabbar(){
+  $('#tabbar').innerHTML=NAVS.map(n=>
+    '<button class="'+(S.view===n.k?'on':'')+'" onclick="A.nav(\''+n.k+'\')">'+icon(n.i,21)+'<span>'+n.t+'</span></button>'
   ).join('');
+}
+function renderFab(){
+  let el=$('#fab');
+  if(S.view==='home'){
+    if(!el){el=document.createElement('button');el.id='fab';el.className='fab';el.setAttribute('aria-label','新建旅行');el.onclick=()=>A.tripSheet();document.body.appendChild(el);}
+    el.style.display='flex';el.innerHTML=icon('plus',24);
+  }else if(el)el.style.display='none';
 }
 
 /* ---------- 首页 ---------- */
-function globalStats(){
-  const days=S.trips.reduce((a,t)=>a+tripDays(t),0);
-  const cities=new Set(S.entries.filter(e=>e.placeName).map(e=>e.placeName)).size;
-  const words=S.entries.reduce((a,e)=>a+(e.content||'').length,0);
-  return {trips:S.trips.length,days,cities,photos:S.photos.length,words};
-}
 function memoryCard(){
   const now=new Date();
-  const mm=String(now.getMonth()+1).padStart(2,'0'),dd=String(now.getDate()).padStart(2,'0');
-  const md=mm+'-'+dd;
+  const md=String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
   const past=S.entries.filter(e=>e.date<todayStr());
   if(!past.length)return '';
   const exact=past.filter(e=>String(e.date).slice(5)===md).sort((a,b)=>a.date<b.date?1:-1);
   let e,label;
-  if(exact.length){e=exact[0];const y=now.getFullYear()-+e.date.slice(0,4);label=(y<=1?'一年':y+'年')+'前的今天';}
+  if(exact.length){e=exact[0];const y=now.getFullYear()-+e.date.slice(0,4);label=(y<=1?'去年':y+'年前')+'的今天';}
   else{e=past[Math.floor(Math.random()*past.length)];label='随手翻到的一页';}
   const t=tripById(e.tripId);if(!t)return '';
   const ph=photosOfEntry(e.id)[0];
-  const ex=(e.content||'').replace(/\s+/g,' ').slice(0,80);
   return '<div class="memory-card" onclick="A.openTrip(\''+t.id+'\')">'+
     '<div class="mc-img">'+(ph?'<img src="'+ph.dataUrl+'" alt="">':'')+'</div>'+
     '<div class="mc-body"><div class="mc-tag">'+esc(label)+'</div>'+
-    '<h3>'+esc(e.title||'无题的一页')+'</h3>'+
-    (ex?'<div class="mc-ex">'+esc(ex)+'</div>':'')+
+    '<h3>'+esc(e.title||itype(e.type).t+' · 一段记录')+'</h3>'+
     '<div class="mc-meta">'+esc(t.name)+(e.date?' · '+fmtYMD(e.date):'')+'</div></div></div>';
 }
 function viewHome(){
   const st=globalStats();
-  let grid;
-  if(!S.trips.length){
-    grid='<div class="empty" style="margin-top:6px">'+icon('compass',54)+
-      '<h3>还没有旅程</h3><p>创建第一段旅行,开始记录沿途的风景、见闻与趣事</p>'+
-      '<button class="btn btn-p" onclick="A.tripModal()">'+icon('plus',15)+'新建旅行</button></div>';
+  const now=new Date(),hr=now.getHours();
+  const greet=hr<6?'夜深了':hr<11?'早上好':hr<14?'中午好':hr<18?'下午好':'晚上好';
+  let list;
+  const sorted=S.trips.slice().sort((a,b)=>(b.startDate||'').localeCompare(a.startDate||''));
+  if(!sorted.length){
+    list='<div class="empty">'+icon('compass',50)+'<h3>还没有旅程</h3><p>创建第一段旅行,把路线、交通、住宿和花销都记下来</p>'+
+      '<button class="btn btn-p" onclick="A.tripSheet()">'+icon('plus',15)+'新建旅行</button></div>';
   }else{
-    grid='<div class="trips-grid"><div class="new-trip-card" onclick="A.tripModal()">'+icon('plus',26)+'<span>新建旅行</span></div>'+
-      S.trips.slice().sort((a,b)=>(b.startDate||'').localeCompare(a.startDate||'')).map(t=>{
-        const cov=tripCover(t),n=entriesOf(t.id).length,np=photosOfTrip(t.id).length,days=tripDays(t);
-        const range=t.startDate?(t.endDate&&t.endDate!==t.startDate?fmtMD(t.startDate)+' — '+fmtYMD(t.endDate):fmtYMD(t.startDate)):'';
-        return '<div class="trip-card" onclick="A.openTrip(\''+t.id+'\')">'+
-          '<div class="trip-ops">'+
-            '<button class="icon-btn" title="编辑" onclick="event.stopPropagation();A.tripModal(\''+t.id+'\')">'+icon('edit',14)+'</button>'+
-            '<button class="icon-btn del" title="删除" onclick="event.stopPropagation();A.delTrip(\''+t.id+'\')">'+icon('trash',14)+'</button></div>'+
-          '<div class="trip-cover">'+(cov?'<img src="'+cov.dataUrl+'" alt="">':'<div class="ph-letter">'+esc((t.destination||t.name||'旅').slice(0,1))+'</div>')+'</div>'+
-          '<div class="trip-body"><h3>'+esc(t.name)+'</h3>'+
-          (t.destination?'<div class="dest">'+icon('pin',13)+esc(t.destination)+'</div>':'')+
-          (range?'<div class="dest" style="margin-top:2px">'+esc(range)+'</div>':'')+
-          '<div class="trip-meta">'+
-            (days?'<span class="badge">'+days+' 天</span>':'')+
-            '<span class="badge">'+n+' 篇游记</span>'+
-            (np?'<span class="badge">'+np+' 张照片</span>':'')+
+    list=sorted.map(t=>{
+      const cov=tripCover(t),n=itemsOf(t.id).length,np=photosOfTrip(t.id).length,days=tripDays(t);
+      const range=t.startDate?(t.endDate&&t.endDate!==t.startDate?fmtMD(t.startDate)+' — '+fmtYMD(t.endDate):fmtYMD(t.startDate)):'日期待定';
+      const[sc,sl]=tripStatus(t);
+      return '<div class="trip-row" onclick="A.openTrip(\''+t.id+'\')">'+
+        '<div class="ops">'+
+          '<button class="icon-btn" aria-label="编辑" onclick="event.stopPropagation();A.tripSheet(\''+t.id+'\')">'+icon('edit',13)+'</button>'+
+          '<button class="icon-btn del" aria-label="删除" onclick="event.stopPropagation();A.delTrip(\''+t.id+'\')">'+icon('trash',13)+'</button></div>'+
+        '<div class="trip-cover">'+(cov?'<img src="'+cov.dataUrl+'" alt="">':esc((t.destination||t.name||'旅').slice(0,1)))+'</div>'+
+        '<div class="trip-info"><h3>'+esc(t.name)+'</h3>'+
+          (t.destination?'<div class="dest">'+icon('pin',12)+esc(t.destination)+'</div>':'')+
+          '<div class="dest" style="color:var(--ink3)">'+esc(range)+'</div>'+
+          '<div class="meta">'+(sl?'<span class="trip-status st-'+sc+'">'+sl+'</span>':'')+
+            (days?'<span class="chip">'+days+' 天</span>':'')+
+            (np?'<span class="chip">'+np+' 张照片</span>':'')+
           '</div></div></div>';
-      }).join('')+'</div>';
+    }).join('');
   }
-  return '<div class="hero"><div class="kicker">XINGTU JOURNAL</div>'+
-    '<h1>走过的每一步,都值得珍藏</h1><p>时间线游记、照片墙、地图足迹——写给未来某一天,想再走一遍来时路的你。</p></div>'+
-    '<div class="stats-strip">'+
-      '<div class="stat-cell"><div class="n">'+st.trips+'<small>次</small></div><div class="l">旅行</div></div>'+
-      '<div class="stat-cell"><div class="n">'+st.cities+'<small>城</small></div><div class="l">足迹</div></div>'+
-      '<div class="stat-cell"><div class="n">'+st.days+'<small>天</small></div><div class="l">在途</div></div>'+
-      '<div class="stat-cell"><div class="n">'+st.photos+'<small>张</small></div><div class="l">照片</div></div>'+
-      '<div class="stat-cell"><div class="n">'+st.words+'<small>字</small></div><div class="l">见闻</div></div>'+
+  return '<div class="hello"><div class="kicker">XINGTU JOURNAL</div>'+
+    '<h1>'+greet+',想去哪里?</h1><p>'+fmtYMD(todayStr())+' '+fmtWeek(todayStr())+'</p></div>'+
+    '<div class="stat-strip">'+
+      '<div class="stat-pill"><div class="n">'+st.trips+'<small>次</small></div><div class="l">旅行</div></div>'+
+      '<div class="stat-pill"><div class="n">'+st.days+'<small>天</small></div><div class="l">在途</div></div>'+
+      '<div class="stat-pill"><div class="n">'+st.cities+'<small>个</small></div><div class="l">足迹</div></div>'+
+      '<div class="stat-pill"><div class="n">'+st.photos+'<small>张</small></div><div class="l">照片</div></div>'+
+      '<div class="stat-pill"><div class="n">'+(st.spent>=10000?(st.spent/10000).toFixed(1)+'<small>万</small>':st.spent+'<small>元</small>')+'</div><div class="l">总花销</div></div>'+
     '</div>'+
     memoryCard()+
-    '<div class="sec-head"><h2>我的旅行</h2><span>'+S.trips.length+' 段旅程</span></div>'+grid+
-    '<div class="safe-hint">'+icon('book',14)+'数据只保存在这台设备的浏览器里 · 记得定期 <a onclick="A.doExport()">导出备份</a></div>';
+    '<div class="sec"><h2>我的旅行</h2><span>'+sorted.length+' 段旅程</span></div>'+list;
 }
 
 /* ---------- 旅行详情 ---------- */
 function viewTrip(){
   const t=tripById(S.tripId);
   if(!t){S.view='home';return viewHome();}
-  const es=entriesOf(t.id),ps=photosOfTrip(t.id);
+  const its=itemsOf(t.id),ps=photosOfTrip(t.id),exs=expensesOf(t.id),cks=checklistOf(t.id);
   const cov=tripCover(t);
   const range=t.startDate?(t.endDate&&t.endDate!==t.startDate?fmtYMD(t.startDate)+' — '+fmtYMD(t.endDate):fmtYMD(t.startDate)):'';
+  const[sc,sl]=tripStatus(t);
+  const nTrans=its.filter(e=>e.type==='transport').length,nStay=new Set(its.filter(e=>e.type==='hotel').map(e=>e.date)).size;
   let tabHtml='';
-  if(S.tab==='timeline')tabHtml=tabTimeline(t,es);
-  else if(S.tab==='gallery')tabHtml=tabGallery(t,ps);
-  else tabHtml=tabMap(t,es);
+  if(S.tab==='plan')tabHtml=tabPlan(t,its);
+  else if(S.tab==='cost')tabHtml=tabCost(t,exs);
+  else if(S.tab==='album')tabHtml=tabAlbum(t,ps);
+  else if(S.tab==='list')tabHtml=tabList(t,cks);
   const tabs=[
-    {k:'timeline',t:'时间线游记',i:'book',n:es.length},
-    {k:'gallery',t:'照片墙',i:'image',n:ps.length},
-    {k:'map',t:'地图足迹',i:'map',n:es.filter(e=>e.lat!=null&&e.lng!=null).length},
+    {k:'plan',t:'行程',n:its.length},
+    {k:'cost',t:'花销',n:exs.length},
+    {k:'album',t:'相册',n:ps.length},
+    {k:'list',t:'清单',n:cks.length},
   ];
-  return '<button class="back-link" onclick="A.nav(\'home\')">'+icon('back',15)+'返回我的旅行</button>'+
-    '<div class="trip-hero'+(cov?' covered':'')+'">'+
+  return '<div class="trip-hero'+(cov?' covered':'')+'">'+
       (cov?'<img class="cover-img" src="'+cov.dataUrl+'" alt="">':'')+
       '<div class="veil"></div>'+
-      '<div class="th-ops">'+
-        '<button class="icon-btn" title="编辑旅行" onclick="A.tripModal(\''+t.id+'\')">'+icon('edit',14)+'</button>'+
-        '<button class="icon-btn del" title="删除旅行" onclick="A.delTrip(\''+t.id+'\')">'+icon('trash',14)+'</button></div>'+
+      '<div class="ops">'+
+        '<button class="icon-btn" aria-label="编辑旅行" onclick="A.tripSheet(\''+t.id+'\')">'+icon('edit',14)+'</button>'+
+        '<button class="icon-btn del" aria-label="删除旅行" onclick="A.delTrip(\''+t.id+'\')">'+icon('trash',14)+'</button></div>'+
       '<div class="th-body"><h1>'+esc(t.name)+'</h1>'+
       '<div class="th-sub">'+
-        (t.destination?'<span class="it">'+icon('pin',14)+esc(t.destination)+'</span>':'')+
-        (range?'<span class="it">'+icon('calendar',14)+esc(range)+(tripDays(t)?' · 共 '+tripDays(t)+' 天':'')+'</span>':'')+
-        '<span class="it">'+icon('book',14)+es.length+' 篇游记</span>'+
-        '<span class="it">'+icon('image',14)+ps.length+' 张照片</span>'+
-      '</div>'+
-      (t.desc?'<div class="th-desc">'+esc(t.desc)+'</div>':'')+
-      '</div></div>'+
-    '<div class="tabs">'+tabs.map(x=>
-      '<button class="'+(S.tab===x.k?'on':'')+'" onclick="A.tab(\''+x.k+'\')">'+icon(x.i,15)+esc(x.t)+
+        (t.destination?'<span class="it">'+icon('pin',13)+esc(t.destination)+'</span>':'')+
+        (range?'<span class="it">'+icon('calendar',13)+esc(range)+'</span>':'')+
+        (sl?'<span class="trip-status st-'+sc+'" style="background:rgba(255,255,255,.25);color:#fff">'+sl+'</span>':'')+
+      '</div></div></div>'+
+    '<div class="trip-days">'+
+      (tripDays(t)?'<span class="chip">'+icon('calendar',12)+tripDays(t)+' 天</span>':'')+
+      '<span class="chip">'+icon('route',12)+nTrans+' 段交通</span>'+
+      '<span class="chip">'+icon('moon',12)+nStay+' 晚住宿</span>'+
+      (exs.length?'<span class="chip">'+money(sumOf(t.id))+'</span>':'')+
+      (t.companions?'<span class="chip">同行 · '+esc(t.companions)+'</span>':'')+
+    '</div>'+
+    '<div class="trip-tabs">'+tabs.map(x=>
+      '<button class="'+(S.tab===x.k?'on':'')+'" onclick="A.tab(\''+x.k+'\')">'+x.t+
       (x.n?'<span class="cnt">'+x.n+'</span>':'')+'</button>').join('')+'</div>'+
     tabHtml;
 }
 
-function tabTimeline(t,es){
-  if(!es.length){
-    return '<div class="empty">'+icon('book',46)+'<h3>这段旅程还没有留下文字</h3><p>写下一页见闻、一件趣事、一顿难忘的饭——未来的你会感谢现在的记录</p>'+
-      '<button class="btn btn-p" onclick="A.entryModal(\''+t.id+'\')">'+icon('plus',15)+'写下第一篇</button></div>';
+/* ---- 行程 Tab ---- */
+function dayLabel(t,d){
+  if(t.startDate&&d>=t.startDate){
+    const n=Math.round((pdate(d)-pdate(t.startDate))/864e5)+1;
+    return'<span class="dn">第 '+n+' 天</span><span class="dd">'+fmtMD(d)+' '+fmtWeek(d)+'</span>';
   }
-  const groups={};es.forEach(e=>{(groups[e.date]=groups[e.date]||[]).push(e);});
+  return'<span class="dn">日程</span><span class="dd">'+fmtYMD(d)+' '+fmtWeek(d)+'</span>';
+}
+function itemCard(t,e){
+  const ops='<div class="itm-ops">'+
+    '<button class="icon-btn" aria-label="编辑" onclick="A.itemSheet(\''+t.id+'\',\''+e.id+'\')">'+icon('edit',13)+'</button>'+
+    '<button class="icon-btn del" aria-label="删除" onclick="A.delItem(\''+e.id+'\')">'+icon('trash',13)+'</button></div>';
+  const ps=photosOfEntry(e.id);
+  const photoHtml=ps.length?'<div class="itm-photos">'+ps.map((p,i)=>
+    '<div class="ep" onclick="A.lbEntry(\''+e.id+'\','+i+')"><img src="'+p.dataUrl+'" loading="lazy" alt=""></div>').join('')+'</div>':'';
+  const placeHtml=e.placeName?'<div class="itm-place">'+icon('pin',11)+esc(e.placeName)+'</div>':'';
+  const contentHtml=e.content?'<div class="itm-content">'+esc(e.content)+'</div>':'';
+
+  if(e.type==='transport'){
+    const m=modeOf(e.mode);
+    return '<div class="itm"><div class="itm-head"><span class="tchip" style="--tc:'+itype('transport').c+'">'+m.em+' '+m.t+'</span>'+
+      (e.number?'<span class="time-chip">'+esc(e.number)+'</span>':'')+ops+'</div>'+
+      '<div class="tr-head"><div class="tr-route">'+
+        '<div class="tr-pt" style="text-align:left;flex:1"><div class="lab">出发</div><div class="val">'+esc(e.from||'—')+'</div></div>'+
+        '<div class="tr-arrow">'+icon('right',17)+'</div>'+
+        '<div class="tr-pt" style="text-align:right;flex:1"><div class="lab">到达</div><div class="val">'+esc(e.to||'—')+'</div></div>'+
+      '</div></div>'+
+      ((e.tDepart||e.tArrive||e.seat)?'<div class="tr-meta">'+
+        (e.tDepart?'<span class="chip">出发 '+esc(e.tDepart)+'</span>':'')+
+        (e.tArrive?'<span class="chip">到达 '+esc(e.tArrive)+'</span>':'')+
+        (e.seat?'<span class="chip">'+esc(e.seat)+'</span>':'')+
+      '</div>':'')+
+      contentHtml+'</div>';
+  }
+  if(e.type==='hotel'){
+    const nights=(e.checkin&&e.checkout)?Math.max(1,Math.round((pdate(e.checkout)-pdate(e.checkin))/864e5)):0;
+    return '<div class="itm"><div class="itm-head"><span class="tchip" style="--tc:'+itype('hotel').c+'">🏨 住宿</span>'+ops+'</div>'+
+      '<div class="ht-head" style="margin-top:2px"><span class="ht-emo">🏨</span>'+
+      '<span class="ht-name">'+esc(e.name||e.title||'住宿')+'</span>'+
+      (nights?'<span class="ht-nights">'+nights+' 晚</span>':'')+'</div>'+
+      '<div class="ht-meta">'+
+        (e.checkin?'<span class="chip">入住 '+fmtMD(e.checkin)+'</span>':'')+
+        (e.checkout?'<span class="chip">离店 '+fmtMD(e.checkout)+'</span>':'')+
+        (e.price?'<span class="chip">'+money(e.price)+'</span>':'')+
+      '</div>'+
+      (e.addr?'<div class="itm-place" style="margin-top:8px">'+icon('pin',11)+esc(e.addr)+'</div>':'')+
+      contentHtml+'</div>';
+  }
+  const tp=itype(e.type);
+  const title=e.title||(e.type==='food'?'一顿好吃的':e.type==='note'?'一段见闻':'行程安排');
+  return '<div class="itm"><div class="itm-head">'+
+      '<span class="tchip" style="--tc:'+tp.c+'">'+tp.em+' '+tp.t+'</span>'+
+      (e.time?'<span class="time-chip">'+esc(e.time)+'</span>':'')+
+      '<h3>'+esc(title)+'</h3>'+ops+'</div>'+
+    contentHtml+placeHtml+photoHtml+'</div>';
+}
+function tabPlan(t,its){
+  if(!its.length){
+    return '<div class="empty">'+icon('route',46)+'<h3>这趟旅程还没有安排</h3><p>添加景点安排、交通班次、酒店住宿,见闻美食也能随手记</p>'+
+      '<button class="btn btn-p" onclick="A.itemSheet(\''+t.id+'\')">'+icon('plus',15)+'添加第一条记录</button></div>';
+  }
+  const groups={};its.forEach(e=>{(groups[e.date]=groups[e.date]||[]).push(e);});
   const dates=Object.keys(groups).sort();
-  let html='<div style="display:flex;justify-content:flex-end;margin-bottom:18px"><button class="btn btn-p" onclick="A.entryModal(\''+t.id+'\')">'+icon('plus',15)+'新的一页</button></div><div class="timeline">';
+  let html='';
   for(const d of dates){
-    let dayLabel='';
-    if(t.startDate&&d>=t.startDate){
-      const n=Math.round((pdate(d)-pdate(t.startDate))/864e5)+1;
-      dayLabel='<span class="d1">第 '+n+' 天</span><span class="d2">'+fmtYMD(d)+' '+fmtWeek(d)+'</span>';
-    }else dayLabel='<span class="d1">'+fmtYMD(d)+'</span><span class="d2">'+fmtWeek(d)+'</span>';
-    html+='<div class="day-block"><div class="day-label">'+dayLabel+'</div>';
-    for(const e of groups[d]){
-      const ps=photosOfEntry(e.id);
-      html+='<div class="entry-card">'+
-        '<div class="entry-head">'+
-          '<span class="type-chip" style="--tc:'+typeColor(e.type)+'">'+esc(e.type||'见闻')+'</span>'+
-          '<h3>'+esc(e.title||'')+'</h3>'+
-          '<div class="entry-ops">'+
-            '<button class="icon-btn" title="编辑" onclick="A.entryModal(\''+t.id+'\',\''+e.id+'\')">'+icon('edit',13)+'</button>'+
-            '<button class="icon-btn del" title="删除" onclick="A.delEntry(\''+e.id+'\')">'+icon('trash',13)+'</button></div>'+
-        '</div>'+
-        (e.content?'<div class="entry-content">'+esc(e.content)+'</div>':'')+
-        (e.placeName?'<div class="entry-place">'+icon('pin',13)+esc(e.placeName)+
-          (e.lat==null?'<span class="no-geo">(未定位)</span>':'')+'</div>':'')+
-        (ps.length?'<div class="entry-photos'+(ps.length===1?' single':'')+'">'+
-          ps.map((p,i)=>'<div class="ep" onclick="A.lbEntry(\''+e.id+'\','+i+')"><img src="'+p.dataUrl+'" alt="'+esc(e.title||'照片')+'" loading="lazy"></div>').join('')+'</div>':'')+
-      '</div>';
-    }
-    html+='</div>';
+    html+='<div class="day-h">'+dayLabel(t,d)+'<span class="ln"></span></div>';
+    for(const e of groups[d])html+=itemCard(t,e);
+    html+='<button class="day-add" onclick="A.itemSheet(\''+t.id+'\',null,\''+d+'\')">+ 这一天加一条</button>';
   }
-  return html+'</div>';
+  return html;
 }
 
-function tabGallery(t,ps){
-  if(!ps.length)return '<div class="empty">'+icon('image',46)+'<h3>还没有照片</h3><p>在游记里上传照片后,它们会自动汇聚到这面墙上</p>'+
-    '<button class="btn btn-p" onclick="A.entryModal(\''+t.id+'\')">'+icon('camera',15)+'去写一篇游记</button></div>';
-  const em={};entriesOf(t.id).forEach(e=>em[e.id]=e);
-  return '<div class="masonry">'+ps.map((p,i)=>{
+/* ---- 花销 Tab ---- */
+function tabCost(t,exs){
+  const total=sumOf(t.id);
+  const budget=+t.budget||0;
+  let head='<div class="card budget-card"><div class="budget-top">'+
+    '<div><div class="big"><small>总花销 </small>'+money(total)+'</div></div>'+
+    '<button class="btn btn-g btn-sm" onclick="A.budgetSheet(\''+t.id+'\')">'+(budget?'改预算':'设预算')+'</button></div>';
+  if(budget){
+    const rest=budget-total,pct=clamp(total/budget*100,0,100);
+    head+='<div class="budget-bar"><i class="'+(total>budget?'over':'')+'" style="width:'+pct+'%"></i></div>'+
+      '<div class="budget-foot"><span>预算 '+money(budget)+'</span>'+
+      '<span style="color:'+(total>budget?'#ef4444':'var(--moss)')+'">'+(total>budget?'超支 '+money(total-budget):'剩余 '+money(rest))+'</span></div>';
+  }
+  head+='</div>';
+  if(exs.length){
+    const cat={};exs.forEach(x=>{cat[x.category]=(cat[x.category]||0)+(+x.amount||0);});
+    const rows=CATS.filter(c=>cat[c.k]).sort((a,b)=>cat[b.k]-cat[a.k]);
+    const max=Math.max(...Object.values(cat));
+    head+='<div class="card cat-bars"><h3>'+icon('wallet',15)+'分类构成</h3>'+
+      rows.map(c=>'<div class="bar-row" style="--bc:'+c.c+'"><span class="bl">'+c.em+' '+c.t+'</span>'+
+        '<div class="bar"><i style="width:'+(cat[c.k]/max*100)+'%"></i></div>'+
+        '<span class="bn">'+money(cat[c.k])+'</span></div>').join('')+'</div>';
+  }
+  if(!exs.length){
+    return head+'<div class="empty">'+icon('wallet',46)+'<h3>还没记过账</h3><p>门票、吃饭、车票……随手记一笔,花销一目了然</p>'+
+      '<button class="btn btn-p" onclick="A.expSheet(\''+t.id+'\')">'+icon('plus',15)+'记第一笔</button></div>';
+  }
+  const groups={};exs.forEach(x=>{(groups[x.date]=groups[x.date]||[]).push(x);});
+  let html=head;
+  for(const d of Object.keys(groups).sort()){
+    const ds=groups[d].reduce((a,x)=>a+(+x.amount||0),0);
+    html+='<div class="exp-day">'+fmtMD(d)+' '+fmtWeek(d)+' · '+money(ds)+'</div>';
+    for(const x of groups[d]){
+      const c=catOf(x.category);
+      html+='<div class="exp-row" onclick="A.expSheet(\''+t.id+'\',\''+x.id+'\')">'+
+        '<div class="exp-emo">'+c.em+'</div>'+
+        '<div class="exp-mid"><div class="c">'+c.t+'</div>'+
+        (x.note?'<div class="n">'+esc(x.note)+'</div>':'')+'</div>'+
+        '<div class="exp-amt">'+money(x.amount)+'</div></div>';
+    }
+  }
+  return html;
+}
+
+/* ---- 相册 Tab ---- */
+function tabAlbum(t,ps){
+  const bar='<div class="add-bar"><button class="btn btn-p btn-blk" onclick="A.albumUpload(\''+t.id+'\')">'+icon('camera',15)+'添加照片</button></div>';
+  if(!ps.length){
+    return bar+'<div class="empty">'+icon('image',46)+'<h3>还没有照片</h3><p>把一路拍的风景、美食、合影都存进来吧</p></div>';
+  }
+  const em={};itemsOf(t.id).forEach(e=>em[e.id]=e);
+  return bar+'<div class="album-grid">'+ps.map((p,i)=>{
     const e=em[p.entryId]||{};
-    return '<div class="ph-item" onclick="A.lbTrip(\''+t.id+'\','+i+')"><img src="'+p.dataUrl+'" loading="lazy" alt="">'+
-      (e.title?'<div class="ph-cap">'+esc(e.title)+(e.date?' · '+fmtMD(e.date):'')+'</div>':'')+'</div>';
+    const day=e.date&&t.startDate&&e.date>=t.startDate?'D'+(Math.round((pdate(e.date)-pdate(t.startDate))/864e5)+1):(e.date?fmtMD(e.date):'');
+    return '<div class="ag" onclick="A.lbTrip(\''+t.id+'\','+i+')"><img src="'+p.dataUrl+'" loading="lazy" alt="">'+
+      (day?'<span class="day-tag">'+day+'</span>':'')+'</div>';
   }).join('')+'</div>';
 }
 
-function tabMap(t,es){
-  const located=es.filter(e=>e.lat!=null&&e.lng!=null);
-  let list='';
-  if(located.length){
-    list='<div class="place-list">'+located.map(e=>
-      '<span class="pl" style="--pc:'+typeColor(e.type)+'">'+icon('pin',12)+esc(e.placeName)+'</span>').join('')+'</div>';
+/* ---- 清单 Tab ---- */
+function tabList(t,cks){
+  const done=cks.filter(c=>c.done).length;
+  let html='<div class="ck-input"><input type="text" id="ck-text" maxlength="60" placeholder="要带的东西 / 要做的事…">'+
+    '<button class="btn btn-p" onclick="A.addCk(\''+t.id+'\')">添加</button></div>';
+  if(cks.length){
+    html+='<div class="ck-prog"><span>'+done+'/'+cks.length+'</span><div class="bar"><i style="width:'+(done/cks.length*100)+'%"></i></div></div>'+
+      cks.slice().sort((a,b)=>(a.done-b.done)||(a.createdAt||0)-(b.createdAt||0)).map(c=>
+      '<div class="ck-row'+(c.done?' done':'')+'">'+
+        '<button class="ck-box" aria-label="完成" onclick="A.toggleCk(\''+c.id+'\')">'+(c.done?icon('check',13):'')+'</button>'+
+        '<span class="ck-txt">'+esc(c.text)+'</span>'+
+        '<button class="icon-btn del" style="box-shadow:none;background:none;width:30px;height:30px" aria-label="删除" onclick="A.delCk(\''+c.id+'\')">'+icon('trash',14)+'</button>'+
+      '</div>').join('');
+  }else{
+    html+='<div class="empty">'+icon('list',46)+'<h3>清单还是空的</h3><p>证件、充电器、常用药……出发前列一张清单,路上不慌</p></div>';
   }
-  return '<div class="map-box" id="trip-map"></div>'+
-    '<div class="map-note">'+icon('pin',13)+(located.length
-      ?'按时间顺序连成路线,共 '+located.length+' 个标注地点'
-      :'这段旅程还没有定位的地点——写游记时填写地点并搜索定位,足迹就会亮起')+'</div>'+list;
+  return html;
 }
 
-/* ---------- 全局照片回忆 ---------- */
-function galleryItems(){
-  const em={};S.entries.forEach(e=>em[e.id]=e);
-  return S.photos.map(p=>({p,e:em[p.entryId]||{},t:tripById(p.tripId)}))
-    .sort((a,b)=>((b.e.date||'')+(b.e.createdAt||0)).localeCompare(String((a.e.date||'')+(a.e.createdAt||0))));
-}
-function viewGallery(){
-  let items=galleryItems();
-  if(S.galleryFilter!=='all')items=items.filter(x=>x.p.tripId===S.galleryFilter);
-  const chips='<div class="filter-row"><button class="fchip'+(S.galleryFilter==='all'?' on':'')+'" onclick="A.galleryFilter(\'all\')">全部</button>'+
-    S.trips.map(t=>'<button class="fchip'+(S.galleryFilter===t.id?' on':'')+'" onclick="A.galleryFilter(\''+t.id+'\')">'+esc(t.name)+'</button>').join('')+'</div>';
-  if(!items.length){
-    return chips+'<div class="empty">'+icon('image',46)+'<h3>这里还很安静</h3><p>'+(S.photos.length?'换一个旅行筛选试试':'去游记里上传照片,回忆就会一张张贴满这面墙')+'</p></div>';
-  }
-  return chips+'<div style="font-size:13px;color:var(--ink3);margin:-8px 0 16px">'+items.length+' 张照片</div>'+
-    '<div class="masonry">'+items.map((x,i)=>
-      '<div class="ph-item" onclick="A.lbGallery('+i+')"><img src="'+x.p.dataUrl+'" loading="lazy" alt="">'+
-      (x.e.title?'<div class="ph-cap">'+esc(x.t?x.t.name+' · ':'')+esc(x.e.title)+(x.e.date?' · '+fmtMD(x.e.date):'')+'</div>':'')+'</div>').join('')+'</div>';
-}
-
-/* ---------- 全局足迹地图 ---------- */
-function viewGlobalMap(){
+/* ---------- 足迹 ---------- */
+function viewMap(){
   const located=S.entries.filter(e=>e.lat!=null&&e.lng!=null&&tripById(e.tripId));
-  let list='';
+  let chips='';
   if(located.length){
-    const seen=new Set();const chips=[];
+    const seen=new Set();const arr=[];
     for(const e of located){if(seen.has(e.placeName))continue;seen.add(e.placeName);
       const t=tripById(e.tripId);const ci=S.trips.indexOf(t);
-      chips.push('<span class="pl" style="--pc:'+PALETTE[ci%PALETTE.length]+'">'+icon('pin',12)+esc(e.placeName)+'</span>');}
-    list='<div class="place-list">'+chips.join('')+'</div>';
+      arr.push('<span class="pl" style="--pc:'+PALETTE[ci%PALETTE.length]+'">'+icon('pin',11)+esc(e.placeName)+'</span>');}
+    chips='<div class="place-list">'+arr.join('')+'</div>';
   }
-  return '<div class="hero" style="margin-bottom:22px"><div class="kicker">FOOTPRINT MAP</div>'+
-    '<h1 style="font-size:26px">走过的路,都亮着灯</h1></div>'+
+  return '<div class="hello" style="margin-bottom:14px"><div class="kicker">FOOTPRINT MAP</div><h1 style="font-size:22px">走过的路,都亮着灯</h1></div>'+
     '<div class="map-box" id="global-map"></div>'+
-    '<div class="map-note">'+icon('map',13)+(located.length
-      ?located.length+' 个地点 · 同一段旅程的足迹按时间连成线'
-      :'还没有任何定位地点——写游记时为地点搜索定位,去过的地方就会在这张地图上点亮')+'</div>'+list;
+    '<div class="map-note">'+icon('map',12)+(located.length
+      ?located.length+' 个定位地点 · 同一段旅程的足迹按时间连成线'
+      :'在行程记录里为地点搜索定位,去过的地方就会点亮这张地图')+'</div>'+chips;
 }
 
-/* ---------- 统计 ---------- */
+/* ---------- 回顾 ---------- */
 function viewStats(){
   const st=globalStats();
   if(!S.trips.length){
-    return '<div class="empty">'+icon('chart',46)+'<h3>还没有可统计的旅程</h3><p>开始第一段旅行后,这里会告诉你走了多远</p></div>';
+    return '<div class="empty">'+icon('chart',46)+'<h3>还没有可回顾的旅程</h3><p>开始第一段旅行后,这里会告诉你走了多远</p></div>';
   }
+  const mem=memoryCard();
   const years={};S.trips.forEach(t=>{const y=t.startDate?t.startDate.slice(0,4):(t.createdAt?new Date(t.createdAt).getFullYear():'未注明');years[y]=(years[y]||0)+1;});
   const maxY=Math.max(...Object.values(years));
   const yearRows=Object.keys(years).sort().reverse().map(y=>
-    '<div class="bar-row"><span class="by">'+esc(y)+'</span><div class="bar"><i style="width:'+(years[y]/maxY*100)+'%"></i></div><span class="bn">'+years[y]+' 段旅程</span></div>').join('');
+    '<div class="bar-row" style="--bc:var(--accent)"><span class="bl" style="width:34px">'+esc(y)+'</span>'+
+    '<div class="bar"><i style="width:'+(years[y]/maxY*100)+'%"></i></div><span class="bn">'+years[y]+' 段</span></div>').join('');
   const pc={};S.entries.forEach(e=>{if(e.placeName)pc[e.placeName]=(pc[e.placeName]||0)+1;});
   const places=Object.keys(pc).sort((a,b)=>pc[b]-pc[a]);
-  const typeCnt={};S.entries.forEach(e=>{typeCnt[e.type||'见闻']=(typeCnt[e.type||'见闻']||0)+1;});
-  return '<div class="hero" style="margin-bottom:26px"><div class="kicker">REVIEW</div>'+
-    '<h1 style="font-size:26px">这些年的行走,都有迹可循</h1></div>'+
-    '<div class="stat-cards">'+
+  return (mem?'<div class="sec" style="margin-top:0"><h2>那年今天</h2></div>'+mem:'')+
+    '<div class="stat-grid">'+
       '<div class="stat-card"><div class="n">'+st.trips+'<small> 次</small></div><div class="l">旅行</div></div>'+
       '<div class="stat-card"><div class="n">'+st.days+'<small> 天</small></div><div class="l">在途日子</div></div>'+
       '<div class="stat-card"><div class="n">'+st.cities+'<small> 个</small></div><div class="l">足迹地方</div></div>'+
       '<div class="stat-card"><div class="n">'+st.photos+'<small> 张</small></div><div class="l">照片</div></div>'+
-      '<div class="stat-card"><div class="n">'+st.words+'<small> 字</small></div><div class="l">见闻文字</div></div>'+
     '</div>'+
-    '<div class="panel"><h3>'+icon('calendar',16)+'哪一年走得最多</h3>'+(yearRows||'<p style="color:var(--ink3);font-size:13px">暂无数据</p>')+'</div>'+
-    (places.length?'<div class="panel"><h3>'+icon('pin',16)+'去过的地方</h3><div class="place-list" style="margin-top:0">'+
-      places.map(p=>'<span class="pl">'+icon('pin',12)+esc(p)+(pc[p]>1?' × '+pc[p]:'')+'</span>').join('')+'</div></div>':'')+
-    (S.entries.length?'<div class="panel"><h3>'+icon('book',16)+'游记里的构成</h3><div class="place-list" style="margin-top:0">'+
-      TYPES.filter(t=>typeCnt[t.k]).map(t=>'<span class="pl" style="--pc:'+t.c+'"><i></i>'+t.k+' × '+typeCnt[t.k]+'</span>').join('')+'</div></div>':'');
+    '<div class="panel"><h3>'+icon('calendar',15)+'哪一年走得最多</h3>'+yearRows+'</div>'+
+    (places.length?'<div class="panel"><h3>'+icon('pin',15)+'去过的地方</h3><div class="place-list" style="margin-top:0">'+
+      places.map(p=>'<span class="pl">'+icon('pin',11)+esc(p)+(pc[p]>1?' × '+pc[p]:'')+'</span>').join('')+'</div></div>':'');
 }
 
-/* ---------- 地图初始化(动态加载 Leaflet,带 CDN 回退) ---------- */
+/* ---------- 我的 ---------- */
+function viewMe(){
+  const st=globalStats();
+  const nExp=S.expenses.length;
+  return '<div class="sec" style="margin-top:0"><h2>我的行途录</h2></div>'+
+    '<div class="card me-card">'+
+      '<div class="row-line"><span>旅行</span><b>'+st.trips+' 段</b></div>'+
+      '<div class="row-line"><span>行程记录</span><b>'+S.entries.length+' 条</b></div>'+
+      '<div class="row-line"><span>照片</span><b>'+st.photos+' 张</b></div>'+
+      '<div class="row-line"><span>花销笔数</span><b>'+nExp+' 笔 · 共 '+money(st.spent)+'</b></div>'+
+    '</div>'+
+    '<div class="card me-list">'+
+      '<button class="me-row" onclick="A.doExport()"><span class="em">📤</span><span>导出备份<span class="sub">全部数据打包成 JSON 文件保存</span></span><span class="arrow">'+icon('right',16)+'</span></button>'+
+      '<button class="me-row" onclick="A.doImport()"><span class="em">📥</span><span>导入备份<span class="sub">用备份文件恢复数据(覆盖当前)</span></span><span class="arrow">'+icon('right',16)+'</span></button>'+
+      '<button class="me-row danger" onclick="A.clearAll()"><span class="em">🗑️</span><span>清空全部数据<span class="sub">不可恢复,请先导出备份</span></span><span class="arrow">'+icon('right',16)+'</span></button>'+
+    '</div>'+
+    '<div class="tip-card">💡 在手机浏览器里点「添加到主屏幕」,行途录就会像 App 一样安装,离线也能打开。<br>🔒 所有数据只保存在这台设备的浏览器里,不会上传;换设备前记得导出备份。</div>';
+}
+
+/* ---------- 地图 ---------- */
 let leafletPromise=null;
 function ensureLeaflet(){
   if(window.L)return Promise.resolve(true);
@@ -889,7 +901,7 @@ function ensureLeaflet(){
           await new Promise((res,rej)=>{const l=document.createElement('link');l.rel='stylesheet';l.href=b+'leaflet.min.css';l.onload=res;l.onerror=rej;document.head.appendChild(l);});
           await new Promise((res,rej)=>{const s=document.createElement('script');s.src=b+'leaflet.min.js';s.onload=res;s.onerror=rej;document.head.appendChild(s);});
           if(window.L)return true;
-        }catch(e){/* 尝试下一个 CDN */}
+        }catch(e){/* 换下一个 CDN */}
       }
       return false;
     })();
@@ -898,36 +910,11 @@ function ensureLeaflet(){
 }
 const TILE_URL='https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 const TILE_ATTR='&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors';
-function makeMap(el){
-  const m=L.map(el,{scrollWheelZoom:true});
-  L.tileLayer(TILE_URL,{maxZoom:19,attribution:TILE_ATTR}).addTo(m);
-  return m;
-}
-function mapFallback(el,msg){
-  el.innerHTML='<div class="map-fallback">'+icon('map',40)+'<div>'+esc(msg)+'</div></div>';
-}
+function mapFallback(el,msg){el.innerHTML='<div class="map-fallback">'+icon('map',38)+'<div>'+esc(msg)+'</div></div>';}
 function popupHtml(e){
   const t=tripById(e.tripId);
   return '<b style="font-family:serif">'+esc(e.placeName||'')+'</b><br>'+
-    (t?esc(t.name)+' · ':'')+(e.date?fmtYMD(e.date):'')+
-    (e.title?'<br>'+esc(e.title):'');
-}
-async function initTripMap(){
-  const el0=document.getElementById('trip-map');if(!el0)return;
-  if(!await ensureLeaflet()){mapFallback(el0,'地图组件未能加载(可能处于离线状态),其余功能不受影响');return;}
-  const el=document.getElementById('trip-map');if(!el||!el.isConnected)return;
-  const t=tripById(S.tripId);if(!t)return;
-  const located=entriesOf(t.id).filter(e=>e.lat!=null&&e.lng!=null);
-  if(!located.length){mapFallback(el,'还没有定位的地点,写游记时为地点搜索定位即可点亮这里');return;}
-  const m=makeMap(el);maps.trip=m;
-  const pts=located.map(e=>[e.lat,e.lng]);
-  if(pts.length>1)L.polyline(pts,{color:'#2f7cf6',weight:2.5,opacity:.75,dashArray:'6 7'}).addTo(m);
-  located.forEach((e,i)=>{
-    L.circleMarker([e.lat,e.lng],{radius:7,color:'#fff',weight:2,fillColor:typeColor(e.type),fillOpacity:.95})
-      .addTo(m).bindPopup(popupHtml(e));
-  });
-  m.fitBounds(pts,{padding:[42,42],maxZoom:13});
-  setTimeout(()=>m.invalidateSize(),120);
+    (t?esc(t.name)+' · ':'')+(e.date?fmtYMD(e.date):'')+(e.title?'<br>'+esc(e.title):'');
 }
 async function initGlobalMap(){
   const el0=document.getElementById('global-map');if(!el0)return;
@@ -935,10 +922,12 @@ async function initGlobalMap(){
   const el=document.getElementById('global-map');if(!el||!el.isConnected)return;
   const located=S.entries.filter(e=>e.lat!=null&&e.lng!=null&&tripById(e.tripId));
   if(!located.length){mapFallback(el,'去过并定位的地方,都会点亮在这张地图上');return;}
-  const m=makeMap(el);maps.global=m;
+  const m=L.map(el,{scrollWheelZoom:true});
+  L.tileLayer(TILE_URL,{maxZoom:19,attribution:TILE_ATTR}).addTo(m);
+  maps.global=m;
   const bounds=[];
   S.trips.forEach((t,ti)=>{
-    const es=entriesOf(t.id).filter(e=>e.lat!=null&&e.lng!=null);
+    const es=itemsOf(t.id).filter(e=>e.lat!=null&&e.lng!=null);
     if(!es.length)return;
     const c=PALETTE[ti%PALETTE.length];
     const pts=es.map(e=>[e.lat,e.lng]);bounds.push(...pts);
@@ -948,7 +937,7 @@ async function initGlobalMap(){
         .addTo(m).bindPopup(popupHtml(e));
     });
   });
-  if(bounds.length)m.fitBounds(bounds,{padding:[42,42],maxZoom:10});
+  if(bounds.length)m.fitBounds(bounds,{padding:[40,40],maxZoom:10});
   setTimeout(()=>m.invalidateSize(),120);
 }
 
@@ -956,7 +945,6 @@ async function initGlobalMap(){
 function openLB(items,i){
   LB={items,i};
   let el=$('#lightbox');
-  if(!el){el=document.createElement('div');el.id='lightbox';el.className='lightbox';document.body.appendChild(el);}
   el.style.display='flex';
   renderLB();
 }
@@ -965,15 +953,15 @@ function renderLB(){
   const it=LB.items[LB.i];
   el.innerHTML=
     '<div class="lb-count">'+(LB.i+1)+' / '+LB.items.length+'</div>'+
-    '<button class="btn lb-close" style="width:44px;height:44px;border-radius:50%;padding:0;justify-content:center;background:rgba(255,255,255,.12);border:0" onclick="A.lbClose()" aria-label="关闭">'+icon('x',18)+'</button>'+
-    (LB.items.length>1?'<button class="lb-btn lb-prev" onclick="A.lbNav(-1)" aria-label="上一张">'+icon('left',20)+'</button>'+
-    '<button class="lb-btn lb-next" onclick="A.lbNav(1)" aria-label="下一张">'+icon('right',20)+'</button>':'')+
+    '<button class="lb-btn lb-close" style="width:42px;height:42px" onclick="A.lbClose()" aria-label="关闭">'+icon('x',18)+'</button>'+
+    (LB.items.length>1?'<button class="lb-btn lb-prev" onclick="A.lbNav(-1)" aria-label="上一张">'+icon('left',19)+'</button>'+
+    '<button class="lb-btn lb-next" onclick="A.lbNav(1)" aria-label="下一张">'+icon('right',19)+'</button>':'')+
     '<img src="'+it.src+'" alt="'+esc(it.cap||'')+'">'+
     (it.cap?'<div class="lb-cap"><b>'+esc(it.cap)+'</b>'+(it.sub?esc(it.sub):'')+'</div>':'');
   el.onclick=e=>{if(e.target===el)closeLB();};
 }
 function lbNav(d){if(!LB)return;LB.i=(LB.i+d+LB.items.length)%LB.items.length;renderLB();}
-function closeLB(){LB=null;const el=$('#lightbox');if(el)el.style.display='none';}
+function closeLB(){LB=null;$('#lightbox').style.display='none';}
 
 /* ============================================================
    动作 (A)
@@ -981,207 +969,267 @@ function closeLB(){LB=null;const el=$('#lightbox');if(el)el.style.display='none'
 const A={
   nav(v){S.view=v;S.tripId=null;render();},
   tab(k){S.tab=k;render();},
-  openTrip(id){S.view='trip';S.tripId=id;S.tab='timeline';render();},
-  galleryFilter(id){S.galleryFilter=id;render();},
+  openTrip(id){S.view='trip';S.tripId=id;S.tab='plan';render();},
 
   /* ---- 灯箱 ---- */
   lbEntry(entryId,i){
     const e=entryById(entryId);if(!e)return;
     const t=tripById(e.tripId);
-    const items=photosOfEntry(e.id).map(p=>({src:p.dataUrl,cap:e.title||'',sub:(t?t.name+' · ':'')+(e.date?fmtYMD(e.date):'')+(e.placeName?' · '+e.placeName:'')}));
+    const items=photosOfEntry(e.id).map(p=>({src:p.dataUrl,cap:e.title||itype(e.type).t,sub:(t?t.name+' · ':'')+(e.date?fmtYMD(e.date):'')}));
     openLB(items,i);
   },
   lbTrip(tripId,i){
     const ps=photosOfTrip(tripId);if(!ps[i])return;
-    const em={};entriesOf(tripId).forEach(e=>em[e.id]=e);
+    const em={};itemsOf(tripId).forEach(e=>em[e.id]=e);
     const t=tripById(tripId);
     const items=ps.map(p=>{const e=em[p.entryId]||{};return{src:p.dataUrl,cap:e.title||'',sub:(t?t.name+' · ':'')+(e.date?fmtYMD(e.date):'')};});
     openLB(items,i);
-  },
-  lbGallery(i){
-    const all=galleryItems();const f=S.galleryFilter==='all'?all:all.filter(x=>x.p.tripId===S.galleryFilter);
-    const items=f.map(x=>({src:x.p.dataUrl,cap:x.e.title||'',sub:(x.t?x.t.name+' · ':'')+(x.e.date?fmtYMD(x.e.date):'')}));
-    if(items[i])openLB(items,i);
   },
   lbClose(){closeLB();},
   lbNav(d){lbNav(d);},
 
   /* ---- 旅行表单 ---- */
-  tripModal(id){
+  tripSheet(id){
     const t=id?tripById(id):null;
-    const m=openModal(
-      '<h3>'+(t?'编辑旅行':'新建旅行')+'</h3>'+
+    const m=openSheet(
+      '<div class="sheet-head"><h3>'+(t?'编辑旅行':'新建旅行')+'</h3>'+
+      '<button class="icon-btn" onclick="void 0" data-x aria-label="关闭">'+icon('x',16)+'</button></div>'+
       '<div class="field"><label>旅行名称 <em>*</em></label><input type="text" id="f-name" maxlength="40" placeholder="例如:大理的风、川西的雪"></div>'+
-      '<div class="field"><label>目的地</label><input type="text" id="f-dest" maxlength="40" placeholder="城市、国家或区域,如:云南 · 大理"></div>'+
+      '<div class="field"><label>目的地</label><input type="text" id="f-dest" maxlength="40" placeholder="如:云南 · 大理"></div>'+
       '<div class="field-row">'+
         '<div class="field"><label>开始日期</label><input type="date" id="f-start"></div>'+
         '<div class="field"><label>结束日期</label><input type="date" id="f-end"></div>'+
       '</div>'+
-      '<div class="field"><label>一句话印象</label><textarea id="f-desc" style="min-height:76px" maxlength="200" placeholder="这段旅程对你意味着什么?"></textarea></div>'+
-      '<div class="modal-foot"><button class="btn btn-g" data-x>取消</button>'+
-      '<button class="btn btn-p" data-ok>'+(t?'保存修改':'创建旅行')+'</button></div>',true);
+      '<div class="field-row">'+
+        '<div class="field"><label>预算(元,选填)</label><input type="number" id="f-budget" inputmode="decimal" min="0" placeholder="5000"></div>'+
+        '<div class="field"><label>同行人(选填)</label><input type="text" id="f-comp" maxlength="30" placeholder="家人 / 朋友"></div>'+
+      '</div>'+
+      '<div class="field"><label>一句话印象</label><textarea id="f-desc" style="min-height:64px" maxlength="200" placeholder="这段旅程对你意味着什么?"></textarea></div>'+
+      '<div class="sheet-foot"><button class="btn btn-g" data-cancel>取消</button>'+
+      '<button class="btn btn-p" data-ok>'+(t?'保存修改':'创建旅行')+'</button></div>');
     m.ov.querySelector('[data-x]').onclick=m.close;
+    m.ov.querySelector('[data-cancel]').onclick=m.close;
     const $n=m.ov.querySelector('#f-name'),$d=m.ov.querySelector('#f-dest'),
-          $s=m.ov.querySelector('#f-start'),$e=m.ov.querySelector('#f-end'),$c=m.ov.querySelector('#f-desc');
-    if(t){$n.value=t.name||'';$d.value=t.destination||'';$s.value=t.startDate||'';$e.value=t.endDate||'';$c.value=t.desc||'';}
-    $n.focus();
+          $s=m.ov.querySelector('#f-start'),$e=m.ov.querySelector('#f-end'),
+          $b=m.ov.querySelector('#f-budget'),$c=m.ov.querySelector('#f-comp'),$ds=m.ov.querySelector('#f-desc');
+    if(t){$n.value=t.name||'';$d.value=t.destination||'';$s.value=t.startDate||'';$e.value=t.endDate||'';
+      $b.value=t.budget||'';$c.value=t.companions||'';$ds.value=t.desc||'';}
+    setTimeout(()=>$n.focus(),80);
     m.ov.querySelector('[data-ok]').onclick=async()=>{
       const name=$n.value.trim();
       if(!name){toast('给这段旅程起个名字吧');$n.focus();return;}
       const startDate=$s.value||null,endDate=$e.value||null;
       if(startDate&&endDate&&endDate<startDate){toast('结束日期不能早于开始日期');return;}
-      const obj=t||{id:uid(),createdAt:Date.now()};
-      obj.name=name;obj.destination=$d.value.trim();obj.startDate=startDate;obj.endDate=endDate;obj.desc=$c.value.trim();
+      const obj=t?Object.assign({},t):{id:uid(),createdAt:Date.now()};
+      obj.name=name;obj.destination=$d.value.trim();obj.startDate=startDate;obj.endDate=endDate;
+      obj.budget=$b.value?+ $b.value:null;obj.companions=$c.value.trim();obj.desc=$ds.value.trim();
       await idbPut('trips',obj);
-      if(!t)S.trips.push(obj);else Object.assign(tripById(id),obj);
+      if(!t)S.trips.push(obj);else S.trips[S.trips.indexOf(tripById(id))]=obj;
       m.close();toast(t?'旅行已更新':'新的旅程开始了');
-      if(!t&&S.view!=='home'){S.view='home';}
+      if(!t){S.view='trip';S.tripId=obj.id;S.tab='plan';}
       render();
     };
   },
 
   async delTrip(id){
     const t=tripById(id);if(!t)return;
-    const es=entriesOf(id),ps=photosOfTrip(id);
+    const n=itemsOf(id).length,np=photosOfTrip(id).length,nx=expensesOf(id).length,nc=checklistOf(id).length;
     const ok=await confirmBox('删除「'+esc(t.name)+'」?',
-      '将同时删除其中 <b>'+es.length+'</b> 篇游记与 <b>'+ps.length+'</b> 张照片,此操作无法撤销。');
+      '将同时删除其中 <b>'+n+'</b> 条记录、<b>'+np+'</b> 张照片、<b>'+nx+'</b> 笔花销与 <b>'+nc+'</b> 项清单,无法恢复。');
     if(!ok)return;
-    for(const p of ps)await idbDel('photos',p.id);
-    for(const e of es)await idbDel('entries',e.id);
+    for(const p of S.photos.filter(p=>p.tripId===id))await idbDel('photos',p.id);
+    for(const e of S.entries.filter(e=>e.tripId===id))await idbDel('entries',e.id);
+    for(const x of S.expenses.filter(x=>x.tripId===id))await idbDel('expenses',x.id);
+    for(const c of S.checklist.filter(c=>c.tripId===id))await idbDel('checklist',c.id);
     await idbDel('trips',id);
     S.photos=S.photos.filter(p=>p.tripId!==id);
     S.entries=S.entries.filter(e=>e.tripId!==id);
+    S.expenses=S.expenses.filter(x=>x.tripId!==id);
+    S.checklist=S.checklist.filter(c=>c.tripId!==id);
     S.trips=S.trips.filter(x=>x.id!==id);
     S.view='home';S.tripId=null;
     render();toast('旅程已删除');
   },
 
-  /* ---- 游记表单 ---- */
-  entryModal(tripId,entryId){
+  /* ---- 行程条目表单(安排/交通/住宿/美食/见闻) ---- */
+  itemSheet(tripId,entryId,presetDate){
     const t=tripById(tripId);if(!t)return;
     const e=entryId?entryById(entryId):null;
-    ED={
-      entryId:entryId||null,tripId,type:e?e.type||'见闻':'见闻',
-      photoIds:e?e.photoIds.slice():[],newPhotos:[],removedIds:[],
-      lat:e?e.lat:null,lng:e?e.lng:null,
-    };
-    const m=openModal(
-      '<h3>'+(e?'编辑这一页':'写下旅程中的一页')+'</h3>'+
-      '<div class="field-row">'+
-        '<div class="field" style="flex:0 0 168px"><label>日期 <em>*</em></label><input type="date" id="f-date"></div>'+
-        '<div class="field" style="flex:1"><label>类型</label><div class="type-picker" id="f-types">'+
-          TYPES.map(x=>'<button type="button" data-t="'+x.k+'" style="--tc:'+x.c+'">'+x.k+'</button>').join('')+'</div></div>'+
-      '</div>'+
-      '<div class="field"><label>标题</label><input type="text" id="f-etime" maxlength="60" placeholder="这一页的标题(可留空)"></div>'+
-      '<div class="field"><label>见闻与故事</label><textarea id="f-content" placeholder="今天看到了什么、遇到了谁、发生了什么有趣的事……"></textarea></div>'+
-      '<div class="field"><label>地点(可选,定位后显示在足迹地图上)</label><div class="place-row">'+
-        '<input type="text" id="f-place" maxlength="80" placeholder="如:洱海、大理古城">'+
-        '<button class="btn btn-g" id="f-search">'+icon('search',14)+'搜索定位</button></div>'+
-        '<div class="place-status none" id="f-pstatus">未定位(不影响保存)</div>'+
-        '<div class="place-results" id="f-results" hidden></div></div>'+
-      '<div class="field"><label>照片</label>'+
-        '<button class="btn btn-g btn-sm" id="f-pick">'+icon('camera',14)+'选择照片(可多选)</button>'+
-        '<input type="file" id="f-files" accept="image/*" multiple hidden>'+
-        '<div class="photo-grid" id="f-grid"></div></div>'+
-      '<div class="modal-foot"><button class="btn btn-g" data-x>取消</button>'+
-      '<button class="btn btn-p" data-ok>保存这一页</button></div>');
-    m.ov.querySelector('[data-x]').onclick=m.close;
+    const curType=e?e.type:'place';
+    const defDate=e?e.date:(presetDate||(t.endDate&&todayStr()>t.endDate?t.endDate:clampDate(todayStr(),t.startDate,t.endDate)||todayStr()));
 
-    const $d=m.ov.querySelector('#f-date'),$c=m.ov.querySelector('#f-content'),
-          $ti=m.ov.querySelector('#f-etime'),$p=m.ov.querySelector('#f-place'),
-          $st=m.ov.querySelector('#f-pstatus');
-    const today=todayStr();
-    const defDate=e?e.date:(t.endDate?clampDate(today,t.startDate||today,t.endDate):(t.startDate||today));
-    $d.value=defDate;
-    function clampDate(v,a,b){if(a&&v<a)return a;if(b&&v>b)return b;return v;}
-    if(e){$ti.value=e.title||'';$c.value=e.content||'';$p.value=e.placeName||'';
-      if(e.lat!=null)$st.textContent='已定位 ('+(+e.lat).toFixed(3)+', '+(+e.lng).toFixed(3)+')',$st.classList.remove('none');}
-    // 类型选择
-    const tp=m.ov.querySelector('#f-types');
-    function paintTypes(){tp.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.t===ED.type));}
-    tp.addEventListener('click',ev=>{const b=ev.target.closest('button');if(b){ED.type=b.dataset.t;paintTypes();}});
-    paintTypes();
-
-    // 照片
-    const $files=m.ov.querySelector('#f-files'),$grid=m.ov.querySelector('#f-grid');
-    function renderGrid(){
-      const olds=ED.photoIds.map(pid=>({pid,p:photoById(pid)})).filter(x=>x.p);
-      const news=ED.newPhotos.map((x,i)=>({np:x,i}));
-      $grid.innerHTML=[...olds.map(x=>
-          '<div class="pg"><img src="'+x.p.dataUrl+'" alt=""><button class="rm" data-old="'+x.pid+'" aria-label="移除">'+icon('x',11)+'</button></div>'),
-        ...news.map(x=>
-          '<div class="pg"><img src="'+x.np.dataUrl+'" alt=""><button class="rm" data-new="'+x.i+'" aria-label="移除">'+icon('x',11)+'</button></div>')
-      ].join('');
-      $grid.querySelectorAll('[data-old]').forEach(b=>b.onclick=()=>{ED.photoIds=ED.photoIds.filter(i=>i!==b.dataset.old);ED.removedIds.push(b.dataset.old);renderGrid();});
-      $grid.querySelectorAll('[data-new]').forEach(b=>b.onclick=()=>{ED.newPhotos.splice(+b.dataset.new,1);renderGrid();});
+    function formHtml(type){
+      let inner='<div class="field-row">'+
+        '<div class="field" style="flex:0 0 46%"><label>日期</label><input type="date" id="f-date" value="'+defDate+'"></div>'+
+        '<div class="field" style="flex:1"><label>类型</label></div></div>';
+      if(type==='place'||type==='food'||type==='note'){
+        inner+='<div class="field-row">'+
+          '<div class="field" style="flex:0 0 38%"><label>时间(选填)</label><input type="time" id="f-time" value="'+(e&&e.time||'')+'"></div>'+
+          '<div class="field" style="flex:1"><label>标题</label><input type="text" id="f-title" maxlength="60" value="'+esc(e&&e.title||'')+'" placeholder="'+(type==='food'?'这顿吃了什么':type==='note'?'这一页的标题':'要去的地方 / 做的事')+'"></div></div>'+
+        '<div class="field"><label>'+(type==='note'?'见闻与故事':'备注')+'</label><textarea id="f-content" placeholder="'+(type==='note'?'今天看到了什么、遇到了谁……':'有什么要注意的:开放时间、门票、预约方式……')+'">'+esc(e&&e.content||'')+'</textarea></div>'+
+        '<div class="field"><label>地点(定位后点亮足迹地图)</label><div class="place-row">'+
+          '<input type="text" id="f-place" maxlength="80" value="'+esc(e&&e.placeName||'')+'" placeholder="如:洱海、大理古城">'+
+          '<button class="btn btn-g btn-sm" id="f-search">'+icon('search',14)+'</button></div>'+
+          '<div class="place-status '+(e&&e.lat!=null?'':'none')+'" id="f-pstatus">'+(e&&e.lat!=null?'已定位 ('+(+e.lat).toFixed(3)+', '+(+e.lng).toFixed(3)+')':'未定位(不影响保存)')+'</div>'+
+          '<div class="place-results" id="f-results" hidden></div></div>'+
+        '<div class="field"><label>照片</label>'+
+          '<button class="btn btn-g btn-sm" id="f-pick">'+icon('camera',14)+'选择照片(可多选)</button>'+
+          '<input type="file" id="f-files" accept="image/*" multiple hidden>'+
+          '<div class="photo-grid" id="f-grid"></div></div>';
+      }else if(type==='transport'){
+        const mk=e&&e.mode||'hsr';
+        inner+='<div class="field"><label>方式</label><div class="mode-chips" id="f-modes">'+
+          MODES.map(x=>'<button type="button" data-m="'+x.k+'" class="'+(x.k===mk?'on':'')+'">'+x.em+' '+x.t+'</button>').join('')+'</div></div>'+
+        '<div class="field-row">'+
+          '<div class="field"><label>出发地</label><input type="text" id="f-from" maxlength="40" value="'+esc(e&&e.from||'')+'" placeholder="如:上海虹桥"></div>'+
+          '<div class="field"><label>到达地</label><input type="text" id="f-to" maxlength="40" value="'+esc(e&&e.to||'')+'" placeholder="如:大理站"></div></div>'+
+        '<div class="field-row">'+
+          '<div class="field"><label>班次 / 航班号</label><input type="text" id="f-num" maxlength="20" value="'+esc(e&&e.number||'')+'" placeholder="如 G1379 / MU5712"></div>'+
+          '<div class="field"><label>座位 / 舱位</label><input type="text" id="f-seat" maxlength="20" value="'+esc(e&&e.seat||'')+'" placeholder="如 05车12F"></div></div>'+
+        '<div class="field-row">'+
+          '<div class="field"><label>出发时间</label><input type="time" id="f-tdep" value="'+(e&&e.tDepart||'')+'"></div>'+
+          '<div class="field"><label>到达时间</label><input type="time" id="f-tarr" value="'+(e&&e.tArrive||'')+'"></div></div>'+
+        '<div class="field"><label>备注</label><input type="text" id="f-content" maxlength="120" value="'+esc(e&&e.content||'')+'" placeholder="选填"></div>';
+      }else if(type==='hotel'){
+        inner+='<div class="field"><label>酒店 / 民宿名称</label><input type="text" id="f-hname" maxlength="60" value="'+esc(e&&(e.name||e.title)||'')+'" placeholder="如:大理海景客栈"></div>'+
+        '<div class="field-row">'+
+          '<div class="field"><label>入住日期</label><input type="date" id="f-cin" value="'+(e&&e.checkin||defDate)+'"></div>'+
+          '<div class="field"><label>离店日期</label><input type="date" id="f-cout" value="'+(e&&e.checkout||'')+'"></div></div>'+
+        '<div class="field-row">'+
+          '<div class="field"><label>总价(元)</label><input type="number" id="f-price" inputmode="decimal" min="0" value="'+(e&&e.price||'')+'" placeholder="选填"></div>'+
+          '<div class="field"><label>城市 / 地址</label><input type="text" id="f-addr" maxlength="60" value="'+esc(e&&e.addr||'')+'" placeholder="选填"></div></div>'+
+        '<div class="field"><label>备注</label><input type="text" id="f-content" maxlength="120" value="'+esc(e&&e.content||'')+'" placeholder="确认号、联系方式等,选填"></div>';
+      }
+      return inner+'<div class="sheet-foot"><button class="btn btn-g" data-cancel>取消</button>'+
+        '<button class="btn btn-p" data-ok>'+(e?'保存修改':'添加')+'</button></div>';
     }
-    m.ov.querySelector('#f-pick').onclick=()=>$files.click();
-    $files.onchange=async()=>{
-      const fs=[...$files.files];if(!fs.length)return;
-      for(const f of fs){
-        try{ED.newPhotos.push(await compressImage(f));}
-        catch(err){toast('有一张图片读取失败,已跳过');}
-      }
-      $files.value='';renderGrid();
-    };
-    renderGrid();
 
-    // 地点搜索
-    const $res=m.ov.querySelector('#f-results');
-    m.ov.querySelector('#f-search').onclick=async()=>{
-      const q=$p.value.trim();
-      if(!q){toast('先填写地点名称,再搜索定位');$p.focus();return;}
-      $res.hidden=true;$st.textContent='正在搜索「'+q+'」……';
-      try{
-        const r=await fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=5&accept-language=zh-CN&q='+encodeURIComponent(q));
-        const list=await r.json();
-        if(!list.length){$st.textContent='没有找到这个地点,可以直接换个说法再试,或不定位保存';return;}
-        $st.textContent='找到 '+list.length+' 个结果,点击选择:';
-        $res.innerHTML=list.map((x,i)=>{
-          const parts=String(x.display_name).split(',').map(s=>s.trim()).slice(0,3).join(' · ');
-          return '<button data-i="'+i+'">'+esc(parts)+'</button>';
-        }).join('');
-        $res.hidden=false;
-        $res.querySelectorAll('button').forEach(b=>b.onclick=()=>{
-          const x=list[+b.dataset.i];
-          ED.lat=parseFloat(x.lat);ED.lng=parseFloat(x.lon);
-          $p.value=String(x.display_name).split(',').map(s=>s.trim()).slice(0,3).join(' · ');
-          $st.textContent='已定位 ('+ED.lat.toFixed(3)+', '+ED.lng.toFixed(3)+')';
-          $st.classList.remove('none');$res.hidden=true;
-        });
-      }catch(err){
-        $st.textContent='定位服务暂时不可用(可能离线),可以先不定位保存';
-      }
-    };
+    const m=openSheet(
+      '<div class="sheet-head"><h3>'+(e?'编辑记录':'添加记录')+'</h3>'+
+      '<button class="icon-btn" data-x aria-label="关闭">'+icon('x',16)+'</button></div>'+
+      '<div class="type-grid" id="f-types">'+ITYPES.map(x=>
+        '<button type="button" data-t="'+x.k+'" class="'+(x.k===curType?'on':'')+'"><span class="em">'+x.em+'</span>'+x.t+'</button>').join('')+'</div>'+
+      '<div id="f-form">'+formHtml(curType)+'</div>');
 
-    m.ov.querySelector('[data-ok]').onclick=async()=>{
-      const date=$d.value;
-      if(!date){toast('选择这一页的日期');$d.focus();return;}
-      const title=$ti.value.trim(),content=$c.value.trim(),place=$p.value.trim();
-      if(!title&&!content&&!ED.photoIds.length&&!ED.newPhotos.length){toast('写点什么,或放一张照片吧');$c.focus();return;}
-      // 移除被删掉的旧照片
-      for(const pid of ED.removedIds){const p=photoById(pid);if(p){await idbDel('photos',pid);S.photos=S.photos.filter(x=>x.id!==pid);}}
-      // 保存新照片
-      const newIds=[];
-      for(const np of ED.newPhotos){
-        const ph={id:uid(),tripId,entryId:null,dataUrl:np.dataUrl,w:np.w,h:np.h};
-        newIds.push(ph.id);S.photos.push(ph);await idbPut('photos',ph);
+    const sh=m.ov.querySelector('.sheet');
+    sh.querySelector('[data-x]').onclick=m.close;
+
+    // 类型切换
+    sh.querySelector('#f-types').addEventListener('click',ev=>{
+      const b=ev.target.closest('button[data-t]');if(!b)return;
+      sh.querySelectorAll('#f-types button').forEach(x=>x.classList.toggle('on',x===b));
+      sh.querySelector('#f-form').innerHTML=formHtml(b.dataset.t);
+      bindForm(b.dataset.t);
+    });
+
+    function bindForm(type){
+      const form=sh.querySelector('#f-form');
+      form.querySelector('[data-cancel]').onclick=m.close;
+      if(type==='place'||type==='food'||type==='note'){
+        // 照片编辑草稿
+        if(!ED||ED.context!==m){ED={context:m,photoIds:e?e.photoIds.slice():[],newPhotos:[],removedIds:[],lat:e?e.lat:null,lng:e?e.lng:null};}
+        const $files=form.querySelector('#f-files'),$grid=form.querySelector('#f-grid');
+        function renderGrid(){
+          const olds=ED.photoIds.map(pid=>({pid,p:photoById(pid)})).filter(x=>x.p);
+          $grid.innerHTML=[...olds.map(x=>'<div class="pg"><img src="'+x.p.dataUrl+'" alt=""><button class="rm" data-old="'+x.pid+'" aria-label="移除">'+icon('x',11)+'</button></div>'),
+            ...ED.newPhotos.map((x,i)=>'<div class="pg"><img src="'+x.np.dataUrl+'" alt=""><button class="rm" data-new="'+i+'" aria-label="移除">'+icon('x',11)+'</button></div>')].join('');
+          $grid.querySelectorAll('[data-old]').forEach(b=>b.onclick=()=>{ED.photoIds=ED.photoIds.filter(i=>i!==b.dataset.old);ED.removedIds.push(b.dataset.old);renderGrid();});
+          $grid.querySelectorAll('[data-new]').forEach(b=>b.onclick=()=>{ED.newPhotos.splice(+b.dataset.new,1);renderGrid();});
+        }
+        form.querySelector('#f-pick').onclick=()=>$files.click();
+        $files.onchange=async()=>{
+          const fs=[...$files.files];if(!fs.length)return;
+          for(const f of fs){try{ED.newPhotos.push(await compressImage(f));}catch(err){toast('有一张图片读取失败,已跳过');}}
+          $files.value='';renderGrid();
+        };
+        renderGrid();
+        // 地点搜索
+        const $p=form.querySelector('#f-place'),$st=form.querySelector('#f-pstatus'),$res=form.querySelector('#f-results');
+        form.querySelector('#f-search').onclick=async()=>{
+          const q=$p.value.trim();
+          if(!q){toast('先填写地点名称');$p.focus();return;}
+          $res.hidden=true;$st.textContent='正在搜索「'+q+'」……';
+          try{
+            const r=await fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=5&accept-language=zh-CN&q='+encodeURIComponent(q));
+            const list=await r.json();
+            if(!list.length){$st.textContent='没有找到,换个说法试试,或不定位直接保存';return;}
+            $st.textContent='找到 '+list.length+' 个结果,点击选择:';
+            $res.innerHTML=list.map((x,i)=>{
+              const parts=String(x.display_name).split(',').map(s=>s.trim()).slice(0,3).join(' · ');
+              return '<button data-i="'+i+'">'+esc(parts)+'</button>';
+            }).join('');
+            $res.hidden=false;
+            $res.querySelectorAll('button').forEach(b=>b.onclick=()=>{
+              const x=list[+b.dataset.i];
+              ED.lat=parseFloat(x.lat);ED.lng=parseFloat(x.lon);
+              $p.value=String(x.display_name).split(',').map(s=>s.trim()).slice(0,3).join(' · ');
+              $st.textContent='已定位 ('+ED.lat.toFixed(3)+', '+ED.lng.toFixed(3)+')';
+              $st.classList.remove('none');$res.hidden=true;
+            });
+          }catch(err){$st.textContent='定位服务暂不可用(可能离线),可先保存';}
+        };
       }
-      const obj=e?Object.assign(e):{id:uid(),tripId,createdAt:Date.now()};
-      Object.assign(obj,{date,type:ED.type,title,content,placeName:place||null,
-        lat:ED.lat,lng:ED.lng,photoIds:[...ED.photoIds,...newIds],updatedAt:Date.now()});
+      form.querySelector('[data-ok]').onclick=()=>saveItem(type);
+    }
+
+    async function saveItem(type){
+      const form=sh.querySelector('#f-form');
+      const date=form.querySelector('#f-date').value;
+      if(!date){toast('选择日期');return;}
+      const obj=e?Object.assign({},e):{id:uid(),tripId,createdAt:Date.now()};
+      obj.type=type;obj.date=date;
+      if(type==='transport'){
+        const modeBtn=form.querySelector('#f-modes button.on');
+        obj.mode=modeBtn?modeBtn.dataset.m:'hsr';
+        obj.from=form.querySelector('#f-from').value.trim();
+        obj.to=form.querySelector('#f-to').value.trim();
+        obj.number=form.querySelector('#f-num').value.trim();
+        obj.seat=form.querySelector('#f-seat').value.trim();
+        obj.tDepart=form.querySelector('#f-tdep').value||null;
+        obj.tArrive=form.querySelector('#f-tarr').value||null;
+        obj.content=form.querySelector('#f-content').value.trim();
+        if(!obj.from&&!obj.to&&!obj.number){toast('填一下出发地/到达地或班次');return;}
+        delete obj.title;delete obj.placeName;delete obj.lat;delete obj.lng;delete obj.photoIds;delete obj.time;
+      }else if(type==='hotel'){
+        obj.name=form.querySelector('#f-hname').value.trim();
+        obj.checkin=form.querySelector('#f-cin').value||date;
+        obj.checkout=form.querySelector('#f-cout').value||null;
+        obj.price=form.querySelector('#f-price').value?+form.querySelector('#f-price').value:null;
+        obj.addr=form.querySelector('#f-addr').value.trim();
+        obj.content=form.querySelector('#f-content').value.trim();
+        if(!obj.name){toast('填一下酒店名称');return;}
+        delete obj.title;delete obj.placeName;delete obj.lat;delete obj.lng;delete obj.photoIds;delete obj.time;
+      }else{
+        obj.time=form.querySelector('#f-time').value||null;
+        obj.title=form.querySelector('#f-title').value.trim();
+        obj.content=form.querySelector('#f-content').value.trim();
+        obj.placeName=form.querySelector('#f-place').value.trim()||null;
+        obj.lat=ED?ED.lat:null;obj.lng=ED?ED.lng:null;
+        // 照片处理
+        for(const pid of ED.removedIds){const p=photoById(pid);if(p){await idbDel('photos',pid);S.photos=S.photos.filter(x=>x.id!==pid);}}
+        const newIds=[];
+        for(const np of ED.newPhotos){
+          const ph={id:uid(),tripId,entryId:null,dataUrl:np.dataUrl,w:np.w,h:np.h};
+          newIds.push(ph.id);S.photos.push(ph);await idbPut('photos',ph);
+        }
+        obj.photoIds=[...ED.photoIds,...newIds];
+        if(!obj.title&&!obj.content&&!obj.placeName&&!obj.photoIds.length){toast('写点什么,或放一张照片吧');return;}
+        newIds.forEach(nid=>{const p=photoById(nid);if(p)p.entryId=obj.id;});
+      }
+      obj.updatedAt=Date.now();
       await idbPut('entries',obj);
       if(!e)S.entries.push(obj);
-      newIds.forEach(nid=>{const p=photoById(nid);if(p)p.entryId=obj.id;});
-      m.close();toast(e?'这一页已更新':'又多了一页回忆');
+      ED=null;
+      m.close();toast('已保存');
       render();
-    };
+    }
+    bindForm(curType);
   },
 
-  async delEntry(id){
+  async delItem(id){
     const e=entryById(id);if(!e)return;
     const ps=photosOfEntry(id);
-    const ok=await confirmBox('删除这一页游记?',(e.title?'「'+esc(e.title)+'」':'这一页')+(ps.length?' 与它的 '+ps.length+' 张照片':'')+' 将被删除,无法恢复。');
+    const ok=await confirmBox('删除这条记录?',(e.title||itype(e.type).t)+(ps.length?' 与它的 '+ps.length+' 张照片':'')+' 将被删除。');
     if(!ok)return;
     for(const p of ps)await idbDel('photos',p.id);
     await idbDel('entries',id);
@@ -1190,10 +1238,120 @@ const A={
     render();toast('已删除');
   },
 
+  /* ---- 相册直传 ---- */
+  albumUpload(tripId){
+    const t=tripById(tripId);if(!t)return;
+    const draft={photos:[],date:t.endDate&&todayStr()>t.endDate?t.endDate:clampDate(todayStr(),t.startDate,t.endDate)||todayStr()};
+    const m=openSheet(
+      '<div class="sheet-head"><h3>添加照片</h3><button class="icon-btn" data-x aria-label="关闭">'+icon('x',16)+'</button></div>'+
+      '<div class="field"><label>拍摄日期</label><input type="date" id="f-date" value="'+draft.date+'"></div>'+
+      '<div class="field"><label>照片</label>'+
+        '<button class="btn btn-g btn-sm" id="f-pick">'+icon('camera',14)+'选择照片(可多选)</button>'+
+        '<input type="file" id="f-files" accept="image/*" multiple hidden>'+
+        '<div class="photo-grid" id="f-grid"></div></div>'+
+      '<div class="sheet-foot"><button class="btn btn-g" data-cancel>取消</button><button class="btn btn-p" data-ok>保存</button></div>');
+    m.ov.querySelector('[data-x]').onclick=m.close;
+    m.ov.querySelector('[data-cancel]').onclick=m.close;
+    const $files=m.ov.querySelector('#f-files'),$grid=m.ov.querySelector('#f-grid');
+    function renderGrid(){
+      $grid.innerHTML=draft.photos.map((x,i)=>'<div class="pg"><img src="'+x.dataUrl+'" alt=""><button class="rm" data-i="'+i+'" aria-label="移除">'+icon('x',11)+'</button></div>').join('');
+      $grid.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{draft.photos.splice(+b.dataset.i,1);renderGrid();});
+    }
+    m.ov.querySelector('#f-pick').onclick=()=>$files.click();
+    $files.onchange=async()=>{
+      const fs=[...$files.files];if(!fs.length)return;
+      for(const f of fs){try{draft.photos.push(await compressImage(f));}catch(err){toast('有一张图片读取失败,已跳过');}}
+      $files.value='';renderGrid();
+    };
+    m.ov.querySelector('[data-ok]').onclick=async()=>{
+      const date=m.ov.querySelector('#f-date').value||todayStr();
+      if(!draft.photos.length){toast('先选几张照片');return;}
+      const obj={id:uid(),tripId,date,type:'note',title:'',content:'',placeName:null,lat:null,lng:null,photoIds:[],createdAt:Date.now()};
+      for(const np of draft.photos){
+        const ph={id:uid(),tripId,entryId:obj.id,dataUrl:np.dataUrl,w:np.w,h:np.h};
+        obj.photoIds.push(ph.id);S.photos.push(ph);await idbPut('photos',ph);
+      }
+      S.entries.push(obj);await idbPut('entries',obj);
+      m.close();toast('已添加 '+draft.photos.length+' 张照片');
+      render();
+    };
+  },
+
+  /* ---- 花销 ---- */
+  expSheet(tripId,expId){
+    const t=tripById(tripId);if(!t)return;
+    const x=expId?S.expenses.find(v=>v.id===expId):null;
+    const defDate=x?x.date:(t.endDate&&todayStr()>t.endDate?t.endDate:clampDate(todayStr(),t.startDate,t.endDate)||todayStr());
+    const m=openSheet(
+      '<div class="sheet-head"><h3>'+(x?'编辑花销':'记一笔')+'</h3>'+
+      '<button class="icon-btn" data-x aria-label="关闭">'+icon('x',16)+'</button></div>'+
+      '<div class="field"><label>日期</label><input type="date" id="f-date" value="'+defDate+'"></div>'+
+      '<div class="field"><label>分类</label><div class="type-grid" id="f-cats" style="grid-template-columns:repeat(4,1fr)">'+
+        CATS.map(c=>'<button type="button" data-k="'+c.k+'" class="'+((x?x.category:'food')===c.k?'on':'')+'"><span class="em">'+c.em+'</span>'+c.t+'</button>').join('')+'</div></div>'+
+      '<div class="field"><label>金额(元) <em>*</em></label><input type="number" id="f-amt" inputmode="decimal" min="0" step="0.01" value="'+(x?x.amount:'')+'" placeholder="0.00"></div>'+
+      '<div class="field"><label>备注</label><input type="text" id="f-note" maxlength="60" value="'+esc(x&&x.note||'')+'" placeholder="如:两张门票"></div>'+
+      '<div class="sheet-foot"><button class="btn btn-g" data-cancel>取消</button>'+
+      '<button class="btn btn-p" data-ok>'+(x?'保存修改':'记一笔')+'</button></div>');
+    m.ov.querySelector('[data-x]').onclick=m.close;
+    m.ov.querySelector('[data-cancel]').onclick=m.close;
+    m.ov.querySelector('#f-cats').addEventListener('click',ev=>{
+      const b=ev.target.closest('button[data-k]');if(!b)return;
+      m.ov.querySelectorAll('#f-cats button').forEach(v=>v.classList.toggle('on',v===b));
+    });
+    m.ov.querySelector('[data-ok]').onclick=async()=>{
+      const amt=m.ov.querySelector('#f-amt').value;
+      if(!amt||+amt<0){toast('填一下金额');return;}
+      const catBtn=m.ov.querySelector('#f-cats button.on');
+      const obj=x?Object.assign({},x):{id:uid(),tripId,createdAt:Date.now()};
+      obj.date=m.ov.querySelector('#f-date').value||defDate;
+      obj.category=catBtn?catBtn.dataset.k:'other';
+      obj.amount=+amt;obj.note=m.ov.querySelector('#f-note').value.trim();
+      await idbPut('expenses',obj);
+      if(!x)S.expenses.push(obj);
+      m.close();toast('已记账 '+money(obj.amount));
+      render();
+    };
+  },
+
+  budgetSheet(tripId){
+    const t=tripById(tripId);if(!t)return;
+    const m=openSheet(
+      '<div class="sheet-head"><h3>旅行预算</h3><button class="icon-btn" data-x aria-label="关闭">'+icon('x',16)+'</button></div>'+
+      '<div class="field"><label>预算金额(元,留空则清除)</label><input type="number" id="f-b" inputmode="decimal" min="0" value="'+(t.budget||'')+'" placeholder="如:5000"></div>'+
+      '<div class="sheet-foot"><button class="btn btn-g" data-cancel>取消</button><button class="btn btn-p" data-ok>保存</button></div>');
+    m.ov.querySelector('[data-x]').onclick=m.close;
+    m.ov.querySelector('[data-cancel]').onclick=m.close;
+    m.ov.querySelector('[data-ok]').onclick=async()=>{
+      const v=m.ov.querySelector('#f-b').value;
+      t.budget=v?+v:null;
+      await idbPut('trips',t);
+      m.close();render();toast(t.budget?'预算 '+money(t.budget):'已清除预算');
+    };
+  },
+
+  /* ---- 清单 ---- */
+  async addCk(tripId){
+    const $t=$('#ck-text');const text=$t.value.trim();
+    if(!text){toast('先输入内容');$t.focus();return;}
+    const c={id:uid(),tripId,text,done:false,createdAt:Date.now()};
+    S.checklist.push(c);await idbPut('checklist',c);
+    render();
+    const nt=$('#ck-text');if(nt)nt.focus();
+  },
+  async toggleCk(id){
+    const c=S.checklist.find(x=>x.id===id);if(!c)return;
+    c.done=!c.done;await idbPut('checklist',c);render();
+  },
+  async delCk(id){
+    await idbDel('checklist',id);
+    S.checklist=S.checklist.filter(x=>x.id!==id);render();
+  },
+
   /* ---- 导出 / 导入 ---- */
   async doExport(){
     if(!S.trips.length&&!S.photos.length){toast('还没有内容可以备份');return;}
-    const data={app:'footprints',version:1,exportedAt:new Date().toISOString(),trips:S.trips,entries:S.entries,photos:S.photos};
+    const data={app:'footprints',version:2,exportedAt:new Date().toISOString(),
+      trips:S.trips,entries:S.entries,photos:S.photos,expenses:S.expenses,checklist:S.checklist};
     const blob=new Blob([JSON.stringify(data)],{type:'application/json'});
     const a=document.createElement('a');
     a.href=URL.createObjectURL(blob);
@@ -1203,24 +1361,36 @@ const A={
     toast('备份文件已导出');
   },
   doImport(){$('#import-file').click();},
+
+  async clearAll(){
+    const ok=await confirmBox('清空全部数据?','所有旅行、记录、照片、花销与清单都会被删除,且无法恢复。强烈建议先导出备份。','确认清空');
+    if(!ok)return;
+    for(const s of['trips','entries','photos','expenses','checklist'])await idbClear(s);
+    S.trips=[];S.entries=[];S.photos=[];S.expenses=[];S.checklist=[];
+    S.view='home';S.tripId=null;
+    render();toast('已清空全部数据');
+  },
 };
 
-/* 导入处理 */
+/* 导入处理(兼容 v1 / v2 备份) */
 $('#import-file').addEventListener('change',async ev=>{
   const f=ev.target.files[0];ev.target.value='';
   if(!f)return;
   try{
-    const text=await f.text();
-    const j=JSON.parse(text);
+    const j=JSON.parse(await f.text());
     if(!j||!Array.isArray(j.trips)||!Array.isArray(j.entries)||!Array.isArray(j.photos))throw new Error('格式');
+    const exps=Array.isArray(j.expenses)?j.expenses:[],cks=Array.isArray(j.checklist)?j.checklist:[];
     const ok=await confirmBox('导入这份备份?',
-      '将用备份内容<b>替换</b>当前全部数据:'+j.trips.length+' 段旅行、'+j.entries.length+' 篇游记、'+j.photos.length+' 张照片。当前未备份的数据会丢失,建议先导出。','覆盖导入');
+      '将用备份内容<b>替换</b>当前全部数据:'+j.trips.length+' 段旅行、'+j.entries.length+' 条记录、'+j.photos.length+' 张照片、'+exps.length+' 笔花销。当前未备份的数据会丢失,建议先导出。','覆盖导入');
     if(!ok)return;
-    await idbClear('trips');await idbClear('entries');await idbClear('photos');
+    for(const s of['trips','entries','photos','expenses','checklist'])await idbClear(s);
     for(const t of j.trips)await idbPut('trips',t);
-    for(const e of j.entries)await idbPut('entries',e);
+    for(const e of j.entries){if(OLD_TYPE_MAP[e.type])e.type=OLD_TYPE_MAP[e.type];await idbPut('entries',e);}
     for(const p of j.photos)await idbPut('photos',p);
-    S.trips=j.trips;S.entries=j.entries;S.photos=j.photos;
+    for(const x of exps)await idbPut('expenses',x);
+    for(const c of cks)await idbPut('checklist',c);
+    S.trips=j.trips;S.entries=j.entries;S.photos=j.photos;S.expenses=exps;S.checklist=cks;
+    S.entries.forEach(e=>{if(OLD_TYPE_MAP[e.type])e.type=OLD_TYPE_MAP[e.type];});
     S.view='home';S.tripId=null;
     render();toast('导入完成:恢复 '+j.trips.length+' 段旅行');
   }catch(err){
@@ -1235,6 +1405,11 @@ $('#import-file').addEventListener('change',async ev=>{
     S.trips=await idbAll('trips');
     S.entries=await idbAll('entries');
     S.photos=await idbAll('photos');
+    S.expenses=await idbAll('expenses');
+    S.checklist=await idbAll('checklist');
+    // 旧版类型迁移(见闻/趣事/心情→note 等)
+    let migrated=false;
+    for(const e of S.entries){if(OLD_TYPE_MAP[e.type]){e.type=OLD_TYPE_MAP[e.type];migrated=true;await idbPut('entries',e);}}
     render();
   }catch(err){
     $('#app').innerHTML='<div class="empty" style="margin-top:40px">'+icon('compass',46)+
