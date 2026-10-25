@@ -228,7 +228,7 @@ input,textarea,select{font-size:16px}/* 防 iOS 聚焦缩放 */
 .ck-prog .bar i{display:block;height:100%;background:var(--moss);border-radius:99px;transition:width .4s}
 
 /* ===== 地图 / 回顾 ===== */
-.map-box{height:56vh;min-height:340px;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow);background:#e3eefc;position:relative;z-index:1}
+.map-box{height:46vh;min-height:300px;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow);background:#e3eefc;position:relative;z-index:1}
 .map-note{font-size:12px;color:var(--ink3);margin-top:10px;display:flex;gap:5px;align-items:center;flex-wrap:wrap}
 .map-fallback{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--ink3);font-size:13.5px;text-align:center;padding:20px}
 .place-list{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}
@@ -274,23 +274,23 @@ input,textarea,select{font-size:16px}/* 防 iOS 聚焦缩放 */
 .sup-row .val{flex:1;min-width:0;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
 .sup-row .num{color:var(--accent);font-variant-numeric:tabular-nums;flex:none;font-size:13px;font-weight:600}
 /* 点亮地图 */
-.light-card{background:linear-gradient(180deg,#0e1a36,#0a1226);border-radius:20px;padding:20px 14px 16px;box-shadow:var(--shadow);margin-bottom:8px;color:#dbe7ff}
-.lg-stats{text-align:center;font-size:13px;color:#9fb6e8;margin-bottom:13px;line-height:1.6}
-.lg-stats b{color:#fff;font-family:var(--serif);font-size:19px;margin:0 3px}
-.lg-toggle{display:flex;gap:9px;justify-content:center;margin-bottom:13px}
-.lg-toggle button{border:1px solid #2a3c66;background:#111d3a;color:#9fb6e8;border-radius:99px;padding:5px 20px;font-size:13px;cursor:pointer}
+.light-card{background:linear-gradient(180deg,#0e1a36,#0a1226);border-radius:20px;padding:16px 12px 12px;box-shadow:var(--shadow);margin-bottom:8px;color:#dbe7ff}
+.lg-stats{text-align:center;font-size:13px;color:#9fb6e8;margin-bottom:9px;line-height:1.6}
+.lg-stats b{color:#fff;font-family:var(--serif);font-size:17px;margin:0 3px}
+.lg-toggle{display:flex;gap:9px;justify-content:center;margin-bottom:9px}
+.lg-toggle button{border:1px solid #2a3c66;background:#111d3a;color:#9fb6e8;border-radius:99px;padding:4px 16px;font-size:13px;cursor:pointer}
 .lg-toggle button.on{background:#2f6ef6;border-color:#2f6ef6;color:#fff;font-weight:600}
-.lg-map{height:330px;border-radius:14px;overflow:hidden;background:#0d1830;position:relative}
+.lg-map{height:270px;border-radius:14px;overflow:hidden;background:#0d1830;position:relative}
 .lg-map.leaflet-container{background:#0d1830}
 .lg-map .leaflet-container{background:#0d1830;font:inherit}
 .lg-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#5f739f;font-size:13px;letter-spacing:1px}
-.lg-crumb{display:flex;align-items:center;justify-content:center;gap:11px;margin-top:13px;font-size:13px;color:#cfe0ff}
+.lg-crumb{display:flex;align-items:center;justify-content:center;gap:11px;margin-top:9px;font-size:13px;color:#cfe0ff}
 .lg-crumb button{background:#152242;border:1px solid #22325a;color:#9fc0ff;border-radius:99px;padding:4px 13px;font-size:12px;cursor:pointer}
 .lg-crumb b{color:#fff}
-.lg-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:13px;justify-content:center}
-.lg-chip{font-size:11.5px;padding:4px 11px;border-radius:99px;background:#152242;color:#5f739f;border:1px solid #22325a}
+.lg-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px;justify-content:center}
+.lg-chip{font-size:10.5px;padding:3px 9px;border-radius:99px;background:#152242;color:#5f739f;border:1px solid #22325a}
 .lg-chip.lit{background:#1d4ed8;color:#fff;border-color:#4f8bff;font-weight:600;cursor:pointer}
-.lg-hint{margin-top:12px;text-align:center;font-size:11px;color:#5f739f}
+.lg-hint{margin-top:8px;text-align:center;font-size:11px;color:#5f739f}
 .lg-pin .fp-dot{width:14px;height:14px;border-width:2px}
 .lg-pin .fp-halo{width:18px;height:18px;left:0;top:-2px}
 .lg-pin .fp-tip{top:10px;width:7px;height:7px;margin-left:-4.5px;border-width:2px}
@@ -927,7 +927,7 @@ function viewMap(){
       '<div class="lg-chips" id="lg-chips"></div>'+
       '<div class="lg-hint">💡 点击亮起来的省/国家,可以钻进去看这个地区点亮了哪些地方</div>'+
     '</div>'+
-    '<div class="sec" style="margin-top:34px"><h2>足迹路线</h2><span>同一段旅程的足迹按时间连成线</span></div>'+
+    '<div class="sec" style="margin-top:24px"><h2>足迹路线</h2><span>同一段旅程的足迹按时间连成线</span></div>'+
     '<div class="map-box" id="global-map"></div>'+
     '<div class="map-note">'+icon('map',12)+(located.length
       ?located.length+' 个定位地点 · 新定位的记录会自动归属省市/国家,旧记录正在静默补齐'
@@ -1212,6 +1212,7 @@ async function initLightMap(){
   if(!await ensureLeaflet()){mapFallback(holder,'地图组件未能加载(可能处于离线状态),其余功能不受影响');return;}
   if(maps.light){try{maps.light.remove();}catch(e){}maps.light=null;}
   const el=document.getElementById('light-map');if(!el||!el.isConnected)return;
+  el.style.height=LG.lv==='cn'?'270px':'200px';/* 世界画幅更扁,减少上下留白 */
   const m=L.map(el,{zoomControl:false,attributionControl:false,scrollWheelZoom:false,doubleClickZoom:false,dragging:true});
   maps.light=m;
   const ld=el.querySelector('.lg-loading');if(ld)ld.remove();
@@ -1270,7 +1271,9 @@ async function initLightMap(){
     if(crumbEl){crumbEl.hidden=false;crumbEl.innerHTML='<button onclick="A.drillBack()">‹ 返回</button><span>'+(LG.lv==='cn'?'中国 · ':'')+'<b>'+esc(nameOf)+'</b> · 点亮 '+marks.length+' 个地方</span>';}
     if(chipsEl){chipsEl.innerHTML=marks.map(t=>chip(t,true,null)).join('')||'<span class="lg-chip">该地区还没有定位记录</span>';}
   }else{
-    try{m.fitBounds(base.getBounds(),{padding:[8,8]});}catch(e){}
+    /* 中国视图只框大陆范围(排除九段线要素 100000_JD),避免下方大片留白 */
+    const fitSrc=LG.lv==='cn'?{type:'FeatureCollection',features:gj.features.filter(f=>(f.properties&&f.properties.adcode)!=='100000_JD')}:gj;
+    try{m.fitBounds(L.geoJSON(fitSrc).getBounds(),{padding:[6,6]});}catch(e){}
     if(crumbEl)crumbEl.hidden=true;
     if(chipsEl){
       chipsEl.innerHTML=LG.lv==='cn'
