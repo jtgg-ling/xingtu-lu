@@ -262,6 +262,18 @@ input,textarea,select{font-size:16px}/* 防 iOS 聚焦缩放 */
 .me-row.danger{color:var(--danger)}
 .tip-card{background:linear-gradient(120deg,#eaf3ff,#f0fbff);border:1px solid #d5e5fc;border-radius:15px;padding:14px 16px;font-size:12.5px;color:var(--ink2);line-height:1.8}
 
+/* 回顾页迷你旅行行 + 之最 */
+.trip-row.mini{padding:10px 12px;margin-bottom:9px;box-shadow:none}
+.trip-row.mini .trip-cover{width:56px;height:56px;border-radius:10px;font-size:22px}
+.trip-row.mini h3{font-size:15px}
+.trip-row.mini .trip-info{gap:1px}
+.sup-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px dashed var(--line)}
+.sup-row:last-child{border-bottom:0}
+.sup-row .em{font-size:21px;flex:none}
+.sup-row .lab{width:80px;font-size:12.5px;color:var(--ink3);flex:none}
+.sup-row .val{flex:1;min-width:0;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+.sup-row .num{color:var(--accent);font-variant-numeric:tabular-nums;flex:none;font-size:13px;font-weight:600}
+
 /* ===== 底部弹窗 ===== */
 .sheet-overlay{position:fixed;inset:0;z-index:1000;background:rgba(18,38,79,.45);animation:fIn .2s ease;backdrop-filter:blur(2px);display:flex;align-items:flex-end;justify-content:center}
 @keyframes fIn{from{opacity:0}to{opacity:1}}
@@ -367,6 +379,7 @@ function icon(name,s=16){
     route:'<circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/>',
     check:'<path d="M20 6 9 17l-5-5"/>',
     moon:'<circle cx="12" cy="12" r="10"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.9 4.9 1.4 1.4"/><path d="m17.7 17.7 1.4 1.4"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.3 17.7-1.4 1.4"/><path d="m19.1 4.9-1.4 1.4"/>',
+    share:'<path d="M12 3v13"/><path d="m8 7 4-4 4 4"/><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/>',
   };
   return '<svg width="'+s+'" height="'+s+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+(P[name]||'')+'</svg>';
 }
@@ -540,6 +553,7 @@ function render(){
   else if(S.view==='me')app.innerHTML=viewMe();
   app.classList.remove('view-anim');void app.offsetWidth;app.classList.add('view-anim');
   if(S.view==='map')initGlobalMap();
+  if(S.view==='me')updateStorageInfo();
 }
 
 const NAVS=[
@@ -554,7 +568,8 @@ function renderTopbar(){
     const t=tripById(S.tripId);
     el.innerHTML='<button class="tb-back" onclick="A.nav(\'home\')" aria-label="返回">'+icon('back',19)+'</button>'+
       '<div class="tb-title">'+esc(t?t.name:'')+'</div>'+
-      (t?'<button class="tb-act" onclick="A.tripSheet(\''+t.id+'\')">编辑</button>':'');
+      (t?'<button class="tb-act" onclick="A.shareTrip(\''+t.id+'\')" aria-label="生成分享图">'+icon('share',17)+'</button>'+
+      '<button class="tb-act" onclick="A.tripSheet(\''+t.id+'\')">编辑</button>':'');
   }else{
     el.innerHTML='<div class="logo" onclick="A.nav(\'home\')">'+
       '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m16.2 7.8-2.1 6.3-6.3 2.1 2.1-6.3z"/></svg>'+
@@ -848,28 +863,57 @@ function viewMap(){
 
 /* ---------- 回顾 ---------- */
 function viewStats(){
-  const st=globalStats();
   if(!S.trips.length){
-    return '<div class="empty">'+icon('chart',46)+'<h3>还没有可回顾的旅程</h3><p>开始第一段旅行后,这里会告诉你走了多远</p></div>';
+    return '<div class="empty">'+icon('chart',46)+'<h3>还没有可回顾的旅程</h3><p>开始第一段旅行后,这里会一年一年帮你记着</p></div>';
   }
-  const mem=memoryCard();
-  const years={};S.trips.forEach(t=>{const y=t.startDate?t.startDate.slice(0,4):(t.createdAt?new Date(t.createdAt).getFullYear():'未注明');years[y]=(years[y]||0)+1;});
-  const maxY=Math.max(...Object.values(years));
-  const yearRows=Object.keys(years).sort().reverse().map(y=>
-    '<div class="bar-row" style="--bc:var(--accent)"><span class="bl" style="width:34px">'+esc(y)+'</span>'+
-    '<div class="bar"><i style="width:'+(years[y]/maxY*100)+'%"></i></div><span class="bn">'+years[y]+' 段</span></div>').join('');
+  /* 时光轴:按年份分组 */
+  const byYear={};
+  S.trips.forEach(t=>{
+    const y=t.startDate?t.startDate.slice(0,4):String(t.createdAt?new Date(t.createdAt).getFullYear():'未注明');
+    (byYear[y]=byYear[y]||[]).push(t);
+  });
+  let html='<div class="hello" style="margin-bottom:6px"><div class="kicker">TIME REVIEW</div><h1 style="font-size:22px">一年一年,慢慢回看</h1></div>';
+  const years=Object.keys(byYear).sort().reverse();
+  for(const y of years){
+    const ts=byYear[y].sort((a,b)=>(b.startDate||'').localeCompare(a.startDate||''));
+    const days=ts.reduce((a,t)=>a+tripDays(t),0);
+    const spent=ts.reduce((a,t)=>a+sumOf(t.id),0);
+    html+='<div class="sec"><h2>'+(y==='未注明'?'未注明日期':esc(y)+' 年')+'</h2><span>'+ts.length+' 段 · '+days+' 天'+(spent>0?' · 花了 '+money(spent):'')+'</span></div>';
+    for(const t of ts){
+      const cov=tripCover(t);
+      const range=t.startDate?(t.endDate&&t.endDate!==t.startDate?fmtMD(t.startDate)+' — '+fmtYMD(t.endDate):fmtYMD(t.startDate)):'日期待定';
+      const sp=sumOf(t.id);
+      html+='<div class="trip-row mini" onclick="A.openTrip(\''+t.id+'\')">'+
+        '<div class="trip-cover">'+(cov?'<img src="'+cov.dataUrl+'" alt="">':esc((t.destination||t.name||'旅').slice(0,1)))+'</div>'+
+        '<div class="trip-info"><h3>'+esc(t.name)+'</h3>'+
+        (t.destination?'<div class="dest">'+icon('pin',12)+esc(t.destination)+'</div>':'')+
+        '<div class="dest" style="color:var(--ink3)">'+esc(range)+'</div></div>'+
+        '<div style="align-self:center;text-align:right;flex:none"><div style="font-family:var(--serif);font-weight:800;color:var(--accent);font-size:17px">'+tripDays(t)+'<span style="font-size:11px;color:var(--ink3);font-weight:400"> 天</span></div>'+
+        (sp>0?'<div style="font-size:11px;color:var(--ink3)">'+money(sp)+'</div>':'')+'</div>'+
+        '</div>';
+    }
+  }
+  /* 旅行之最 */
+  const cands=[
+    {em:'📅',lab:'最长一次',v:t=>tripDays(t),get:t=>tripDays(t)+' 天'},
+    {em:'✏️',lab:'记录最多',v:t=>itemsOf(t.id).length,get:t=>itemsOf(t.id).length+' 条'},
+    {em:'📸',lab:'照片最多',v:t=>photosOfTrip(t.id).length,get:t=>photosOfTrip(t.id).length+' 张'},
+    {em:'💰',lab:'花销最高',v:t=>sumOf(t.id),get:t=>money(sumOf(t.id))},
+    {em:'🌍',lab:'到访地方最多',v:t=>new Set(itemsOf(t.id).filter(e=>e.placeName).map(e=>e.placeName)).size,get:t=>new Set(itemsOf(t.id).filter(e=>e.placeName).map(e=>e.placeName)).size+' 个'},
+  ];
+  const sups=[];
+  for(const c of cands){
+    let best=null,bv=0;
+    for(const t of S.trips){const v=c.v(t);if(v>bv){bv=v;best=t;}}
+    if(best&&bv>0)sups.push('<div class="sup-row"><span class="em">'+c.em+'</span><span class="lab">'+c.lab+'</span><span class="val" onclick="A.openTrip(\''+best.id+'\')">'+esc(best.name)+'</span><span class="num">'+c.get(best)+'</span></div>');
+  }
+  if(sups.length)html+='<div class="sec"><h2>旅行之最</h2></div><div class="panel" style="padding:6px 16px">'+sups.join('')+'</div>';
+  /* 去过的地方 */
   const pc={};S.entries.forEach(e=>{if(e.placeName)pc[e.placeName]=(pc[e.placeName]||0)+1;});
   const places=Object.keys(pc).sort((a,b)=>pc[b]-pc[a]);
-  return (mem?'<div class="sec" style="margin-top:0"><h2>那年今天</h2></div>'+mem:'')+
-    '<div class="stat-grid">'+
-      '<div class="stat-card"><div class="n">'+st.trips+'<small> 次</small></div><div class="l">旅行</div></div>'+
-      '<div class="stat-card"><div class="n">'+st.days+'<small> 天</small></div><div class="l">在途日子</div></div>'+
-      '<div class="stat-card"><div class="n">'+st.cities+'<small> 个</small></div><div class="l">足迹地方</div></div>'+
-      '<div class="stat-card"><div class="n">'+st.photos+'<small> 张</small></div><div class="l">照片</div></div>'+
-    '</div>'+
-    '<div class="panel"><h3>'+icon('calendar',15)+'哪一年走得最多</h3>'+yearRows+'</div>'+
-    (places.length?'<div class="panel"><h3>'+icon('pin',15)+'去过的地方</h3><div class="place-list" style="margin-top:0">'+
-      places.map(p=>'<span class="pl">'+icon('pin',11)+esc(p)+(pc[p]>1?' × '+pc[p]:'')+'</span>').join('')+'</div></div>':'');
+  if(places.length)html+='<div class="panel"><h3>'+icon('pin',15)+'去过的地方</h3><div class="place-list" style="margin-top:0">'+
+    places.map(p=>'<span class="pl">'+icon('pin',11)+esc(p)+(pc[p]>1?' × '+pc[p]:'')+'</span>').join('')+'</div></div>';
+  return html;
 }
 
 /* ---------- 我的 ---------- */
@@ -883,15 +927,40 @@ function viewMe(){
       '<div class="row-line"><span>照片</span><b>'+st.photos+' 张</b></div>'+
       '<div class="row-line"><span>花销笔数</span><b>'+nExp+' 笔 · 共 '+money(st.spent)+'</b></div>'+
     '</div>'+
+    '<div class="card me-card" id="storage-info"><div class="row-line"><span>存储体检</span><b>检查中…</b></div></div>'+
     '<div class="card me-list">'+
       '<button class="me-row" onclick="A.doExport()"><span class="em">📤</span><span>导出备份<span class="sub">全部数据打包成 JSON 文件保存</span></span><span class="arrow">'+icon('right',16)+'</span></button>'+
       '<button class="me-row" onclick="A.doImport()"><span class="em">📥</span><span>导入备份<span class="sub">用备份文件恢复数据(覆盖当前)</span></span><span class="arrow">'+icon('right',16)+'</span></button>'+
       '<button class="me-row danger" onclick="A.clearAll()"><span class="em">🗑️</span><span>清空全部数据<span class="sub">不可恢复,请先导出备份</span></span><span class="arrow">'+icon('right',16)+'</span></button>'+
     '</div>'+
-    '<div class="tip-card">💡 在手机浏览器里点「添加到主屏幕」,行途录就会像 App 一样安装,离线也能打开。<br>🔒 所有数据只保存在这台设备的浏览器里,不会上传;换设备前记得导出备份。</div>';
+    '<div class="tip-card">💡 数据小课堂:主屏幕图标、Safari 网页、微信里打开,是<b>三套互相独立</b>的数据空间。请固定用主屏幕图标(或 Safari)一个入口,不要混用,更不要用微信打开。<br>🔒 数据只存在这台设备上;换设备或换入口前,先「导出备份」,再到新入口「导入备份」就能搬家。</div>';
 }
 
-/* ---------- 地图 ---------- */
+async function persistStorage(){
+  try{if(navigator.storage&&navigator.storage.persist)await navigator.storage.persist();}catch(e){}
+}
+async function updateStorageInfo(){
+  const el=document.getElementById('storage-info');if(!el)return;
+  const standalone=(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;
+  let html='<div class="row-line"><span>当前打开入口</span><b>'+(standalone?'主屏幕 App ✅':'浏览器网页')+'</b></div>';
+  try{
+    if(navigator.storage&&navigator.storage.estimate){
+      const est=await navigator.storage.estimate();
+      const used=(est.usage||0)/1048576,quota=(est.quota||0)/1048576;
+      if(quota){
+        html+='<div class="row-line"><span>可用空间</span><b>'+(quota<1024?quota.toFixed(0)+' MB':(quota/1024).toFixed(1)+' GB')+'</b></div>';
+        html+='<div class="row-line"><span>已用</span><b>'+(used<1?used.toFixed(2):used.toFixed(1))+' MB</b></div>';
+        if(quota<300)html+='<div class="row-line"><span style="color:var(--danger)">⚠️ 疑似无痕/临时模式</span><b style="color:var(--danger)">刷新后数据会丢</b></div>';
+      }
+    }else{
+      html+='<div class="row-line"><span>存储状态</span><b>无法检测(较老浏览器)</b></div>';
+    }
+  }catch(e){
+    html+='<div class="row-line"><span style="color:var(--danger)">⚠️ 存储不可用</span><b style="color:var(--danger)">可能处于无痕模式</b></div>';
+  }
+  el.innerHTML=html;
+}
+
 let leafletPromise=null;
 function ensureLeaflet(){
   if(window.L)return Promise.resolve(true);
@@ -910,8 +979,25 @@ function ensureLeaflet(){
   }
   return leafletPromise;
 }
-const TILE_URL='https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const TILE_ATTR='&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors';
+const TILE_URL='https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
+const TILE_ATTR='&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> &copy; <a href="https://carto.com/" target="_blank">CARTO</a>';
+/* 地点定位:三源并行搜索(Photon/Open-Meteo/Nominatim),超时保护+按坐标去重 */
+async function geocodePlace(q){
+  const enc=encodeURIComponent(q);
+  const one=p=>Promise.race([p,new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),6000))]);
+  const srcs=[
+    one(fetch('https://photon.komoot.io/api/?limit=6&lang=default&q='+enc)).then(r=>r.json()).then(j=>(j.features||[]).filter(f=>f.geometry&&f.geometry.coordinates).map(f=>{const p=f.properties||{};return{name:[p.name,p.city||p.state,p.country].filter(Boolean).join(' · '),lat:f.geometry.coordinates[1],lng:f.geometry.coordinates[0]};})).catch(()=>[]),
+    one(fetch('https://geocoding-api.open-meteo.com/v1/search?count=6&language=zh&format=json&name='+enc)).then(r=>r.json()).then(j=>(j.results||[]).map(x=>({name:[x.name,x.admin1,x.country].filter(Boolean).join(' · '),lat:x.latitude,lng:x.longitude}))).catch(()=>[]),
+    one(fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=6&accept-language=zh-CN&q='+enc)).then(r=>r.json()).then(j=>(j||[]).map(x=>({name:String(x.display_name).split(',').map(s=>s.trim()).slice(0,3).join(' · '),lat:parseFloat(x.lat),lng:parseFloat(x.lon)}))).catch(()=>[]),
+  ];
+  const all=(await Promise.all(srcs)).flat();
+  const seen=new Set(),out=[];
+  for(const it of all){
+    const k=it.lat.toFixed(3)+','+it.lng.toFixed(3);
+    if(!seen.has(k)){seen.add(k);out.push(it);}
+  }
+  return out;
+}
 function mapFallback(el,msg){el.innerHTML='<div class="map-fallback">'+icon('map',38)+'<div>'+esc(msg)+'</div></div>';}
 function popupHtml(e){
   const t=tripById(e.tripId);
@@ -925,7 +1011,7 @@ async function initGlobalMap(){
   const located=S.entries.filter(e=>e.lat!=null&&e.lng!=null&&tripById(e.tripId));
   if(!located.length){mapFallback(el,'去过并定位的地方,都会点亮在这张地图上');return;}
   const m=L.map(el,{scrollWheelZoom:true});
-  L.tileLayer(TILE_URL,{maxZoom:19,attribution:TILE_ATTR}).addTo(m);
+  L.tileLayer(TILE_URL,{maxZoom:19,subdomains:'abcd',attribution:TILE_ATTR}).addTo(m);
   maps.global=m;
   const bounds=[];
   S.trips.forEach((t,ti)=>{
@@ -966,12 +1052,124 @@ function lbNav(d){if(!LB)return;LB.i=(LB.i+d+LB.items.length)%LB.items.length;re
 function closeLB(){LB=null;$('#lightbox').style.display='none';}
 
 /* ============================================================
+   旅程分享图(Canvas 绘制 1080×1440,适合抖音/小红书)
+   ============================================================ */
+function rrect(ctx,X,Y,W,H,R){
+  ctx.beginPath();
+  ctx.moveTo(X+R,Y);
+  ctx.arcTo(X+W,Y,X+W,Y+H,R);
+  ctx.arcTo(X+W,Y+H,X,Y+H,R);
+  ctx.arcTo(X,Y+H,X,Y,R);
+  ctx.arcTo(X,Y,X+W,Y,R);
+  ctx.closePath();
+}
+function fitFont(ctx,text,max,size,weight){
+  do{ctx.font=weight+' '+size+'px "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif';if(ctx.measureText(text).width<=max)break;size-=4;}while(size>28);
+  return size;
+}
+async function renderShareCard(t){
+  const W=1080,H=1440;
+  const cv=document.createElement('canvas');cv.width=W;cv.height=H;
+  const x=cv.getContext('2d');
+  const loadImg=src=>new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=src;});
+  /* 背景:封面照片铺满,无封面则用渐变 */
+  const cov=tripCover(t);
+  if(cov){
+    try{
+      const bg=await loadImg(cov.dataUrl);
+      const r=Math.max(W/bg.width,H/bg.height);
+      x.drawImage(bg,(W-bg.width*r)/2,(H-bg.height*r)/2,bg.width*r,bg.height*r);
+    }catch(e){}
+  }
+  if(!cov){
+    const g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,'#2f7cf6');g.addColorStop(1,'#7dd3fc');
+    x.fillStyle=g;x.fillRect(0,0,W,H);
+  }
+  /* 压暗渐层保证文字可读 */
+  const v=x.createLinearGradient(0,0,0,H);
+  v.addColorStop(0,'rgba(10,25,55,.30)');v.addColorStop(.4,'rgba(10,25,55,.45)');v.addColorStop(1,'rgba(8,20,45,.94)');
+  x.fillStyle=v;x.fillRect(0,0,W,H);
+  x.textAlign='center';x.textBaseline='alphabetic';
+  /* 顶部品牌 */
+  x.fillStyle='rgba(255,255,255,.82)';x.font='500 30px "PingFang SC",sans-serif';
+  x.fillText('行 途 录 · 旅 程 总 结',W/2,96);
+  /* 标题与目的地 */
+  const nameY=780;
+  fitFont(x,t.name||'未命名旅程',W-140,88,'800');
+  x.fillStyle='#fff';x.fillText(t.name||'未命名旅程',W/2,nameY);
+  const days=tripDays(t);
+  x.font='600 38px "PingFang SC",sans-serif';x.fillStyle='rgba(255,255,255,.95)';
+  x.fillText((t.destination?'📍 '+t.destination+(days?' · 共 '+days+' 天':''):days?'共 '+days+' 天':''),W/2,nameY+66);
+  x.font='34px "PingFang SC",sans-serif';x.fillStyle='rgba(255,255,255,.78)';
+  x.fillText(t.startDate?(t.endDate&&t.endDate!==t.startDate?fmtYMD(t.startDate)+' — '+fmtYMD(t.endDate):fmtYMD(t.startDate)):'日期待定',W/2,nameY+122);
+  /* 数据统计 */
+  const its=itemsOf(t.id),ps=photosOfTrip(t.id);
+  const stats=[
+    {n:days,l:'天'},
+    {n:new Set(its.filter(e=>e.placeName).map(e=>e.placeName)).size,l:'个地方'},
+    {n:its.length,l:'条记录'},
+    {n:ps.length,l:'张照片'},
+  ];
+  const sy=1010,cw=(W-160)/4;
+  stats.forEach((s,i)=>{
+    const cx=80+cw*i+cw/2;
+    x.fillStyle='#fff';x.font='800 62px "PingFang SC",sans-serif';x.fillText(s.n,cx,sy);
+    x.fillStyle='rgba(255,255,255,.72)';x.font='26px "PingFang SC",sans-serif';x.fillText(s.l,cx,sy+40);
+  });
+  const spent=sumOf(t.id);
+  if(spent>0){x.fillStyle='rgba(255,255,255,.85)';x.font='32px "PingFang SC",sans-serif';x.fillText('总花销 '+money(spent),W/2,sy+100);}
+  /* 照片条(最多 3 张圆角缩略) */
+  const thumbs=ps.slice(0,3);
+  if(thumbs.length){
+    const th=170,tw=Math.min(300,(W-120-24*(thumbs.length-1))/thumbs.length);
+    let px=(W-(tw*thumbs.length+24*(thumbs.length-1)))/2,py=1195;
+    for(const p of thumbs){
+      try{
+        const im=await loadImg(p.dataUrl);
+        const r=Math.max(tw/im.width,th/im.height);
+        x.save();rrect(x,px,py,tw,th,22);x.clip();
+        x.drawImage(im,px+(tw-im.width*r)/2,py+(th-im.height*r)/2,im.width*r,im.height*r);
+        x.restore();
+        x.strokeStyle='rgba(255,255,255,.35)';x.lineWidth=2;rrect(x,px,py,tw,th,22);x.stroke();
+      }catch(e){}
+      px+=tw+24;
+    }
+  }
+  /* 底部落款 */
+  x.fillStyle='rgba(255,255,255,.7)';x.font='28px "PingFang SC",sans-serif';
+  x.fillText('—— 用「行途录」记录每一段旅程 ——',W/2,1408);
+  return cv.toDataURL('image/jpeg',.92);
+}
+
+/* ============================================================
    动作 (A)
    ============================================================ */
 const A={
   nav(v){S.view=v;S.tripId=null;render();},
   tab(k){S.tab=k;render();},
   openTrip(id){S.view='trip';S.tripId=id;S.tab='plan';render();},
+
+  /* ---- 旅程分享图 ---- */
+  shareTrip(tripId){
+    const t=tripById(tripId);if(!t)return;
+    const m=openSheet('<div class="sheet-head"><h3>旅程分享图</h3><button class="icon-btn" data-x aria-label="关闭">'+icon('x',16)+'</button></div>'+
+      '<div style="text-align:center;color:var(--ink3);padding:36px 0;letter-spacing:2px">正在生成…</div>');
+    m.ov.querySelector('[data-x]').onclick=m.close;
+    renderShareCard(t).then(url=>{
+      const sh=m.ov.querySelector('.sheet');
+      sh.innerHTML='<div class="grab"></div><div class="sheet-head"><h3>旅程分享图</h3><button class="icon-btn" data-x aria-label="关闭">'+icon('x',16)+'</button></div>'+
+        '<img src="'+url+'" alt="旅程分享图" style="width:100%;border-radius:14px;box-shadow:var(--shadow)">'+
+        '<div class="sheet-foot"><button class="btn btn-g" data-close>关闭</button>'+
+        '<button class="btn btn-p" data-save>'+icon('image',15)+'保存图片</button></div>'+
+        '<p style="font-size:11.5px;color:var(--ink3);text-align:center;margin-top:10px">保存后可发抖音/小红书做图文素材;手机上也可以直接长按图片保存</p>';
+      sh.querySelector('[data-x]').onclick=m.close;
+      sh.querySelector('[data-close]').onclick=m.close;
+      sh.querySelector('[data-save]').onclick=()=>{
+        const a=document.createElement('a');a.href=url;a.download='行途录_'+(t.name||'旅程')+'.png';a.click();
+        toast('已保存(若未弹出,请长按图片保存)');
+      };
+    }).catch(()=>{toast('生成失败,请重试');m.close();});
+  },
 
   /* ---- 灯箱 ---- */
   lbEntry(entryId,i){
@@ -1151,23 +1349,19 @@ const A={
           if(!q){toast('先填写地点名称');$p.focus();return;}
           $res.hidden=true;$st.textContent='正在搜索「'+q+'」……';
           try{
-            const r=await fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=5&accept-language=zh-CN&q='+encodeURIComponent(q));
-            const list=await r.json();
+            const list=await geocodePlace(q);
             if(!list.length){$st.textContent='没有找到,换个说法试试,或不定位直接保存';return;}
             $st.textContent='找到 '+list.length+' 个结果,点击选择:';
-            $res.innerHTML=list.map((x,i)=>{
-              const parts=String(x.display_name).split(',').map(s=>s.trim()).slice(0,3).join(' · ');
-              return '<button data-i="'+i+'">'+esc(parts)+'</button>';
-            }).join('');
+            $res.innerHTML=list.map((x,i)=>'<button data-i="'+i+'">'+esc(x.name)+'</button>').join('');
             $res.hidden=false;
             $res.querySelectorAll('button').forEach(b=>b.onclick=()=>{
               const x=list[+b.dataset.i];
-              ED.lat=parseFloat(x.lat);ED.lng=parseFloat(x.lon);
-              $p.value=String(x.display_name).split(',').map(s=>s.trim()).slice(0,3).join(' · ');
-              $st.textContent='已定位 ('+ED.lat.toFixed(3)+', '+ED.lng.toFixed(3)+')';
+              ED.lat=x.lat;ED.lng=x.lng;
+              $p.value=x.name;
+              $st.textContent='已定位 ('+x.lat.toFixed(3)+', '+x.lng.toFixed(3)+')';
               $st.classList.remove('none');$res.hidden=true;
             });
-          }catch(err){$st.textContent='定位服务暂不可用(可能离线),可先保存';}
+          }catch(err){$st.textContent='定位服务暂时连不上,可先保存,不影响其他功能';}
         };
       }
       form.querySelector('[data-ok]').onclick=()=>saveItem(type);
@@ -1412,6 +1606,7 @@ $('#import-file').addEventListener('change',async ev=>{
     let migrated=false;
     for(const e of S.entries){if(OLD_TYPE_MAP[e.type]){e.type=OLD_TYPE_MAP[e.type];migrated=true;await idbPut('entries',e);}}
     render();
+    persistStorage();
   }catch(err){
     $('#app').innerHTML='<div class="empty" style="margin-top:40px">'+icon('compass',46)+
       '<h3>无法打开本地数据库</h3><p>请检查浏览器是否开启了隐私模式或限制了存储,然后刷新重试</p></div>';
