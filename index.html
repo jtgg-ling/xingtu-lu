@@ -273,6 +273,49 @@ input,textarea,select{font-size:16px}/* 防 iOS 聚焦缩放 */
 .sup-row .lab{width:80px;font-size:12.5px;color:var(--ink3);flex:none}
 .sup-row .val{flex:1;min-width:0;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
 .sup-row .num{color:var(--accent);font-variant-numeric:tabular-nums;flex:none;font-size:13px;font-weight:600}
+/* 点亮地图 */
+.light-card{background:linear-gradient(180deg,#0e1a36,#0a1226);border-radius:20px;padding:20px 14px 16px;box-shadow:var(--shadow);margin-bottom:8px;color:#dbe7ff}
+.lg-stats{text-align:center;font-size:13px;color:#9fb6e8;margin-bottom:13px;line-height:1.6}
+.lg-stats b{color:#fff;font-family:var(--serif);font-size:19px;margin:0 3px}
+.lg-toggle{display:flex;gap:9px;justify-content:center;margin-bottom:13px}
+.lg-toggle button{border:1px solid #2a3c66;background:#111d3a;color:#9fb6e8;border-radius:99px;padding:5px 20px;font-size:13px;cursor:pointer}
+.lg-toggle button.on{background:#2f6ef6;border-color:#2f6ef6;color:#fff;font-weight:600}
+.lg-map{height:330px;border-radius:14px;overflow:hidden;background:#0d1830;position:relative}
+.lg-map.leaflet-container{background:#0d1830}
+.lg-map .leaflet-container{background:#0d1830;font:inherit}
+.lg-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#5f739f;font-size:13px;letter-spacing:1px}
+.lg-crumb{display:flex;align-items:center;justify-content:center;gap:11px;margin-top:13px;font-size:13px;color:#cfe0ff}
+.lg-crumb button{background:#152242;border:1px solid #22325a;color:#9fc0ff;border-radius:99px;padding:4px 13px;font-size:12px;cursor:pointer}
+.lg-crumb b{color:#fff}
+.lg-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:13px;justify-content:center}
+.lg-chip{font-size:11.5px;padding:4px 11px;border-radius:99px;background:#152242;color:#5f739f;border:1px solid #22325a}
+.lg-chip.lit{background:#1d4ed8;color:#fff;border-color:#4f8bff;font-weight:600;cursor:pointer}
+.lg-hint{margin-top:12px;text-align:center;font-size:11px;color:#5f739f}
+.lg-pin .fp-dot{width:14px;height:14px;border-width:2px}
+.lg-pin .fp-halo{width:18px;height:18px;left:0;top:-2px}
+.lg-pin .fp-tip{top:10px;width:7px;height:7px;margin-left:-4.5px;border-width:2px}
+.lg-pin{width:14px;height:20px}
+/* 每日速览 */
+.ov-panel .ov-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed var(--line);cursor:pointer}
+.ov-panel .ov-row:last-child{border-bottom:0}
+.ov-row .ov-d{flex:none;font-family:var(--serif);font-weight:800;color:var(--accent);font-size:13px;min-width:32px}
+.ov-row .ov-p{flex:1;min-width:0;font-size:13px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ov-row .ov-n{flex:none;font-size:11px;color:var(--ink3)}
+/* 分享图轮播 */
+.sc-carousel{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 12px}
+.sc-item{flex:0 0 78%;scroll-snap-align:center}
+.sc-item img{width:100%;border-radius:14px;box-shadow:var(--shadow);display:block}
+.sc-lab{font-size:12px;color:var(--ink3);margin:9px 2px 8px;text-align:center;letter-spacing:1px}
+.sc-item .btn{display:block;margin:0 auto}
+
+/* 足迹点亮标记(高德/百度风格:光晕脉冲钉 + 地名标签) */
+.fp-wrap{background:none;border:0}
+.fp-pin{position:relative;width:28px;height:58px}
+.fp-halo{position:absolute;left:1px;top:0;width:26px;height:26px;border-radius:50%;background:var(--pc);opacity:.35;animation:fpPulse 2.6s ease-out infinite}
+.fp-dot{position:absolute;left:0;top:0;width:22px;height:22px;background:var(--pc);border:2.5px solid #fff;border-radius:50%;box-shadow:0 2px 6px rgba(15,35,80,.4);z-index:2}
+.fp-tip{position:absolute;left:50%;top:17px;width:9px;height:9px;margin-left:-7px;background:var(--pc);border-right:2.5px solid #fff;border-bottom:2.5px solid #fff;transform:rotate(45deg);border-bottom-right-radius:2px;z-index:1}
+.fp-lab{position:absolute;left:50%;top:37px;transform:translateX(-50%);white-space:nowrap;font-size:11px;font-weight:600;color:#12264f;background:rgba(255,255,255,.94);border:1px solid rgba(47,124,246,.18);border-radius:9px;padding:1px 8px;box-shadow:0 2px 6px rgba(15,35,80,.2);pointer-events:none;z-index:3}
+@keyframes fpPulse{0%{transform:scale(.5);opacity:.5}75%{transform:scale(1.4);opacity:0}100%{transform:scale(1.4);opacity:0}}
 
 /* ===== 底部弹窗 ===== */
 .sheet-overlay{position:fixed;inset:0;z-index:1000;background:rgba(18,38,79,.45);animation:fIn .2s ease;backdrop-filter:blur(2px);display:flex;align-items:flex-end;justify-content:center}
@@ -552,7 +595,7 @@ function render(){
   else if(S.view==='stats')app.innerHTML=viewStats();
   else if(S.view==='me')app.innerHTML=viewMe();
   app.classList.remove('view-anim');void app.offsetWidth;app.classList.add('view-anim');
-  if(S.view==='map')initGlobalMap();
+  if(S.view==='map'){initLightMap();initGlobalMap();}
   if(S.view==='me')updateStorageInfo();
 }
 
@@ -756,9 +799,23 @@ function tabPlan(t,its){
   }
   const groups={};its.forEach(e=>{(groups[e.date]=groups[e.date]||[]).push(e);});
   const dates=Object.keys(groups).sort();
-  let html='';
+  /* 每日速览:一眼看清每天都去了哪,点一下跳到当天 */
+  const ov=dates.map(d=>{
+    const es=groups[d];
+    const spots=[];
+    for(const e of es){
+      const s=e.type==='transport'?(e.to||e.from):e.type==='hotel'?(e.name||e.title||'住宿'):(e.placeName||e.title);
+      if(s&&!spots.includes(s))spots.push(s);
+    }
+    const n=t.startDate&&d>=t.startDate?Math.round((pdate(d)-pdate(t.startDate))/864e5)+1:null;
+    return '<div class="ov-row" onclick="A.jumpDay(\''+d+'\')">'+
+      '<span class="ov-d">'+(n?'D'+n:fmtMD(d))+'</span>'+
+      '<span class="ov-p">'+esc(spots.slice(0,4).join(' → '))+(spots.length>4?' …':'')+'</span>'+
+      '<span class="ov-n">'+es.length+' 条</span></div>';
+  }).join('');
+  let html='<div class="panel ov-panel"><h3>'+icon('route',15)+'每日速览 · 点日期直达</h3>'+ov+'</div>';
   for(const d of dates){
-    html+='<div class="day-h">'+dayLabel(t,d)+'<span class="ln"></span></div>';
+    html+='<div class="day-h" id="day-'+d+'">'+dayLabel(t,d)+'<span class="ln"></span></div>';
     for(const e of groups[d])html+=itemCard(t,e);
     html+='<button class="day-add" onclick="A.itemSheet(\''+t.id+'\',null,\''+d+'\')">+ 这一天加一条</button>';
   }
@@ -846,6 +903,11 @@ function tabList(t,cks){
 /* ---------- 足迹 ---------- */
 function viewMap(){
   const located=S.entries.filter(e=>e.lat!=null&&e.lng!=null&&tripById(e.tripId));
+  const reged=located.filter(e=>e.cc&&e.cc!=='??');
+  const provSet=new Set(reged.filter(e=>e.prov).map(e=>e.prov));
+  const cSet=new Set(reged.map(e=>e.cc));
+  const citySet=new Set(located.map(e=>e.placeName||e.title).filter(Boolean));
+  backfillRegions();
   let chips='';
   if(located.length){
     const seen=new Set();const arr=[];
@@ -854,10 +916,21 @@ function viewMap(){
       arr.push('<span class="pl" style="--pc:'+PALETTE[ci%PALETTE.length]+'">'+icon('pin',11)+esc(e.placeName)+'</span>');}
     chips='<div class="place-list">'+arr.join('')+'</div>';
   }
-  return '<div class="hello" style="margin-bottom:14px"><div class="kicker">FOOTPRINT MAP</div><h1 style="font-size:22px">走过的路,都亮着灯</h1></div>'+
+  const pcPct=Math.round(provSet.size/34*100);
+  return '<div class="hello" style="margin-bottom:14px"><div class="kicker">FOOTPRINT LIGHT</div><h1 style="font-size:22px">把去过的土地,一一点亮</h1></div>'+
+    '<div class="light-card">'+
+      '<div class="lg-stats">点亮中国 <b>'+provSet.size+'</b>/34 个省 ('+pcPct+'%) · <b>'+cSet.size+'</b> 个国家 · <b>'+citySet.size+'</b> 个地方</div>'+
+      '<div class="lg-toggle"><button class="'+(LG.lv==='cn'?'on':'')+'" onclick="A.lightLv(\'cn\')">🇨🇳 中国</button>'+
+      '<button class="'+(LG.lv==='w'?'on':'')+'" onclick="A.lightLv(\'w\')">🌍 世界</button></div>'+
+      '<div class="lg-map" id="light-map"><div class="lg-loading">地图数据加载中…</div></div>'+
+      '<div class="lg-crumb" id="lg-crumb" hidden></div>'+
+      '<div class="lg-chips" id="lg-chips"></div>'+
+      '<div class="lg-hint">💡 点击亮起来的省/国家,可以钻进去看这个地区点亮了哪些地方</div>'+
+    '</div>'+
+    '<div class="sec" style="margin-top:34px"><h2>足迹路线</h2><span>同一段旅程的足迹按时间连成线</span></div>'+
     '<div class="map-box" id="global-map"></div>'+
     '<div class="map-note">'+icon('map',12)+(located.length
-      ?located.length+' 个定位地点 · 同一段旅程的足迹按时间连成线'
+      ?located.length+' 个定位地点 · 新定位的记录会自动归属省市/国家,旧记录正在静默补齐'
       :'在行程记录里为地点搜索定位,去过的地方就会点亮这张地图')+'</div>'+chips;
 }
 
@@ -966,7 +1039,7 @@ function ensureLeaflet(){
   if(window.L)return Promise.resolve(true);
   if(!leafletPromise){
     leafletPromise=(async()=>{
-      const bases=['https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/','https://unpkg.com/leaflet@1.9.4/dist/'];
+      const bases=['https://cdn.bootcdn.net/ajax/libs/leaflet/1.9.4/','https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/','https://unpkg.com/leaflet@1.9.4/dist/'];
       for(const b of bases){
         try{
           await new Promise((res,rej)=>{const l=document.createElement('link');l.rel='stylesheet';l.href=b+'leaflet.min.css';l.onload=res;l.onerror=rej;document.head.appendChild(l);});
@@ -979,8 +1052,21 @@ function ensureLeaflet(){
   }
   return leafletPromise;
 }
-const TILE_URL='https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
-const TILE_ATTR='&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> &copy; <a href="https://carto.com/" target="_blank">CARTO</a>';
+const TILE_URL='https://webrd{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}';
+const TILE_ATTR='&copy; 高德地图';
+/* WGS-84 → GCJ-02:高德底图为国测局坐标系,境内标记点需纠偏 */
+function wgs2gcj(lat,lng){
+  if(lng<72.004||lng>137.8347||lat<0.8293||lat>55.8271)return[lat,lng];
+  const a=6378245,ee=0.00669342162296594323;
+  const trLat=(x,y)=>{let r=-100+2*x+3*y+.2*y*y+.1*x*y+.2*Math.sqrt(Math.abs(x));r+=(20*Math.sin(6*x*Math.PI)+20*Math.sin(2*x*Math.PI))*2/3;r+=(20*Math.sin(y*Math.PI)+40*Math.sin(y/3*Math.PI))*2/3;r+=(160*Math.sin(y/12*Math.PI)+320*Math.sin(y*Math.PI/30))*2/3;return r;};
+  const trLng=(x,y)=>{let r=300+x+2*y+.1*x*x+.1*x*y+.1*Math.sqrt(Math.abs(x));r+=(20*Math.sin(6*x*Math.PI)+20*Math.sin(2*x*Math.PI))*2/3;r+=(20*Math.sin(x*Math.PI)+40*Math.sin(x/3*Math.PI))*2/3;r+=(150*Math.sin(x/12*Math.PI)+300*Math.sin(x/30*Math.PI))*2/3;return r;};
+  let dLat=trLat(lng-105,lat-35),dLng=trLng(lng-105,lat-35);
+  const radLat=lat/180*Math.PI;let mg=Math.sin(radLat);mg=1-ee*mg*mg;
+  const sq=Math.sqrt(mg);
+  dLat=(dLat*180)/((a*(1-ee))/(mg*sq)*Math.PI);
+  dLng=(dLng*180)/(a/sq*Math.cos(radLat)*Math.PI);
+  return[lat+dLat,lng+dLng];
+}
 /* 地点定位:三源并行搜索(Photon/Open-Meteo/Nominatim),超时保护+按坐标去重 */
 async function geocodePlace(q){
   const enc=encodeURIComponent(q);
@@ -999,6 +1085,55 @@ async function geocodePlace(q){
   return out;
 }
 function mapFallback(el,msg){el.innerHTML='<div class="map-fallback">'+icon('map',38)+'<div>'+esc(msg)+'</div></div>';}
+
+/* ---------- 足迹点亮:省份/国家归属 ---------- */
+const PROVINCES=['北京','上海','天津','重庆','河北','山西','辽宁','吉林','黑龙江','江苏','浙江','安徽','福建','江西','山东','河南','湖北','湖南','广东','海南','四川','贵州','云南','陕西','甘肃','青海','台湾','内蒙古','广西','西藏','宁夏','新疆','香港','澳门'];
+const PROV_EN={'Beijing':'北京','Shanghai':'上海','Tianjin':'天津','Chongqing':'重庆','Hebei':'河北','Shanxi':'山西','Liaoning':'辽宁','Jilin':'吉林','Heilongjiang':'黑龙江','Jiangsu':'江苏','Zhejiang':'浙江','Anhui':'安徽','Fujian':'福建','Jiangxi':'江西','Shandong':'山东','Henan':'河南','Hubei':'湖北','Hunan':'湖南','Guangdong':'广东','Guangxi':'广西','Hainan':'海南','Sichuan':'四川','Guizhou':'贵州','Yunnan':'云南','Shaanxi':'陕西','Gansu':'甘肃','Qinghai':'青海','Taiwan':'台湾','Inner Mongolia':'内蒙古','Tibet':'西藏','Ningxia':'宁夏','Xinjiang':'新疆','Hong Kong':'香港','Macau':'澳门','Macao':'澳门'};
+const ISO23={};('AD:AND,AE:ARE,AF:AFG,AG:ATG,AL:ALB,AM:ARM,AO:AGO,AR:ARG,AT:AUT,AU:AUS,AZ:AZE,BA:BIH,BB:BRB,BD:BGD,BE:BEL,BF:BFA,BG:BGR,BH:BHR,BI:BDI,BJ:BEN,BN:BRN,BO:BOL,BR:BRA,BS:BHS,BT:BTN,BW:BWA,BY:BLR,BZ:BLZ,CA:CAN,CD:COD,CF:CAF,CG:COG,CH:CHE,CI:CIV,CL:CHL,CM:CMR,CN:CHN,CO:COL,CR:CRI,CU:CUB,CV:CPV,CY:CYP,CZ:CZE,DE:DEU,DJ:DJI,DK:DNK,DM:DMA,DO:DOM,DZ:DZA,EC:ECU,EE:EST,EG:EGY,ER:ERI,ES:ESP,ET:ETH,FI:FIN,FJ:FJI,FM:FSM,FO:FRO,FR:FRA,GA:GAB,GB:GBR,GD:GRD,GE:GEO,GH:GHA,GL:GRL,GM:GMB,GN:GIN,GQ:GNQ,GR:GRC,GT:GTM,GU:GUM,GW:GNB,GY:GUY,HK:HKG,HN:HND,HR:HRV,HT:HTI,HU:HUN,ID:IDN,IE:IRL,IL:ISR,IN:IND,IQ:IRQ,IR:IRN,IS:ISL,IT:ITA,JM:JAM,JO:JOR,JP:JPN,KE:KEN,KG:KGZ,KH:KHM,KI:KIR,KM:COM,KN:KNA,KP:PRK,KR:KOR,KW:KWT,KY:CYM,KZ:KAZ,LA:LAO,LB:LBN,LC:LCA,LI:LIE,LK:LKA,LR:LBR,LS:LSO,LT:LTU,LU:LUX,LV:LVA,LY:LBY,MA:MAR,MC:MCO,MD:MDA,ME:MNE,MG:MDG,MK:MKD,ML:MLI,MM:MMR,MN:MNG,MO:MAC,MQ:MTQ,MR:MRT,MT:MLT,MV:MDV,MW:MWI,MX:MEX,MY:MYS,MZ:MOZ,NA:NAM,NC:NCL,NE:NER,NG:NGA,NI:NIC,NL:NLD,NO:NOR,NP:NPL,NZ:NZL,OM:OMN,PA:PAN,PE:PER,PF:PYF,PG:PNG,PH:PHL,PK:PAK,PL:POL,PR:PRI,PT:PRT,PW:PLW,PY:PRY,QA:QAT,RE:REU,RO:ROU,RS:SRB,RU:RUS,RW:RWA,SA:SAU,SB:SLB,SC:SYC,SD:SDN,SE:SWE,SG:SGP,SI:SVN,SK:SVK,SL:SLE,SM:SMR,SN:SEN,SO:SOM,SR:SUR,SS:SSD,SV:SLV,SY:SYR,SZ:SWZ,TD:TCD,TG:TGO,TH:THA,TJ:TJK,TL:TLS,TM:TKM,TN:TUN,TO:TON,TR:TUR,TT:TTO,TW:TWN,TZ:TZA,UA:UKR,UG:UGA,US:USA,UY:URY,UZ:UZB,VA:VAT,VC:VCT,VE:VEN,VG:VGB,VN:VNM,VU:VUT,WS:WSM,YE:YEM,ZA:ZAF,ZM:ZMB,ZW:ZWE').split(',').forEach(p=>{const i=p.indexOf(':');if(i>0)ISO23[p.slice(0,i)]=p.slice(i+1);});
+function iso2to3(cc){return (ISO23[cc]||'');}
+function provShort(s){
+  s=String(s||'').replace(/维吾尔|回族|壮族|特别行政区|自治区|自治州|省|市/g,'');
+  if(PROVINCES.includes(s))return s;
+  for(const p of PROVINCES){if(s.indexOf(p)>=0)return p;}
+  const en=PROV_EN[String(s||'').trim()];
+  if(en)return en;
+  for(const k in PROV_EN){if(String(s||'').indexOf(k)>=0)return PROV_EN[k];}
+  return '';
+}
+/* 反查坐标 → {cc 国家码, cName 国家名, prov 省份简称, city 城市} */
+async function reverseGeo(lat,lng){
+  const one=p=>Promise.race([p,new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),6500))]);
+  try{
+    const j=await one(fetch('https://nominatim.openstreetmap.org/reverse?format=jsonv2&accept-language=zh-CN&lat='+lat+'&lon='+lng)).then(r=>r.json());
+    const a=(j&&j.address)||{};
+    const cc=String(a.country_code||'').toUpperCase();
+    if(cc)return{cc,cName:a.country||'',prov:cc==='CN'?provShort(a.state||a.province||''):'',city:a.city||a.county||a.town||a.village||''};
+  }catch(e){}
+  try{
+    const j=await one(fetch('https://photon.komoot.io/reverse?lat='+lat+'&lon='+lng)).then(r=>r.json());
+    const p=(j&&j.features&&j.features[0]&&j.features[0].properties)||{};
+    const cc=String(p.countrycode||'').toUpperCase();
+    let prov=p.state||'';
+    if(cc==='CN')prov=provShort(prov);
+    return{cc,cName:p.country||'',prov:cc==='CN'?prov:'',city:p.city||p.county||''};
+  }catch(e){}
+  return null;
+}
+/* 旧记录自动补齐归属信息(每次最多 6 条,静默进行) */
+let rgBusy=false;
+async function backfillRegions(){
+  if(rgBusy)return;rgBusy=true;
+  let changed=false;
+  try{
+    const todo=S.entries.filter(e=>e.lat!=null&&e.lng!=null&&!e.cc).slice(0,6);
+    for(const e of todo){
+      const rg=await reverseGeo(e.lat,e.lng);
+      if(rg&&rg.cc){e.cc=rg.cc;e.cName=rg.cName||e.cName;e.prov=rg.prov||e.prov;e.city=rg.city||e.city;await idbPut('entries',e);changed=true;}
+      else{e.cc=e.cc||'??';await idbPut('entries',e);}
+    }
+  }finally{rgBusy=false;}
+  if(changed&&S.view==='map')render();
+}
 function popupHtml(e){
   const t=tripById(e.tripId);
   return '<b style="font-family:serif">'+esc(e.placeName||'')+'</b><br>'+
@@ -1011,22 +1146,137 @@ async function initGlobalMap(){
   const located=S.entries.filter(e=>e.lat!=null&&e.lng!=null&&tripById(e.tripId));
   if(!located.length){mapFallback(el,'去过并定位的地方,都会点亮在这张地图上');return;}
   const m=L.map(el,{scrollWheelZoom:true});
-  L.tileLayer(TILE_URL,{maxZoom:19,subdomains:'abcd',attribution:TILE_ATTR}).addTo(m);
+  L.tileLayer(TILE_URL,{maxZoom:18,subdomains:['01','02','03','04'],attribution:TILE_ATTR}).addTo(m);
   maps.global=m;
   const bounds=[];
+  /* 高德/百度足迹风格的点亮标记 */
+  function fpIcon(color,label){
+    return L.divIcon({className:'fp-wrap',iconSize:[28,58],iconAnchor:[14,35],
+      html:'<div class="fp-pin" style="--pc:'+color+'">'+
+        (label?'<span class="fp-lab">'+esc(label)+'</span>':'')+
+        '<span class="fp-halo"></span><span class="fp-dot"></span><span class="fp-tip"></span></div>'});
+  }
   S.trips.forEach((t,ti)=>{
     const es=itemsOf(t.id).filter(e=>e.lat!=null&&e.lng!=null);
     if(!es.length)return;
     const c=PALETTE[ti%PALETTE.length];
-    const pts=es.map(e=>[e.lat,e.lng]);bounds.push(...pts);
-    if(pts.length>1)L.polyline(pts,{color:c,weight:2.5,opacity:.7,dashArray:'6 7'}).addTo(m);
+    const pts=es.map(e=>wgs2gcj(e.lat,e.lng));bounds.push(...pts);
+    if(pts.length>1){
+      L.polyline(pts,{color:c,weight:8,opacity:.16,lineCap:'round',lineJoin:'round'}).addTo(m);
+      L.polyline(pts,{color:c,weight:3,opacity:.8,lineCap:'round',lineJoin:'round'}).addTo(m);
+    }
     es.forEach(e=>{
-      L.circleMarker([e.lat,e.lng],{radius:7,color:'#fff',weight:2,fillColor:c,fillOpacity:.95})
-        .addTo(m).bindPopup(popupHtml(e));
+      const[la,lo]=wgs2gcj(e.lat,e.lng);
+      L.marker([la,lo],{icon:fpIcon(c,e.placeName||e.title||'')}).addTo(m).bindPopup(popupHtml(e));
     });
   });
   if(bounds.length)m.fitBounds(bounds,{padding:[40,40],maxZoom:10});
   setTimeout(()=>m.invalidateSize(),120);
+}
+
+/* ---------- 点亮地图(中国省份 / 世界国家 + 地区钻取) ---------- */
+const LG={lv:'cn',drill:null};
+let _gjCN=null,_gjW=null;
+async function fetchChinaGeo(){
+  if(_gjCN)return _gjCN;
+  const urls=[
+    'https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json',
+    'https://cdn.jsdelivr.net/gh/ychda/china-geojson@master/100000_full.json',
+  ];
+  for(const u of urls){
+    try{const r=await fetch(u);if(r.ok){_gjCN=await r.json();return _gjCN;}}catch(e){}
+  }
+  throw new Error('china geo fail');
+}
+async function fetchWorldGeo(){
+  if(_gjW)return _gjW;
+  const urls=[
+    'https://cdn.jsdelivr.net/gh/johan/world.geo.json@master/countries.geo.json',
+    'https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json',
+  ];
+  for(const u of urls){
+    try{const r=await fetch(u);if(r.ok){_gjW=await r.json();return _gjW;}}catch(e){}
+  }
+  throw new Error('world geo fail');
+}
+function featProv(f){return provShort((f.properties&&f.properties.name)||'');}
+function featISO3(f){return String(f.id||'').toUpperCase();}
+function litCityIcon(color){
+  return L.divIcon({className:'fp-wrap',iconSize:[20,26],iconAnchor:[10,20],
+    html:'<div class="fp-pin lg-pin" style="--pc:'+color+'"><span class="fp-halo"></span><span class="fp-dot"></span><span class="fp-tip"></span></div>'});
+}
+async function initLightMap(){
+  const holder=document.getElementById('light-map');if(!holder)return;
+  if(!await ensureLeaflet()){mapFallback(holder,'地图组件未能加载(可能处于离线状态),其余功能不受影响');return;}
+  if(maps.light){try{maps.light.remove();}catch(e){}maps.light=null;}
+  const el=document.getElementById('light-map');if(!el||!el.isConnected)return;
+  const m=L.map(el,{zoomControl:false,attributionControl:false,scrollWheelZoom:false,doubleClickZoom:false,dragging:true});
+  maps.light=m;
+  const ld=el.querySelector('.lg-loading');if(ld)ld.remove();
+  setTimeout(()=>m.invalidateSize(),120);
+  const located=S.entries.filter(e=>e.lat!=null&&e.lng!=null&&tripById(e.tripId));
+  const reged=located.filter(e=>e.cc&&e.cc!=='??');
+  const provSet=new Set(reged.filter(e=>e.prov).map(e=>e.prov));
+  const iso3Set=new Set(reged.map(e=>iso2to3(e.cc)).filter(Boolean));
+  const ccSet=new Set(reged.map(e=>e.cc));
+  let gj;
+  try{gj=await (LG.lv==='cn'?fetchChinaGeo():fetchWorldGeo());}
+  catch(err){mapFallback(el,'地图边界数据加载失败,请检查网络后重进足迹页');return;}
+  const el2=document.getElementById('light-map');if(!el2||!el2.isConnected)return;
+  const litFn=f=>LG.lv==='cn'?provSet.has(featProv(f)):iso3Set.has(featISO3(f));
+  const base=L.geoJSON(gj,{
+    style:f=>{const lit=litFn(f);
+      return LG.drill?{color:'#1c2a4e',weight:.8,fillColor:'#101c38',fillOpacity:.75}
+        :{color:lit?'#7db2ff':'#22335f',weight:lit?1.4:.8,fillColor:lit?'#2f6ef6':'#152142',fillOpacity:lit?.95:.85};},
+    onEachFeature:(f,ly)=>{
+      const lit=litFn(f);
+      ly.on('click',()=>{
+        if(LG.lv==='cn'){
+          const p=featProv(f);
+          if(lit&&p)A.drillProv(p);
+          else toast('还没去过 '+((f.properties&&f.properties.name)||'这里')+',去旅行把它点亮吧 ✨');
+        }else{
+          const i3=featISO3(f);
+          const cc=Object.keys(ISO23).find(k=>ISO23[k]===i3);
+          if(lit&&cc)A.drillCountry(cc);
+          else toast('还没去过这个国家,去旅行把它点亮吧 ✨');
+        }
+      });
+    }
+  }).addTo(m);
+  /* 面包屑 + 徽章网格 */
+  const crumbEl=document.getElementById('lg-crumb'),chipsEl=document.getElementById('lg-chips');
+  const chip=(txt,lit,fn)=>'<span class="lg-chip'+(lit?' lit':'')+'" '+(lit&&fn?'onclick="'+fn+'"':'')+'>'+esc(txt)+'</span>';
+  if(LG.drill){
+    /* 钻取:该地区点亮的城市 */
+    const cities=located.filter(e=>{
+      if(LG.drill.type==='prov')return e.prov===LG.drill.key;
+      return e.cc===LG.drill.key;
+    });
+    const nameOf=LG.drill.type==='prov'?LG.drill.key:(reged.find(e=>e.cc===LG.drill.key)||{}).cName||LG.drill.key;
+    const gl=L.geoJSON({type:'FeatureCollection',features:gj.features.filter(f=>LG.lv==='cn'?featProv(f)===LG.drill.key:featISO3(f)===(iso2to3(LG.drill.key)||featISO3(f)))},
+      {style:{color:'#8ec3ff',weight:1.6,fillColor:'#2f6ef6',fillOpacity:.35}}).addTo(m);
+    try{m.fitBounds(gl.getBounds(),{padding:[16,16]});}catch(e){}
+    const seen=new Set();const marks=[];
+    for(const e of cities){
+      const label=e.placeName||e.title||'';
+      if(!label||seen.has(label+e.lat))continue;seen.add(label+e.lat);
+      const[la,lo]=wgs2gcj(e.lat,e.lng);
+      L.marker([la,lo],{icon:litCityIcon('#38bdf8')}).addTo(m).bindPopup(popupHtml(e));
+      if(!marks.includes(label))marks.push(label);
+    }
+    if(crumbEl){crumbEl.hidden=false;crumbEl.innerHTML='<button onclick="A.drillBack()">‹ 返回</button><span>'+(LG.lv==='cn'?'中国 · ':'')+'<b>'+esc(nameOf)+'</b> · 点亮 '+marks.length+' 个地方</span>';}
+    if(chipsEl){chipsEl.innerHTML=marks.map(t=>chip(t,true,null)).join('')||'<span class="lg-chip">该地区还没有定位记录</span>';}
+  }else{
+    try{m.fitBounds(base.getBounds(),{padding:[8,8]});}catch(e){}
+    if(crumbEl)crumbEl.hidden=true;
+    if(chipsEl){
+      chipsEl.innerHTML=LG.lv==='cn'
+        ?PROVINCES.map(p=>chip(p,provSet.has(p),'A.drillProv(\''+p+'\')')).join('')
+        :reged.filter(e=>e.cName).reduce((a,e)=>{if(!a.some(x=>x.cc===e.cc))a.push(e);return a;},[])
+            .map(e=>chip(e.cName||e.cc,true,'A.drillCountry(\''+e.cc+'\')')).join('')||'<span class="lg-chip">去国外旅行后,这里会点亮国家</span>';
+    }
+  }
 }
 
 /* ---------- 灯箱 ---------- */
@@ -1067,78 +1317,428 @@ function fitFont(ctx,text,max,size,weight){
   do{ctx.font=weight+' '+size+'px "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif';if(ctx.measureText(text).width<=max)break;size-=4;}while(size>28);
   return size;
 }
-async function renderShareCard(t){
+function wrapLines(x,text,maxW){
+  const lines=[];let cur='';
+  for(const ch of String(text)){const t2=cur+ch;if(x.measureText(t2).width>maxW&&cur){lines.push(cur);cur=ch;}else cur=t2;}
+  if(cur)lines.push(cur);return lines;
+}
+/* ============================================================
+   旅程分享图 V2 —— 手账攻略风(米黄底/虚线手账框/Day 面板/拍立得)
+   ============================================================ */
+async function renderShareCards(t){
   const W=1080,H=1440;
-  const cv=document.createElement('canvas');cv.width=W;cv.height=H;
-  const x=cv.getContext('2d');
+  const C={bg:'#f9f4e8',ink:'#3a352c',red:'#d6493f',orange:'#ee8c2c',green:'#6fae3f',blue:'#3f7fd6',gold:'#f2b73f',paper:'#fffdf7',soft:'rgba(58,53,44,.55)'};
+  const FAM='"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif';
+  const out=cv=>cv.toDataURL('image/jpeg',.92);
   const loadImg=src=>new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=src;});
-  /* 背景:封面照片铺满,无封面则用渐变 */
-  const cov=tripCover(t);
-  if(cov){
-    try{
-      const bg=await loadImg(cov.dataUrl);
-      const r=Math.max(W/bg.width,H/bg.height);
-      x.drawImage(bg,(W-bg.width*r)/2,(H-bg.height*r)/2,bg.width*r,bg.height*r);
-    }catch(e){}
-  }
-  if(!cov){
-    const g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,'#2f7cf6');g.addColorStop(1,'#7dd3fc');
-    x.fillStyle=g;x.fillRect(0,0,W,H);
-  }
-  /* 压暗渐层保证文字可读 */
-  const v=x.createLinearGradient(0,0,0,H);
-  v.addColorStop(0,'rgba(10,25,55,.30)');v.addColorStop(.4,'rgba(10,25,55,.45)');v.addColorStop(1,'rgba(8,20,45,.94)');
-  x.fillStyle=v;x.fillRect(0,0,W,H);
-  x.textAlign='center';x.textBaseline='alphabetic';
-  /* 顶部品牌 */
-  x.fillStyle='rgba(255,255,255,.82)';x.font='500 30px "PingFang SC",sans-serif';
-  x.fillText('行 途 录 · 旅 程 总 结',W/2,96);
-  /* 标题与目的地 */
-  const nameY=780;
-  fitFont(x,t.name||'未命名旅程',W-140,88,'800');
-  x.fillStyle='#fff';x.fillText(t.name||'未命名旅程',W/2,nameY);
+  const its=itemsOf(t.id),ps=photosOfTrip(t.id),exs=expensesOf(t.id);
   const days=tripDays(t);
-  x.font='600 38px "PingFang SC",sans-serif';x.fillStyle='rgba(255,255,255,.95)';
-  x.fillText((t.destination?'📍 '+t.destination+(days?' · 共 '+days+' 天':''):days?'共 '+days+' 天':''),W/2,nameY+66);
-  x.font='34px "PingFang SC",sans-serif';x.fillStyle='rgba(255,255,255,.78)';
-  x.fillText(t.startDate?(t.endDate&&t.endDate!==t.startDate?fmtYMD(t.startDate)+' — '+fmtYMD(t.endDate):fmtYMD(t.startDate)):'日期待定',W/2,nameY+122);
-  /* 数据统计 */
-  const its=itemsOf(t.id),ps=photosOfTrip(t.id);
-  const stats=[
-    {n:days,l:'天'},
-    {n:new Set(its.filter(e=>e.placeName).map(e=>e.placeName)).size,l:'个地方'},
-    {n:its.length,l:'条记录'},
-    {n:ps.length,l:'张照片'},
-  ];
-  const sy=1010,cw=(W-160)/4;
-  stats.forEach((s,i)=>{
-    const cx=80+cw*i+cw/2;
-    x.fillStyle='#fff';x.font='800 62px "PingFang SC",sans-serif';x.fillText(s.n,cx,sy);
-    x.fillStyle='rgba(255,255,255,.72)';x.font='26px "PingFang SC",sans-serif';x.fillText(s.l,cx,sy+40);
+  /* 每日路线行 */
+  const groups={};its.forEach(e=>{(groups[e.date]=groups[e.date]||[]).push(e);});
+  const dates=Object.keys(groups).sort();
+  const dayRows=[];
+  dates.forEach((d,i)=>{
+    const es=groups[d];
+    const spots=[];
+    for(const e of es){
+      const s=e.type==='transport'?(e.to||e.from):e.type==='hotel'?(e.name||e.title||'住宿'):(e.placeName||e.title);
+      if(s&&!spots.includes(s))spots.push(s);
+    }
+    if(!spots.length)for(const e of es){if(e.title&&!spots.includes(e.title))spots.push(e.title);}
+    if(!spots.length)return;
+    const n=t.startDate&&d>=t.startDate?Math.round((pdate(d)-pdate(t.startDate))/864e5)+1:(i+1);
+    dayRows.push({tag:n,date:fmtMD(d)+' '+fmtWeek(d),txt:spots.join(' — ')});
   });
-  const spent=sumOf(t.id);
-  if(spent>0){x.fillStyle='rgba(255,255,255,.85)';x.font='32px "PingFang SC",sans-serif';x.fillText('总花销 '+money(spent),W/2,sy+100);}
-  /* 照片条(最多 3 张圆角缩略) */
-  const thumbs=ps.slice(0,3);
-  if(thumbs.length){
-    const th=170,tw=Math.min(300,(W-120-24*(thumbs.length-1))/thumbs.length);
-    let px=(W-(tw*thumbs.length+24*(thumbs.length-1)))/2,py=1195;
-    for(const p of thumbs){
-      try{
-        const im=await loadImg(p.dataUrl);
-        const r=Math.max(tw/im.width,th/im.height);
-        x.save();rrect(x,px,py,tw,th,22);x.clip();
-        x.drawImage(im,px+(tw-im.width*r)/2,py+(th-im.height*r)/2,im.width*r,im.height*r);
-        x.restore();
-        x.strokeStyle='rgba(255,255,255,.35)';x.lineWidth=2;rrect(x,px,py,tw,th,22);x.stroke();
+  const chunk=(a,n)=>{const r=[];for(let i=0;i<a.length;i+=n)r.push(a.slice(i,i+n));return r;};
+  const routePages=chunk(dayRows,5);
+  const hiPicks=its.filter(e=>e.title||e.placeName).sort((a,b)=>((b.photoIds&&b.photoIds.length)?1:0)-((a.photoIds&&a.photoIds.length)?1:0)).slice(0,5);
+  const photoWall=ps.length>=4?ps.slice(0,9):null;
+  const total=1+routePages.length+(exs.length?1:0)+(hiPicks.length?1:0)+(photoWall?1:0);
+  const pages=[];
+  const PC=['#d6493f','#ee8c2c','#6fae3f','#3f7fd6','#8e6fc1','#2fa6a0'];
+  /* —— 手账页面公共件 —— */
+  const mk=()=>{
+    const cv=document.createElement('canvas');cv.width=W;cv.height=H;
+    const x=cv.getContext('2d');
+    x.fillStyle=C.bg;x.fillRect(0,0,W,H);
+    x.save();x.setLineDash([14,10]);x.lineWidth=3;x.strokeStyle=C.ink;
+    rrect(x,26,26,W-52,H-52,30);x.stroke();x.restore();
+    return{cv,x};
+  };
+  const badge=(x,i)=>{
+    const txt='第 '+(i+1)+' / '+total+' 页';
+    x.font='700 28px '+FAM;
+    const w=x.measureText(txt).width+40;
+    x.save();rrect(x,W-56-w,58,w,54,27);x.fillStyle=C.paper;x.fill();
+    x.setLineDash([8,6]);x.lineWidth=2.5;x.strokeStyle=C.ink;x.stroke();x.restore();
+    x.fillStyle=C.ink;x.textAlign='center';x.fillText(txt,W-56-w/2,96);
+  };
+  const foot=x=>{
+    x.textAlign='center';
+    x.fillStyle=C.soft;x.font='30px '+FAM;
+    x.fillText('🚐  行 途 录 · XINGTU  ·  记录每一段旅程  🚩',W/2,1378);
+  };
+  const pill=(x,text,cx,cy,bg,fg,fs,pad)=>{
+    fs=fs||34;pad=pad||20;
+    x.font='800 '+fs+'px '+FAM;
+    const w=x.measureText(text).width+pad*2,h=fs+pad;
+    rrect(x,cx-w/2,cy-h/2,w,h,h/2);x.fillStyle=bg;x.fill();
+    x.fillStyle=fg;x.textAlign='center';x.fillText(text,cx,cy+fs*.36);
+    return w;
+  };
+  const dashR=(x,X,Y,Wd,Ht,r)=>{x.save();x.setLineDash([12,9]);x.lineWidth=3;x.strokeStyle=C.ink;rrect(x,X,Y,Wd,Ht,r);x.stroke();x.restore();};
+  const shadowPanel=(x,X,Y,Wd,Ht,r)=>{x.save();x.shadowColor='rgba(58,53,44,.13)';x.shadowBlur=12;x.shadowOffsetY=6;x.fillStyle=C.paper;rrect(x,X,Y,Wd,Ht,r);x.fill();x.restore();};
+  const headBig=(x,title,sub)=>{
+    x.textAlign='center';
+    x.fillStyle=C.red;x.font='900 74px '+FAM;x.fillText(title,W/2,196);
+    x.strokeStyle=C.gold;x.lineWidth=5;x.lineCap='round';
+    x.beginPath();
+    let xx=W/2-130,yw=226;
+    x.moveTo(xx,yw);
+    for(let i=0;i<15;i++){x.quadraticCurveTo(xx+9,yw+(i%2?9:-9),xx+18,yw);xx+=18;}
+    x.stroke();
+    if(sub){x.fillStyle=C.soft;x.font='600 32px '+FAM;x.fillText(sub,W/2,268);}
+  };
+  const polaroid=(x,img,cx,cy,pw,ph,rot,cap)=>{
+    x.save();x.translate(cx,cy);x.rotate(rot*Math.PI/180);
+    const fw=13;
+    x.shadowColor='rgba(58,53,44,.3)';x.shadowBlur=16;x.shadowOffsetY=8;
+    x.fillStyle='#fff';rrect(x,-pw/2-fw,-ph/2-fw,pw+fw*2,ph+fw*2+30,10);x.fill();
+    x.shadowColor='transparent';
+    try{
+      const r=Math.max(pw/img.width,ph/img.height);
+      x.save();rrect(x,-pw/2,-ph/2,pw,ph,6);x.clip();
+      x.drawImage(img,-pw/2+(pw-img.width*r)/2,-ph/2+(ph-img.height*r)/2,img.width*r,img.height*r);
+      x.restore();
+    }catch(e){}
+    if(cap){x.fillStyle=C.ink;x.font='600 24px '+FAM;x.textAlign='center';x.fillText(cap,0,ph/2+fw+4);}
+    x.restore();
+  };
+  /* —— P1 封面 —— */
+  {
+    const{cv,x}=mk();badge(x,0);
+    x.textAlign='left';x.font='88px '+FAM;x.fillText('☀️',72,140);
+    const name=t.name||'未命名旅程';
+    x.textAlign='center';
+    fitFont(x,name,W-220,96,'900');
+    x.fillStyle=C.red;x.fillText(name,W/2,318);
+    const l2=(t.destination||'我的旅程')+(days?' · '+days+' 日游':'');
+    fitFont(x,l2,W-260,58,'900');
+    x.fillStyle=C.ink;x.fillText(l2,W/2,402);
+    pill(x,new Set(its.filter(e=>e.placeName).map(e=>e.placeName)).size+' 个地方 · '+its.length+' 条记录 · '+ps.length+' 张照片',W/2,476,C.gold,'#5a3d0e',30,16);
+    /* 路线总览面板 */
+    const py=548,ph2=494;
+    dashR(x,80,py,W-160,ph2,24);
+    pill(x,'路线总览',W/2,py,C.green,'#fff',34,14);
+    let ry=py+80;
+    const rows=dayRows.slice(0,4);
+    rows.forEach((r,ri)=>{
+      const c=PC[ri%PC.length];
+      pill(x,'Day'+r.tag,196,ry,c,'#fff',28,10);
+      x.textAlign='left';x.fillStyle=C.ink;x.font='600 31px '+FAM;
+      const ls=wrapLines(x,r.txt,W-430);
+      x.fillText(ls[0],258,ry+11);
+      if(ls[1]){x.font='400 26px '+FAM;x.fillStyle=C.soft;x.fillText(ls[1],258,ry+48);}
+      if(ri<rows.length-1){x.save();x.strokeStyle='rgba(58,53,44,.25)';x.lineWidth=2;x.setLineDash([7,6]);x.beginPath();x.moveTo(120,ry+76);x.lineTo(W-120,ry+76);x.stroke();x.restore();}
+      ry+=100;
+    });
+    if(dayRows.length>4){x.fillStyle=C.soft;x.font='500 26px '+FAM;x.textAlign='center';x.fillText('…共 '+dayRows.length+' 天,翻页看完整安排 →',W/2,py+ph2-28);}
+    if(!dayRows.length){x.fillStyle=C.soft;x.font='500 30px '+FAM;x.textAlign='center';x.fillText('行程在路上,正在书写中…',W/2,py+ph2/2+10);}
+    /* 拍立得 */
+    const thumbs=ps.slice(0,3);
+    if(thumbs.length){
+      const rots=[-4,3,-2];
+      for(let i=0;i<thumbs.length;i++){
+        try{const im=await loadImg(thumbs[i].dataUrl);
+          polaroid(x,im,W/2+(i-(thumbs.length-1)/2)*330,1230,285,220,rots[i],i===0?(t.destination||''):'');
+        }catch(e){}
+      }
+    }else{
+      x.font='84px '+FAM;x.textAlign='center';x.fillText('⛰️  🌊  🏕️  🚐',W/2,1235);
+    }
+    foot(x);pages.push(out(cv));
+  }
+  /* —— P2 每日安排 —— */
+  routePages.forEach(rows=>{
+    const{cv,x}=mk();badge(x,pages.length);
+    headBig(x,'每日安排',(t.name||'')+(days?' · 共 '+days+' 天':''));
+    let y=330;
+    rows.forEach((r,ri)=>{
+      const c=PC[ri%PC.length];
+      shadowPanel(x,86,y,W-172,150,20);
+      dashR(x,86,y,W-172,150,20);
+      x.beginPath();x.arc(172,y+75,52,0,7);x.fillStyle=c;x.fill();
+      x.strokeStyle='#fff';x.lineWidth=4;x.stroke();
+      x.fillStyle='#fff';x.textAlign='center';
+      x.font='600 22px '+FAM;x.fillText('DAY',172,y+68);
+      x.font='800 38px '+FAM;x.fillText(String(r.tag),172,y+104);
+      x.textAlign='left';x.fillStyle=C.ink;x.font='600 30px '+FAM;
+      const ls=wrapLines(x,r.txt,W-460);
+      let yy=y+60;
+      for(const l of ls.slice(0,2)){x.fillText(l,246,yy);yy+=40;}
+      x.textAlign='right';x.fillStyle=C.soft;x.font='400 24px '+FAM;
+      x.fillText(r.date,W-116,y+118);
+      y+=170;
+    });
+    foot(x);pages.push(out(cv));
+  });
+  /* —— P3 花销参考 —— */
+  if(exs.length){
+    const{cv,x}=mk();badge(x,pages.length);
+    headBig(x,'花销参考',t.name||'');
+    const cat={};exs.forEach(e=>{const k=e.category||'other';cat[k]=(cat[k]||0)+(+e.amount||0);});
+    const rows=CATS.filter(c=>cat[c.k]).sort((a,b)=>cat[b.k]-cat[a.k]).slice(0,5);
+    const tot=exs.reduce((a,e)=>a+(+e.amount||0),0);
+    x.textAlign='center';x.fillStyle=C.red;x.font='900 64px '+FAM;
+    x.fillText('¥ '+tot,W/2,360);
+    x.fillStyle=C.soft;x.font='500 27px '+FAM;x.fillText('共 '+exs.length+' 笔',W/2,408);
+    let y=452;
+    rows.forEach(c=>{
+      shadowPanel(x,86,y,W-172,108,18);
+      dashR(x,86,y,W-172,108,18);
+      x.textAlign='left';x.font='36px '+FAM;x.fillText(c.em,130,y+69);
+      x.fillStyle=C.ink;x.font='700 32px '+FAM;x.fillText(c.t,192,y+68);
+      x.textAlign='right';x.fillStyle=C.red;x.font='800 36px '+FAM;x.fillText('¥'+cat[c.k],W-130,y+69);
+      y+=126;
+    });
+    x.textAlign='center';x.fillStyle=C.soft;x.font='500 26px '+FAM;
+    x.fillText('💡 费用以现场实际为准,记录仅作回忆参考',W/2,y+34);
+    foot(x);pages.push(out(cv));
+  }
+  /* —— P4 旅途高光 —— */
+  if(hiPicks.length){
+    const{cv,x}=mk();badge(x,pages.length);
+    headBig(x,'旅途高光',t.name||'');
+    let y=330;
+    hiPicks.forEach(e=>{
+      const tp=itype(e.type);
+      const main=e.title||e.placeName||(e.type==='transport'?((e.from||'')+'→'+(e.to||'')):'记录');
+      const sub=(t.startDate&&e.date>=t.startDate?'Day'+(Math.round((pdate(e.date)-pdate(t.startDate))/864e5)+1)+' · ':'')+fmtMD(e.date)+(e.placeName&&e.title?' · '+e.placeName:'');
+      shadowPanel(x,86,y,W-172,168,22);
+      dashR(x,86,y,W-172,168,22);
+      x.textAlign='left';x.font='52px '+FAM;x.fillText(tp.em,128,y+90);
+      x.fillStyle=C.ink;x.font='800 36px '+FAM;
+      const ls=wrapLines(x,main,W-430);
+      x.fillText(ls[0],212,y+66);
+      if(ls[1]){x.font='400 28px '+FAM;x.fillStyle=C.soft;x.fillText(ls[1],212,y+106);}
+      x.fillStyle=C.soft;x.font='500 26px '+FAM;x.fillText(sub,212,y+144);
+      y+=192;
+    });
+    foot(x);pages.push(out(cv));
+  }
+  /* —— P5 照片墙(拍立得九宫格) —— */
+  if(photoWall){
+    const{cv,x}=mk();badge(x,pages.length);
+    headBig(x,'旅途光影',t.name||'');
+    const cell=250,gap=30,startX=(W-(cell*3+gap*2))/2;
+    for(let i=0;i<photoWall.length;i++){
+      const cx=startX+cell/2+(i%3)*(cell+gap);
+      const cy=350+cell/2+Math.floor(i/3)*(cell+42);
+      try{const im=await loadImg(photoWall[i].dataUrl);
+        polaroid(x,im,cx,cy,cell,cell-30,(i%2?2.4:-2.4),'');
       }catch(e){}
-      px+=tw+24;
+    }
+    foot(x);pages.push(out(cv));
+  }
+  return pages;
+}
+/* 旧版深色分享图(保留未用) */
+async function renderShareCardsOld(t){
+  const W=1080,H=1440;
+  const loadImg=src=>new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=src;});
+  const its=itemsOf(t.id),ps=photosOfTrip(t.id),exs=expensesOf(t.id);
+  const days=tripDays(t);
+  const daysN=new Set(its.filter(e=>e.placeName).map(e=>e.placeName)).size;
+  /* 预计算:每日路线行 */
+  const groups={};its.forEach(e=>{(groups[e.date]=groups[e.date]||[]).push(e);});
+  const dates=Object.keys(groups).sort();
+  const dayRows=dates.map(d=>{
+    const spots=[];
+    for(const e of groups[d]){
+      const s=e.type==='transport'?(e.to||e.from):e.type==='hotel'?(e.name||e.title||'住宿'):(e.placeName||e.title);
+      if(s&&!spots.includes(s))spots.push(s);
+    }
+    if(!spots.length)for(const e of groups[d]){if(e.title&&!spots.includes(e.title))spots.push(e.title);}
+    const n=t.startDate&&d>=t.startDate?Math.round((pdate(d)-pdate(t.startDate))/864e5)+1:null;
+    return{tag:n?'D'+n:fmtMD(d),date:fmtMD(d)+' '+fmtWeek(d),txt:spots.slice(0,6).join(' → ')||'自由活动'};
+  }).filter(r=>r.txt);
+  const routePages=[];
+  for(let i=0;i<dayRows.length;i+=7)routePages.push(dayRows.slice(i,i+7));
+  const hiPicks=its.filter(e=>e.title||e.placeName).sort((a,b)=>(b.photoIds&&b.photoIds.length?1:0)-(a.photoIds&&a.photoIds.length?1:0)).slice(0,5);
+  const pageTotal=1+(dayRows.length?routePages.length:0)+(exs.length?1:0)+(hiPicks.length?1:0)+(ps.length>=4?1:0);
+  const pages=[];
+  const mk=(photoBg,bgImg)=>{
+    const cv=document.createElement('canvas');cv.width=W;cv.height=H;
+    const x=cv.getContext('2d');
+    if(photoBg&&bgImg){
+      const r=Math.max(W/bgImg.width,H/bgImg.height);
+      x.drawImage(bgImg,(W-bgImg.width*r)/2,(H-bgImg.height*r)/2,bgImg.width*r,bgImg.height*r);
+    }else{
+      const g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,'#122a52');g.addColorStop(1,'#0b1a38');
+      x.fillStyle=g;x.fillRect(0,0,W,H);
+      x.fillStyle='rgba(47,124,246,.10)';x.beginPath();x.arc(W-120,180,340,0,7);x.fill();
+      x.fillStyle='rgba(56,189,248,.08)';x.beginPath();x.arc(140,H-160,300,0,7);x.fill();
+    }
+    return{cv,x};
+  };
+  const shade=x=>{const v=x.createLinearGradient(0,0,0,H);v.addColorStop(0,'rgba(10,25,55,.30)');v.addColorStop(.4,'rgba(10,25,55,.45)');v.addColorStop(1,'rgba(8,20,45,.94)');x.fillStyle=v;x.fillRect(0,0,W,H);};
+  const foot=(x,i)=>{x.textAlign='center';x.fillStyle='rgba(255,255,255,.6)';x.font='26px "PingFang SC",sans-serif';x.fillText('行 途 录 · XINGTU   |   '+(i+1)+' / '+pageTotal,W/2,1402);};
+  const head=(x,title,sub)=>{
+    x.textAlign='center';
+    x.fillStyle='rgba(255,255,255,.55)';x.font='500 26px "PingFang SC",sans-serif';
+    x.fillText('行途录 · 旅程总结',W/2,92);
+    x.fillStyle='#fff';x.font='800 58px "PingFang SC",sans-serif';x.fillText(title,W/2,176);
+    if(sub){x.fillStyle='rgba(255,255,255,.7)';x.font='28px "PingFang SC",sans-serif';x.fillText(sub,W/2,226);}
+  };
+  /* P1 封面 */
+  {
+    const cov=tripCover(t);
+    let bgImg=null;
+    if(cov){try{bgImg=await loadImg(cov.dataUrl);}catch(e){}}
+    const{cv,x}=mk(true,bgImg);
+    if(!cov){
+      const g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,'#2f7cf6');g.addColorStop(1,'#7dd3fc');
+      x.fillStyle=g;x.fillRect(0,0,W,H);
+    }
+    shade(x);
+    x.textAlign='center';
+    x.fillStyle='rgba(255,255,255,.82)';x.font='500 30px "PingFang SC",sans-serif';
+    x.fillText('行 途 录 · 旅 程 总 结',W/2,96);
+    const nameY=760;
+    fitFont(x,t.name||'未命名旅程',W-140,88,'800');
+    x.fillStyle='#fff';x.fillText(t.name||'未命名旅程',W/2,nameY);
+    x.font='600 38px "PingFang SC",sans-serif';x.fillStyle='rgba(255,255,255,.95)';
+    x.fillText((t.destination?'📍 '+t.destination+(days?' · 共 '+days+' 天':''):days?'共 '+days+' 天':''),W/2,nameY+66);
+    x.font='34px "PingFang SC",sans-serif';x.fillStyle='rgba(255,255,255,.78)';
+    x.fillText(t.startDate?(t.endDate&&t.endDate!==t.startDate?fmtYMD(t.startDate)+' — '+fmtYMD(t.endDate):fmtYMD(t.startDate)):'日期待定',W/2,nameY+122);
+    const stats=[
+      {n:days,l:'天'},
+      {n:daysN,l:'个地方'},
+      {n:its.length,l:'条记录'},
+      {n:ps.length,l:'张照片'},
+    ];
+    const sy=1000,cw=(W-160)/4;
+    stats.forEach((s,i)=>{
+      const cx=80+cw*i+cw/2;
+      x.fillStyle='#fff';x.font='800 62px "PingFang SC",sans-serif';x.fillText(s.n,cx,sy);
+      x.fillStyle='rgba(255,255,255,.72)';x.font='26px "PingFang SC",sans-serif';x.fillText(s.l,cx,sy+40);
+    });
+    const spent=sumOf(t.id);
+    if(spent>0){x.fillStyle='rgba(255,255,255,.85)';x.font='32px "PingFang SC",sans-serif';x.fillText('总花销 '+money(spent),W/2,sy+102);}
+    const thumbs=ps.slice(0,3);
+    if(thumbs.length){
+      const th=170,tw=Math.min(300,(W-120-24*(thumbs.length-1))/thumbs.length);
+      let px=(W-(tw*thumbs.length+24*(thumbs.length-1)))/2,py=1195;
+      for(const p of thumbs){
+        try{
+          const im=await loadImg(p.dataUrl);
+          const r=Math.max(tw/im.width,th/im.height);
+          x.save();rrect(x,px,py,tw,th,22);x.clip();
+          x.drawImage(im,px+(tw-im.width*r)/2,py+(th-im.height*r)/2,im.width*r,im.height*r);
+          x.restore();
+          x.strokeStyle='rgba(255,255,255,.35)';x.lineWidth=2;rrect(x,px,py,tw,th,22);x.stroke();
+        }catch(e){}
+        px+=tw+24;
+      }
+    }
+    x.fillStyle='rgba(255,255,255,.7)';x.font='28px "PingFang SC",sans-serif';
+    x.fillText('—— 用「行途录」记录每一段旅程 ——',W/2,1355);
+    foot(x,0);
+    pages.push(cv.toDataURL('image/jpeg',.92));
+  }
+  /* P2 每日路线 */
+  if(dayRows.length){
+    for(let pi=0;pi<routePages.length;pi++){
+      const{x}=mk(false);
+      head(x,'每日路线',t.name||'');
+      let y=330;
+      const rows=routePages[pi];
+      rows.forEach((r,ri)=>{
+        x.textAlign='left';
+        x.fillStyle='rgba(125,211,252,.95)';x.font='800 34px "PingFang SC",sans-serif';
+        x.fillText(r.tag,90,y);
+        x.fillStyle='rgba(255,255,255,.5)';x.font='24px "PingFang SC",sans-serif';
+        x.fillText(r.date,90+x.measureText(r.tag).width+18,y);
+        x.font='30px "PingFang SC",sans-serif';x.fillStyle='rgba(255,255,255,.92)';
+        const ls=wrapLines(x,r.txt,W-200);
+        let yy=y+46;
+        for(const l of ls.slice(0,2)){x.fillText(l,90,yy);yy+=44;}
+        y=yy+26;
+        if(ri<rows.length-1){x.strokeStyle='rgba(255,255,255,.12)';x.lineWidth=2;x.beginPath();x.moveTo(90,y-14);x.lineTo(W-90,y-14);x.stroke();y+=26;}
+      });
+      if(pi===0&&routePages.length>1){}
+      x.textAlign='center';
+      foot(x,1+pi);
+      pages.push(x.canvas.toDataURL('image/jpeg',.92));
     }
   }
-  /* 底部落款 */
-  x.fillStyle='rgba(255,255,255,.7)';x.font='28px "PingFang SC",sans-serif';
-  x.fillText('—— 用「行途录」记录每一段旅程 ——',W/2,1408);
-  return cv.toDataURL('image/jpeg',.92);
+  /* P3 花销明细 */
+  if(exs.length){
+    const{x}=mk(false);
+    head(x,'花销明细',(exs.length)+' 笔 · 共 '+money(sumOf(t.id)));
+    const cat={};exs.forEach(e=>{const k=e.category||'other';cat[k]=(cat[k]||0)+(+e.amount||0);});
+    const rows=CATS.filter(c=>cat[c.k]).sort((a,b)=>cat[b.k]-cat[a.k]);
+    const maxV=Math.max(...rows.map(c=>cat[c.k]));
+    let y=330;
+    rows.forEach(c=>{
+      x.textAlign='left';
+      x.font='32px "PingFang SC",sans-serif';x.fillStyle='rgba(255,255,255,.92)';
+      x.fillText(c.em+' '+c.t,90,y);
+      x.textAlign='right';x.font='800 34px "PingFang SC",sans-serif';x.fillStyle='#fff';
+      x.fillText(money(cat[c.k]),W-90,y);
+      x.textAlign='left';
+      const bw=(W-180),pct=Math.max(.06,cat[c.k]/maxV);
+      rrect(x,90,y+16,bw*pct,14,7);x.fillStyle=c.c;x.fill();
+      x.fillStyle='rgba(255,255,255,.14)';rrect(x,90,y+16,bw,14,7);x.fill();
+      y+=92;
+    });
+    x.fillStyle='rgba(255,255,255,.55)';x.font='26px "PingFang SC",sans-serif';x.textAlign='center';
+    x.fillText('记账是一种回忆的方式',W/2,y+40);
+    foot(x,pages.length);
+    pages.push(x.canvas.toDataURL('image/jpeg',.92));
+  }
+  /* P4 高光记录 */
+  if(hiPicks.length){
+    const{x}=mk(false);
+    head(x,'旅途高光',t.name||'');
+    let y=330;
+    hiPicks.forEach((e,i)=>{
+      const tp=itype(e.type);
+      const main=e.title||e.placeName||(e.type==='transport'?(e.from||'')+'→'+(e.to||''):'记录');
+      x.textAlign='left';
+      x.font='800 36px "PingFang SC",sans-serif';
+      x.fillStyle='#fff';
+      x.fillText(tp.em+' '+main,90,y);
+      x.font='26px "PingFang SC",sans-serif';x.fillStyle='rgba(125,211,252,.9)';
+      const sub=(t.startDate&&e.date>=t.startDate?'D'+(Math.round((pdate(e.date)-pdate(t.startDate))/864e5)+1)+' · ':'')+fmtMD(e.date)+(e.placeName&&e.title?' · '+e.placeName:'');
+      x.fillText(sub,90,y+42);
+      if(i<hiPicks.length-1){x.strokeStyle='rgba(255,255,255,.12)';x.lineWidth=2;x.beginPath();x.moveTo(90,y+76);x.lineTo(W-90,y+76);x.stroke();}
+      y+=118;
+    });
+    x.textAlign='center';
+    foot(x,pages.length);
+    pages.push(x.canvas.toDataURL('image/jpeg',.92));
+  }
+  /* P5 照片墙 */
+  if(ps.length>=4){
+    const{x}=mk(false);
+    head(x,'旅途光影',ps.length+' 张照片');
+    const cell=(W-2*70-2*24)/3;
+    for(let i=0;i<9&&i<ps.length;i++){
+      const cx=70+(i%3)*(cell+24),cy=290+Math.floor(i/3)*(cell+24);
+      try{
+        const im=await loadImg(ps[i].dataUrl);
+        const r=Math.max(cell/im.width,cell/im.height);
+        x.save();rrect(x,cx,cy,cell,cell,20);x.clip();
+        x.drawImage(im,cx+(cell-im.width*r)/2,cy+(cell-im.height*r)/2,im.width*r,im.height*r);
+        x.restore();
+      }catch(e){}
+    }
+    x.textAlign='center';
+    foot(x,pages.length);
+    pages.push(x.canvas.toDataURL('image/jpeg',.92));
+  }
+  return pages;
 }
 
 /* ============================================================
@@ -1149,27 +1749,42 @@ const A={
   tab(k){S.tab=k;render();},
   openTrip(id){S.view='trip';S.tripId=id;S.tab='plan';render();},
 
-  /* ---- 旅程分享图 ---- */
+  /* ---- 旅程分享图(整套) ---- */
   shareTrip(tripId){
     const t=tripById(tripId);if(!t)return;
     const m=openSheet('<div class="sheet-head"><h3>旅程分享图</h3><button class="icon-btn" data-x aria-label="关闭">'+icon('x',16)+'</button></div>'+
-      '<div style="text-align:center;color:var(--ink3);padding:36px 0;letter-spacing:2px">正在生成…</div>');
+      '<div style="text-align:center;color:var(--ink3);padding:36px 0;letter-spacing:2px">正在生成整套分享图…</div>');
     m.ov.querySelector('[data-x]').onclick=m.close;
-    renderShareCard(t).then(url=>{
+    renderShareCards(t).then(urls=>{
+      const labels=['封面 · 主图','每日路线','花销明细','旅途高光','照片墙'];
       const sh=m.ov.querySelector('.sheet');
-      sh.innerHTML='<div class="grab"></div><div class="sheet-head"><h3>旅程分享图</h3><button class="icon-btn" data-x aria-label="关闭">'+icon('x',16)+'</button></div>'+
-        '<img src="'+url+'" alt="旅程分享图" style="width:100%;border-radius:14px;box-shadow:var(--shadow)">'+
-        '<div class="sheet-foot"><button class="btn btn-g" data-close>关闭</button>'+
-        '<button class="btn btn-p" data-save>'+icon('image',15)+'保存图片</button></div>'+
-        '<p style="font-size:11.5px;color:var(--ink3);text-align:center;margin-top:10px">保存后可发抖音/小红书做图文素材;手机上也可以直接长按图片保存</p>';
+      sh.innerHTML='<div class="grab"></div><div class="sheet-head"><h3>旅程分享图 · '+urls.length+' 张</h3><button class="icon-btn" data-x aria-label="关闭">'+icon('x',16)+'</button></div>'+
+        '<div class="sc-carousel">'+urls.map((u,i)=>
+          '<div class="sc-item"><div class="sc-lab">'+(i===0?labels[0]:labels[i]||('第 '+(i+1)+' 张'))+'</div><img src="'+u+'" alt="">'+
+          '<button class="btn btn-p btn-sm" data-save="'+i+'">保存此张</button></div>').join('')+
+        '</div>'+
+        '<div class="sheet-foot"><button class="btn btn-g" data-close>关闭</button></div>'+
+        '<p style="font-size:11.5px;color:var(--ink3);text-align:center;margin-top:10px">左右滑动查看每张;逐张保存后一起发抖音/小红书;手机上也可以直接长按单张保存</p>';
       sh.querySelector('[data-x]').onclick=m.close;
       sh.querySelector('[data-close]').onclick=m.close;
-      sh.querySelector('[data-save]').onclick=()=>{
-        const a=document.createElement('a');a.href=url;a.download='行途录_'+(t.name||'旅程')+'.png';a.click();
-        toast('已保存(若未弹出,请长按图片保存)');
-      };
+      sh.querySelectorAll('[data-save]').forEach(b=>b.onclick=()=>{
+        const a=document.createElement('a');a.href=urls[+b.dataset.save];a.download='行途录_'+(t.name||'旅程')+'_'+(+b.dataset.save+1)+'.png';a.click();
+        toast('已保存第 '+(+b.dataset.save+1)+' 张(若未弹出,请长按图片保存)');
+      });
     }).catch(()=>{toast('生成失败,请重试');m.close();});
   },
+
+  /* ---- 跳转到行程某天 ---- */
+  jumpDay(d){
+    S.tab='plan';render();
+    requestAnimationFrame(()=>{const el=document.getElementById('day-'+d);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});});
+  },
+
+  /* ---- 点亮地图 ---- */
+  lightLv(lv){LG.lv=lv;LG.drill=null;render();},
+  drillProv(p){LG.lv='cn';LG.drill={type:'prov',key:p};render();},
+  drillCountry(cc){LG.lv='w';LG.drill={type:'cc',key:cc};render();},
+  drillBack(){LG.drill=null;render();},
 
   /* ---- 灯箱 ---- */
   lbEntry(entryId,i){
@@ -1412,6 +2027,12 @@ const A={
         newIds.forEach(nid=>{const p=photoById(nid);if(p)p.entryId=obj.id;});
       }
       obj.updatedAt=Date.now();
+      /* 有定位 → 反查省市/国家归属(点亮地图用) */
+      if(obj.lat!=null&&obj.lng!=null&&(!e||e.lat!==obj.lat||e.lng!==obj.lng||!e.cc)){
+        try{const rg=await reverseGeo(obj.lat,obj.lng);
+          if(rg&&rg.cc){obj.cc=rg.cc;obj.cName=rg.cName;obj.prov=rg.prov;obj.city=rg.city;}
+        }catch(err){}
+      }
       await idbPut('entries',obj);
       if(!e)S.entries.push(obj);
       ED=null;
