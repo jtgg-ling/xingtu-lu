@@ -1180,6 +1180,7 @@ let _gjCN=null,_gjW=null;
 async function fetchChinaGeo(){
   if(_gjCN)return _gjCN;
   const urls=[
+    'china.geo.json',/* 自托管,优先 */
     'https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json',
     'https://cdn.jsdelivr.net/gh/ychda/china-geojson@master/100000_full.json',
   ];
@@ -1191,6 +1192,7 @@ async function fetchChinaGeo(){
 async function fetchWorldGeo(){
   if(_gjW)return _gjW;
   const urls=[
+    'world.geo.json',/* 自托管,优先 */
     'https://cdn.jsdelivr.net/gh/johan/world.geo.json@master/countries.geo.json',
     'https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json',
   ];
